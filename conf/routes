@@ -1,0 +1,22 @@
+# Routes
+
+#Home Controller Get HTML pages
+
+GET           /                           controllers.HomeController.index
+GET           /index.html                 controllers.HomeController.index
+GET           /cart.html                  controllers.HomeController.cart
+GET           /singleProduct.html         controllers.HomeController.product
+GET           /checkout.html              controllers.HomeController.checkOut
+GET           /shop.html                  controllers.HomeController.shop
+GET           /contact.html               controllers.HomeController.contact()
+
+#ElectronicsController
+
+GET           /products                   controllers.ElectronicsController.viewAll
+POST          /products/create            controllers.ElectronicsController.createProduct
+GET           /products/details           controllers.ElectronicsController.productDetails(id :Int)
+POST          /products/cart/:id          controllers.ElectronicsController.addCart(id :Int)
+PUT           /products/edit/:id          controllers.ElectronicsController.editProduct(id :Int)
+DELETE        /products/delete/:id        controllers.ElectronicsController.delete(id :Int)
+#Assets
+GET           /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

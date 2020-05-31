@@ -1,0 +1,251 @@
+@()
+
+@main("Product") {
+    <div class="header-area">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="user-menu">
+                        <ul>
+                            <li><a href="#"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/account.png")">
+                                Account</a></li>
+                            <li><a href="@routes.HomeController.cart()"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/cart.png")">
+                                Cart</a></li>
+                            <li><a href="@routes.HomeController.checkOut()"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/check.png")">
+                                Checkout</a></li>
+                            <li><a href="@routes.HomeController.index()"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/login.png")">
+                                Login</a></li>
+                            <li><a href="@routes.HomeController.checkOut()"><img class="rounded" height="20" width="20" src="@routes.Assets.versioned("/img/signup.png")">SignUp</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="header-right">
+                        <ul class="list-unstyled list-inline">
+                            <li class="dropdown dropdown-small">
+                                <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">
+                                    currency :</span><span class="value">USD </span><b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">USD</a></li>
+                                    <li><a href="#">EUR</a></li>
+                                    <li><a href="#">GBP</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="dropdown dropdown-small">
+                                <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">
+                                    language :</span><span class="value">English </span><b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="index.html">English</a></li>
+                                    <li><a href="#">Greek</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- End header area -->
+
+    <div class="site-branding-area">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="logo">
+                        <h1><a href="@routes.HomeController.index()">
+                            <img class="img-thumbnail" height="150" width="200" src="@routes.Assets.versioned("/img/eshoplogo.png")"></a></h1>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="shopping-item">
+                        <a href="cart.html">Cart - <span class="cart-amunt">
+                            $0</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">0</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- End site branding area -->
+    <div class="mainmenu-area">
+        <div class="container">
+            <nav class="navbar navbar-expand-sm">
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="@routes.HomeController.index()">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@routes.HomeController.shop()">Store</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@routes.HomeController.cart()">Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="@routes.HomeController.checkOut()">Checkout</a>
+                    </li>
+                    <li class="nav-item">
+                        <<a href="@routes.HomeController.contact()">Contact</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="product-big-title-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-11">
+                    <div class="product-bit-title text-center" >
+                        <h2>Store</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="single-product-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="single-sidebar">
+                        <h2 class="sidebar-title">Search Products</h2>
+                        <form action="">
+                            <input type="text" placeholder="Search products...">
+                            <input type="submit" value="Search">
+                        </form>
+                    </div>
+
+                    <div class="single-sidebar">
+                        <h2 class="sidebar-title">Products</h2>
+                        <div class="thubmnail-recent">
+                            <img src="@routes.Assets.versioned("img/alienware.jpg")" class="recent-thumb" alt="">
+                            <h2><a href="">Sony Smart TV</a></h2>
+                            <div class="product-sidebar-price">
+                                <ins>$700.00</ins> <del>$800.00</del>
+                            </div>
+                        </div>
+                        <div class="thubmnail-recent">
+                            <img src="@routes.Assets.versioned("img/alienware.jpg")" class="recent-thumb" alt="">
+                            <h2><a href="">Sony Smart TV </a></h2>
+                            <div class="product-sidebar-price">
+                                <ins>$700.00</ins> <del>$800.00</del>
+                            </div>
+                        </div>
+                        <div class="thubmnail-recent">
+                            <img src="@routes.Assets.versioned("img/alienware.jpg")" class="recent-thumb" alt="">
+                            <h2><a href="">Sony Smart TV </a></h2>
+                            <div class="product-sidebar-price">
+                                <ins>$700.00</ins> <del>$800.00</del>
+                            </div>
+                        </div>
+                        <div class="thubmnail-recent">
+                            <img src="@routes.Assets.versioned("img/alienware.jpg")" class="recent-thumb" alt="">
+                            <h2><a href="">Sony Smart TV </a></h2>
+                            <div class="product-sidebar-price">
+                                <ins>$700.00</ins> <del>$800.00</del>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="product-content-right">
+                        <div class="product-breadcroumb">
+                            <a href="@routes.HomeController.index()">Home</a>
+                            <a href="#">Sony Smart TV </a>
+                            <br><br>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="product-images">
+                                    <div class="product-main-img">
+                                        <img src="@routes.Assets.versioned("img/product-thumb-4.jpg")" alt="">
+                                    </div>
+                                    <br>
+                                    <div class="product-gallery">
+                                        <img src="@routes.Assets.versioned("img/alienware.jpg")" alt="">
+                                        <img src="@routes.Assets.versioned("img/product-thumb-2.jpg")" alt="">
+                                        <img src="@routes.Assets.versioned("img/product-thumb-3.jpg")" alt="">
+                                        <img src="@routes.Assets.versioned("img/product-thumb-4.jpg")" alt="">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="product-inner">
+                                    <h2 class="product-name">Sony Smart TV</h2>
+                                    <div class="product-inner-price">
+                                        <ins>$700.00</ins> <del>$800.00</del>
+                                    </div>
+
+                                    <form action="" class="cart">
+                                        <div class="quantity">
+                                            <input type="number" size="4" class="input-text qty text" title="Qty" value="1" name="quantity" min="1" step="1">
+                                        </div>
+                                        <button class="add_to_cart_button" type="submit">Add to cart</button>
+                                    </form>
+
+                                    <div role="tabpanel">
+                                        <ul class="product-tab" role="tablist">
+                                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">
+                                                Description</a></li>
+                                            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
+                                                Reviews</a></li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div role="tabpanel" class="tab-pane fade in active" id="home">
+                                                <h2>Product Description</h2>
+                                                <p>Explaining Here in more details about a single Product that the User click on</p>
+                                            </div>
+                                            <div role="tabpanel" class="tab-pane fade" id="profile">
+                                                <h2>Reviews</h2>
+                                                <div class="submit-review">
+                                                    <p><label for="name">Name</label> <input name="name" type="text"></p>
+                                                    <p><label for="email">
+                                                        Email</label> <input name="email" type="email"></p>
+                                                    <div class="rating-chooser">
+                                                        <p>Your rating</p>
+
+                                                        <div class="rating-wrap-post">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                        </div>
+                                                    </div>
+                                                    <p><label for="review">
+                                                        Your review</label> <textarea name="review" id="" cols="30" rows="10"></textarea></p>
+                                                    <p><input type="submit" value="Submit"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom-area">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="copyright" style="padding-left: 40px">
+                    <p>European standards   <img height="20" width="20" src="@routes.Assets.versioned("/img/eu.png")"></p><br>
+                    <p>&copy; 2020 eShop. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- End footer bottom area -->
+
+
+}

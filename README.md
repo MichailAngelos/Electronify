@@ -1,2 +1,2 @@
-# eShop
-In progress..
+# Electronify
+Web Application for shopping online electronic items.

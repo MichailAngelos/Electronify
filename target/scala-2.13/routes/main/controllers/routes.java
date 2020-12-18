@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
-// @SOURCE:/home/michail/dev/Electronify/conf/routes
-// @DATE:Mon Oct 12 09:44:01 EEST 2020
+// @SOURCE:C:/Users/micha/IdeaProjects/Electronify/conf/routes
+// @DATE:Fri Dec 18 16:36:31 EET 2020
 
 package controllers;
 

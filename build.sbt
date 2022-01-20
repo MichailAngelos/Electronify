@@ -10,5 +10,11 @@ libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
 libraryDependencies += jdbc
 libraryDependencies ++= Seq(
-  "org.postgresql" % "postgresql" % "42.1.1"
+  "org.postgresql" % "postgresql" % "42.1.1",
+  "com.typesafe.play" %% "play-slick" % "5.0.0"
 )
+libraryDependencies += ws
+libraryDependencies ++= Seq(
+  "org.playframework.anorm" %% "anorm-postgres" % "2.6.10"
+)
+libraryDependencies += ehcache

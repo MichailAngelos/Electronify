@@ -39,4 +39,5 @@
     <appender-ref ref="ASYNCSTDOUT" />
   </root>
 
+  <logger name="play.api.libs.ws.ahc.cache" level="TRACE" />
 </configuration>

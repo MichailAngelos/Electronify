@@ -6,7 +6,7 @@ import play.api.mvc._
 @Singleton
 class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
-  def index() = Action { implicit request: Request[AnyContent] =>
+  def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     Ok(views.html.index())
   }
 
@@ -14,26 +14,24 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
     Ok(views.html.cart())
   }
 
-  def product() = Action { implicit request =>
+  def product(): Action[AnyContent] = Action { implicit request =>
     Ok(views.html.singleProduct())
   }
 
-  def shop() = Action { implicit request =>
+  def shop(): Action[AnyContent] = Action { implicit request =>
    Ok(views.html.shop())
   }
 
 
-  def checkOut() = Action { implicit request =>
+  def checkOut(): Action[AnyContent] = Action { implicit request =>
     Ok(views.html.checkout())
   }
 
-  def contact() = Action { implicit request =>
+  def contact(): Action[AnyContent] = Action { implicit request =>
     Ok(views.html.contact())
-
   }
 
-def addCart(id :Int) : Action[AnyContent]= Action{implicit request =>
-  // TODO
-  ???
-}
+  def signUp(): Action[AnyContent] = Action { implicit request =>
+    Ok(views.html.signup())
+  }
 }

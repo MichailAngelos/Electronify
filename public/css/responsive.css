@@ -19,7 +19,7 @@ input[type="submit"], button[type="submit"] {
 }
 
 /* Tablet Layout: 768px. */
-@media only screen and (min-width: 768px) and (max-width: 991px) { 
+@media only screen and (min-width: 768px) and (max-width: 991px) {
 .user-menu, .header-right ul.list-inline {
   text-align: center;
 }
@@ -59,7 +59,7 @@ div.cart-collaterals ul.products li.product {
 }
 /* Mobile Layout: 320px. */
 @media only screen and (max-width: 767px) { 
-    
+
 .user-menu, .header-right ul.list-inline {
   text-align: center;
 }  

@@ -1,25 +1,34 @@
 package controllers
 
+import controllers.services.UserService
 import play.api.libs.json.Json
-import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponents, Request, Result}
-import services.{UserService, Validation}
+import play.api.libs.ws.WSClient
+import play.api.mvc._
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class UserController @Inject() (
+    ws: WSClient,
     cc: ControllerComponents,
     userService: UserService
 )(implicit ec: ExecutionContext)
     extends AbstractController(cc) {
 
-  def getAll: Action[AnyContent] =
+  def getAllUsers: Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      val userListF = userService.getAll
-      val list: Future[Result] = for {
-        list <- userListF
-      } yield Ok(Json.toJson(list))
-
-      Validation.futureValidation(list)
+      Ok(Json.toJson(userService.getAll))
     }
+
+  def getAllActiveUsers: Action[AnyContent] =
+    Action { implicit request: Request[AnyContent] =>
+      Ok(Json.toJson(userService.getAllActiveUsers))
+    }
+
+  def signUpUser(username: String, password: String): Action[AnyContent] =
+    Action { implicit request: Request[AnyContent] =>
+     //todo post data sign up form
+      ???
+    }
+
 }

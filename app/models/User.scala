@@ -1,64 +1,95 @@
 package models
 
+import controllers.utils.{DateUtils, Utils}
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
-import play.api.libs.json.{Format, JsPath, Json, OFormat, Reads, Writes}
-import slick.jdbc.GetResult
+import play.api.libs.json._
+import slick.jdbc.{GetResult, PositionedParameters, PositionedResult, SetParameter}
 
+import java.sql.JDBCType
+import java.util.UUID
 import scala.language.postfixOps
 
 case class User(
-    id: Int,
+    id: UUID = UUID.fromString(""),
     username: String,
     password: String,
     email: String,
     telephone: Int,
-    created_at: String,
-    active: Boolean
+    created_at: String = "",
+    active: Boolean = false
 )
 
 object User {
-  implicit val reads:  Reads[User]= (
-    (JsPath \ "id").read[Int] and
+  implicit val reads: Reads[User] = (
+    (JsPath \ "id").read[UUID] and
       (JsPath \ "username").read[String] and
       (JsPath \ "password").read[String] and
       (JsPath \ "email").read[String] and
       (JsPath \ "telephone").read[Int] and
       (JsPath \ "created_at").read[String] and
       (JsPath \ "active").read[Boolean]
-    )(User.apply _)
+  )(User.apply _)
 
-  implicit val writes : Writes[User]= (
-    (JsPath \ "id").write[Int] and
+  implicit val writes: Writes[User] = (
+    (JsPath \ "id").write[UUID] and
       (JsPath \ "username").write[String] and
       (JsPath \ "password").write[String] and
       (JsPath \ "email").write[String] and
       (JsPath \ "telephone").write[Int] and
       (JsPath \ "created_at").write[String] and
       (JsPath \ "active").write[Boolean]
-    )(unlift(User.unapply))
+  )(unlift(User.unapply))
 
-  implicit val getUserResult: AnyRef with GetResult[Seq[User]] = GetResult(r =>
-    Seq(User(
-      r.nextInt(),
-      r.nextString(),
-      r.nextString(),
-      r.nextString(),
-      r.nextInt(),
-      r.nextString(),
-      r.nextBoolean()
+  implicit val getUserResultSeq: AnyRef with GetResult[Seq[User]] =
+    GetResult(r =>
+      Seq(
+        User(
+          uuidMapping(r).nextUUID,
+          r.nextString(),
+          r.nextString(),
+          r.nextString(),
+          r.nextInt(),
+          r.nextString(),
+          r.nextBoolean()
+        )
+      )
     )
-  ))
+
+  implicit class uuidMapping(val r: PositionedResult) extends AnyVal{
+    def nextUUID : UUID =  UUID.fromString(r.nextString)
+    }
+
+  implicit object SetUUID extends SetParameter[UUID] {
+    def apply(v: UUID, pp: PositionedParameters): Unit = {
+      pp.setObject(v, JDBCType.BINARY.getVendorTypeNumber)
+    }
+  }
 
   def defaultUser: User = {
     User(
-      id = 0,
       username = "",
       password = "",
       email = "",
-      telephone = 0,
-      created_at = "",
-      active = false
+      telephone = 0
     )
+  }
+
+  def extractFormData(form: Option[JsValue]): User = {
+    form match {
+      case Some(userForm) =>
+        userForm.validate[User] match {
+          case JsSuccess(value, _) =>
+            value.copy(
+              id = UUID.randomUUID(),
+              password = Utils.encryptPassword(value.password),
+              created_at = DateUtils.timestampNow,
+              active = true
+            )
+          case JsError(errors) =>
+            throw new Exception("Invalid User Form " + errors)
+        }
+      case None => throw new Exception("Failed Empty Form")
+    }
   }
 }
 
@@ -70,5 +101,4 @@ object UserList {
   def getUserList(users: Vector[Seq[User]]): UserList = {
     UserList(users.flatten)
   }
-
 }

@@ -23,7 +23,7 @@ DELETE        /products/delete/:id        controllers.ElectronicsController.dele
 #Users
 GET           /user                       controllers.UserController.getAllUsers
 GET           /user/active                controllers.UserController.getAllActiveUsers
-POST          /user/signup                controllers.UserController.signUpUser(username: String,password: String)
+POST          /user/signup                controllers.UserController.signUpUser
 
 #Assets
 GET           /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

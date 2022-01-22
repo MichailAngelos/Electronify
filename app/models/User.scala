@@ -40,20 +40,33 @@ object User {
       (JsPath \ "active").write[Boolean]
   )(unlift(User.unapply))
 
-  implicit val getUserResultSeq: AnyRef with GetResult[Seq[User]] =
+  implicit val getUserResult: AnyRef with GetResult[User] =
     GetResult(r =>
-      Seq(
-        User(
-          uuidMapping(r).nextUUID,
-          r.nextString(),
-          r.nextString(),
-          r.nextString(),
-          r.nextInt(),
-          r.nextString(),
-          r.nextBoolean()
-        )
+      User(
+        uuidMapping(r).nextUUID,
+        r.nextString(),
+        r.nextString(),
+        r.nextString(),
+        r.nextInt(),
+        r.nextString(),
+        r.nextBoolean()
       )
     )
+
+  implicit val getUsersResultSeq: AnyRef with GetResult[Seq[User]] =
+    GetResult(r => Seq(getUserResult.apply(r)))
+
+  implicit val setUser: SetParameter[User] = SetParameter { (user, _) =>
+    User(
+      user.id,
+      user.username,
+      user.password,
+      user.email,
+      user.telephone,
+      user.created_at,
+      user.active
+    )
+  }
 
   implicit class uuidMapping(val r: PositionedResult) extends AnyVal{
     def nextUUID : UUID =  UUID.fromString(r.nextString)

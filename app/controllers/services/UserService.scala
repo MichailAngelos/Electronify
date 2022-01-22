@@ -5,7 +5,9 @@ import models.User._
 import models.{User, UserList}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.http.Status
-import slick.jdbc.JdbcProfile
+import slick.jdbc.{JdbcProfile, SQLActionBuilder}
+
+import java.sql.{Connection, PreparedStatement, ResultSet, Statement}
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
@@ -13,7 +15,8 @@ class UserService @Inject() (
     protected val dbConfigProvider: DatabaseConfigProvider
 )(implicit ec: ExecutionContext)
     extends HasDatabaseConfigProvider[JdbcProfile] {
-
+  var conn: Connection = _
+  var stmt: Statement = _
   import profile.api._
 
   def getAll: UserList = {
@@ -28,18 +31,13 @@ class UserService @Inject() (
   }
 
   def createUser(user: User): Int = {
-    val stringId = user.id.toString
     val query =
-      sql"insert into electronify.users(id,username,password,email,telephone,created_at,active) values($stringId,$user.username,$user.password,$user.email,$user.telephone,$user.created_at,$user.active);".asUpdate
-      val response: Int = Utils.getFutureValue[Int](db.run(query))
+      sqlu"insert into electronify.users values (${user.id}, ${user.username}, ${user.password}, ${user.email}, ${user.telephone}, ${user.created_at}, ${user.active})"
+    val response: Int = Utils.getFutureValue[Int](db.run(query))
 
-      response match {
-        case Status.CREATED => response
-        case _ => Status.IM_A_TEAPOT
-      }
-
-    //todo resolve error
-    //could not find implicit value for parameter e: slick.jdbc.SetParameter[models.User]
-
+    response match {
+      case 1 => Status.IM_A_TEAPOT
+      case _ => Status.BAD_REQUEST
+    }
   }
 }

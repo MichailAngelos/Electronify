@@ -2,8 +2,7 @@ package controllers
 
 import controllers.services.UserService
 import models.User
-import play.api.libs.json.{JsValue, Json}
-import play.api.libs.ws.WSClient
+import play.api.libs.json.Json
 import play.api.mvc._
 
 import javax.inject.Inject
@@ -28,6 +27,6 @@ class UserController @Inject() (
   def signUpUser: Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
       val user: User = User.extractFormData(request.body.asJson)
-        Ok(userService.createUser(user).toString)
+        Created(userService.createUser(user).toString)
     }
 }

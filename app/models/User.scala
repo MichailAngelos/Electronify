@@ -3,7 +3,12 @@ package models
 import controllers.utils.{DateUtils, Utils}
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json._
-import slick.jdbc.{GetResult, PositionedParameters, PositionedResult, SetParameter}
+import slick.jdbc.{
+  GetResult,
+  PositionedParameters,
+  PositionedResult,
+  SetParameter
+}
 
 import java.sql.JDBCType
 import java.util.UUID
@@ -19,7 +24,7 @@ case class User(
     active: Option[Boolean] = Some(false)
 )
 
-object User {
+object User extends Logger {
   implicit val reads: Reads[User] = (
     (JsPath \ "id").readNullable[UUID] and
       (JsPath \ "username").read[String] and
@@ -68,9 +73,9 @@ object User {
     )
   }
 
-  implicit class uuidMapping(val r: PositionedResult) extends AnyVal{
-    def nextUUID : UUID =  UUID.fromString(r.nextString())
-    }
+  implicit class uuidMapping(val r: PositionedResult) extends AnyVal {
+    def nextUUID: UUID = UUID.fromString(r.nextString())
+  }
 
   implicit object SetUUID extends SetParameter[UUID] {
     def apply(v: UUID, pp: PositionedParameters): Unit = {
@@ -99,9 +104,12 @@ object User {
               active = Some(true)
             )
           case JsError(errors) =>
-            throw new Exception("Invalid User Form " + errors)
+            logger.info("Invalid User Form " + errors)
+            User.defaultUser
         }
-      case None => throw new Exception("Failed Empty Form")
+      case None =>
+        logger.info("Failed Empty Form")
+        User.defaultUser
     }
   }
 }

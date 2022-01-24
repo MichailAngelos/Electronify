@@ -2,7 +2,7 @@ package controllers.services
 
 import controllers.utils.Utils
 import models.User._
-import models.{User, UserList}
+import models.{Logger, User, UserList}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.http.Status
 import slick.jdbc.JdbcProfile
@@ -15,7 +15,8 @@ import scala.concurrent.ExecutionContext
 class UserService @Inject() (
     protected val dbConfigProvider: DatabaseConfigProvider
 )(implicit ec: ExecutionContext)
-    extends HasDatabaseConfigProvider[JdbcProfile] {
+    extends HasDatabaseConfigProvider[JdbcProfile]
+    with Logger {
 
   import profile.api._
 
@@ -29,9 +30,17 @@ class UserService @Inject() (
           id == user.id
             .getOrElse(UUID.fromString(""))
             .toString && user.active.get
-        ) user
-        else throw new Exception("Failed no user")
-      case None => throw new Exception("Failed no user")
+        ) {
+          logger.info("Success")
+          user
+        } else {
+          logger.info("Failed no user")
+          User.defaultUser
+        }
+      case None => {
+        logger.info("Failed no user")
+        User.defaultUser
+      }
     }
   }
 

@@ -1,7 +1,7 @@
 package controllers.utils
 
 import controllers.constants.Responses._
-import models.Id
+import models.{Id, Logger}
 import play.api.http.Status
 import play.api.libs.json.{JsError, JsSuccess, JsValue}
 
@@ -10,7 +10,7 @@ import java.util.UUID
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, Future}
 
-object Utils {
+object Utils extends Logger {
 
   def getFutureValue[T](future: Future[T]): T = {
     futureValidation(Some(Await.result(future, 10.seconds)))
@@ -55,10 +55,15 @@ object Utils {
     jsValue match {
       case Some(js) =>
         js.validate[Id] match {
-          case JsSuccess(value, _) => value.id.getOrElse(UUID.fromString("")).toString
-          case JsError(errors)     => throw new Exception("Invalid id" + errors)
+          case JsSuccess(value, _) =>
+            value.id.getOrElse(UUID.fromString("")).toString
+          case JsError(errors) =>
+            logger.info("Invalid id" + errors)
+            ""
         }
-      case None => throw new Exception("No id was given")
+      case None =>
+        logger.info("No ID was given")
+        ""
     }
   }
 }

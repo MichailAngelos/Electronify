@@ -10,46 +10,46 @@ import java.util.UUID
 import scala.language.postfixOps
 
 case class User(
-    id: UUID = UUID.fromString(""),
+    id: Option[UUID] = Some(UUID.fromString("")),
     username: String,
     password: String,
     email: String,
     telephone: Int,
-    created_at: String = "",
-    active: Boolean = false
+    created_at: Option[String] = Some(""),
+    active: Option[Boolean] = Some(false)
 )
 
 object User {
   implicit val reads: Reads[User] = (
-    (JsPath \ "id").read[UUID] and
+    (JsPath \ "id").readNullable[UUID] and
       (JsPath \ "username").read[String] and
       (JsPath \ "password").read[String] and
       (JsPath \ "email").read[String] and
       (JsPath \ "telephone").read[Int] and
-      (JsPath \ "created_at").read[String] and
-      (JsPath \ "active").read[Boolean]
+      (JsPath \ "created_at").readNullable[String] and
+      (JsPath \ "active").readNullable[Boolean]
   )(User.apply _)
 
   implicit val writes: Writes[User] = (
-    (JsPath \ "id").write[UUID] and
+    (JsPath \ "id").writeNullable[UUID] and
       (JsPath \ "username").write[String] and
       (JsPath \ "password").write[String] and
       (JsPath \ "email").write[String] and
       (JsPath \ "telephone").write[Int] and
-      (JsPath \ "created_at").write[String] and
-      (JsPath \ "active").write[Boolean]
+      (JsPath \ "created_at").writeNullable[String] and
+      (JsPath \ "active").writeNullable[Boolean]
   )(unlift(User.unapply))
 
   implicit val getUserResult: AnyRef with GetResult[User] =
     GetResult(r =>
       User(
-        uuidMapping(r).nextUUID,
+        Some(uuidMapping(r).nextUUID),
         r.nextString(),
         r.nextString(),
         r.nextString(),
         r.nextInt(),
-        r.nextString(),
-        r.nextBoolean()
+        Some(r.nextString()),
+        Some(r.nextBoolean())
       )
     )
 
@@ -69,7 +69,7 @@ object User {
   }
 
   implicit class uuidMapping(val r: PositionedResult) extends AnyVal{
-    def nextUUID : UUID =  UUID.fromString(r.nextString)
+    def nextUUID : UUID =  UUID.fromString(r.nextString())
     }
 
   implicit object SetUUID extends SetParameter[UUID] {
@@ -93,10 +93,10 @@ object User {
         userForm.validate[User] match {
           case JsSuccess(value, _) =>
             value.copy(
-              id = UUID.randomUUID(),
+              id = Some(UUID.randomUUID()),
               password = Utils.encryptPassword(value.password),
-              created_at = DateUtils.timestampNow,
-              active = true
+              created_at = Some(DateUtils.timestampNow),
+              active = Some(true)
             )
           case JsError(errors) =>
             throw new Exception("Invalid User Form " + errors)

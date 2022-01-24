@@ -1,7 +1,10 @@
 package controllers
 
+import controllers.constants.Responses._
 import controllers.services.UserService
+import controllers.utils.Utils.{extractUUID, updateValidationResponse}
 import models.User
+import models.User._
 import play.api.libs.json.Json
 import play.api.mvc._
 
@@ -14,9 +17,10 @@ class UserController @Inject() (
 )(implicit ec: ExecutionContext)
     extends AbstractController(cc) {
 
-  def getAllUsers: Action[AnyContent] =
+  def getUserById: Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      Ok(Json.toJson(userService.getAll))
+      val id = extractUUID(request.body.asJson)
+      Ok(Json.toJson(userService.getUserById(id)))
     }
 
   def getAllActiveUsers: Action[AnyContent] =
@@ -26,7 +30,24 @@ class UserController @Inject() (
 
   def signUpUser: Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      val user: User = User.extractFormData(request.body.asJson)
-        Created(userService.createUser(user).toString)
+      val user: User = extractFormData(request.body.asJson)
+      val response = updateValidationResponse(userService.createUser(user))
+
+      response match {
+        case USER_CREATED   => Created(response)
+        case ERR_USER_EXIST => BadGateway(response)
+        case _              => BadRequest(response)
+      }
+    }
+
+  def disableUser: Action[AnyContent] =
+    Action { implicit request: Request[AnyContent] =>
+      val id = extractUUID(request.body.asJson)
+      val response = updateValidationResponse(userService.disableUser(id))
+
+      response match {
+        case USER_UPDATED => Ok(response)
+        case _            => BadRequest(response)
+      }
     }
 }

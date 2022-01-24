@@ -1,9 +1,11 @@
 package controllers.services
 
+import controllers.constants.Responses._
 import controllers.utils.Utils
-import models.db.User._
 import models.Logger
+import models.db.User._
 import models.db.{User, UserList}
+import models.raw.LogIn
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.http.Status
 import slick.jdbc.JdbcProfile
@@ -32,14 +34,14 @@ class UserService @Inject() (
             .getOrElse(UUID.fromString(""))
             .toString && user.active
         ) {
-          logger.info("Success")
+          logger.info(SUCCESS)
           user
         } else {
-          logger.info("Failed no user")
+          logger.info(NO_USER_FOUND)
           User.defaultUser
         }
       case None => {
-        logger.info("Failed no user")
+        logger.info(NO_USER_FOUND)
         User.defaultUser
       }
     }
@@ -94,6 +96,19 @@ class UserService @Inject() (
         case _ => Status.BAD_REQUEST
       }
     } else Status.GONE
+  }
+
+  def logInUser(credentials: LogIn): Int = {
+    val query =
+      sql"select * from electronify.users where username = ${credentials.username} and password = ${credentials.password} and active = true;"
+        .as[User]
+    val userO = Utils.getFutureValue(db.run(query)).headOption
+    userO match {
+      case Some(_) => Status.OK
+      case None =>
+        logger.info(NO_USER_FOUND)
+        Status.BAD_REQUEST
+    }
   }
 
   def updateQueries(query: SqlAction[Int, NoStream, Effect]): Int = {

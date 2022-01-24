@@ -1,11 +1,12 @@
 package controllers
 
-import controllers.constants.Forms.userForm
 import controllers.constants.Responses._
+import controllers.forms.Forms._
 import controllers.services.UserService
+import controllers.utils.Utils
 import controllers.utils.Utils.{extractUUID, updateValidationResponse}
-import models.db.User._
 import models.db.User
+import models.db.User._
 import models.raw.RawUser
 import play.api.libs.json.Json
 import play.api.mvc._
@@ -47,6 +48,26 @@ class UserController @Inject() (
         Redirect(routes.HomeController.signUp(), 400)
       }
     }
+
+  def logIn: Action[AnyContent] =
+    Action { implicit request: Request[AnyContent] =>
+      val credentials = logInForm.bindFromRequest().get
+      val encryptedPass = Utils.encryptPassword(credentials.password)
+      Ok(
+        userService
+          .logInUser(
+            credentials
+              .copy(password = encryptedPass)
+          )
+          .toString
+      )
+    }
+
+//  def logout = Action {
+//    Redirect(routes.Auth.login).withNewSession.flashing(
+//      "success" -> "You are now logged out."
+//    )
+//  }
 
   def disableUser: Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>

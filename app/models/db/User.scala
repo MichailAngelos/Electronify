@@ -1,6 +1,8 @@
-package models
+package models.db
 
 import controllers.utils.{DateUtils, Utils}
+import models.Logger
+import models.raw.RawUser
 import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
 import play.api.libs.json._
 import slick.jdbc.{
@@ -20,8 +22,8 @@ case class User(
     password: String,
     email: String,
     telephone: Int,
-    created_at: Option[String] = Some(""),
-    active: Option[Boolean] = Some(false)
+    created_at: String = "",
+    active: Boolean = false
 )
 
 object User extends Logger {
@@ -31,8 +33,8 @@ object User extends Logger {
       (JsPath \ "password").read[String] and
       (JsPath \ "email").read[String] and
       (JsPath \ "telephone").read[Int] and
-      (JsPath \ "created_at").readNullable[String] and
-      (JsPath \ "active").readNullable[Boolean]
+      (JsPath \ "created_at").read[String] and
+      (JsPath \ "active").read[Boolean]
   )(User.apply _)
 
   implicit val writes: Writes[User] = (
@@ -41,8 +43,8 @@ object User extends Logger {
       (JsPath \ "password").write[String] and
       (JsPath \ "email").write[String] and
       (JsPath \ "telephone").write[Int] and
-      (JsPath \ "created_at").writeNullable[String] and
-      (JsPath \ "active").writeNullable[Boolean]
+      (JsPath \ "created_at").write[String] and
+      (JsPath \ "active").write[Boolean]
   )(unlift(User.unapply))
 
   implicit val getUserResult: AnyRef with GetResult[User] =
@@ -53,8 +55,8 @@ object User extends Logger {
         r.nextString(),
         r.nextString(),
         r.nextInt(),
-        Some(r.nextString()),
-        Some(r.nextBoolean())
+        r.nextString(),
+        r.nextBoolean()
       )
     )
 
@@ -92,23 +94,23 @@ object User extends Logger {
     )
   }
 
-  def extractFormData(form: Option[JsValue]): User = {
+  def getUserFromRaw(form: RawUser): User = {
+    User(
+      id = Some(UUID.randomUUID()),
+      username = form.username,
+      password = Utils.encryptPassword(form.password),
+      email = form.email,
+      telephone = form.telephone,
+      created_at = DateUtils.timestampNow,
+      active = true
+    )
+  }
+
+  def extractFormData(form: Option[RawUser]): User = {
     form match {
-      case Some(userForm) =>
-        userForm.validate[User] match {
-          case JsSuccess(value, _) =>
-            value.copy(
-              id = Some(UUID.randomUUID()),
-              password = Utils.encryptPassword(value.password),
-              created_at = Some(DateUtils.timestampNow),
-              active = Some(true)
-            )
-          case JsError(errors) =>
-            logger.info("Invalid User Form " + errors)
-            User.defaultUser
-        }
+      case Some(userForm) => User.getUserFromRaw(userForm)
       case None =>
-        logger.info("Failed Empty Form")
+        logger.info("Failed Invalid Form")
         User.defaultUser
     }
   }

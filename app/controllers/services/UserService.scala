@@ -1,8 +1,9 @@
 package controllers.services
 
 import controllers.utils.Utils
-import models.User._
-import models.{Logger, User, UserList}
+import models.db.User._
+import models.Logger
+import models.db.{User, UserList}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.http.Status
 import slick.jdbc.JdbcProfile
@@ -29,7 +30,7 @@ class UserService @Inject() (
         if (
           id == user.id
             .getOrElse(UUID.fromString(""))
-            .toString && user.active.get
+            .toString && user.active
         ) {
           logger.info("Success")
           user
@@ -61,18 +62,19 @@ class UserService @Inject() (
     val filter =
       activeUsers.users.filter(existingUser => user.email == existingUser.email)
 
-    (user.id, user.created_at, user.active) match {
-      case (Some(id), Some(date), Some(status)) =>
+    user.id match {
+      case Some(userId) =>
+        val id = userId.toString
         if (filter.isEmpty) {
           val query: SqlAction[Int, NoStream, Effect] =
-            sqlu"insert into electronify.users values ($id, ${user.username}, ${user.password}, ${user.email}, ${user.telephone}, $date, $status)"
+            sqlu"insert into electronify.users values ($id, ${user.username}, ${user.password}, ${user.email}, ${user.telephone}, ${user.created_at}, ${user.active})"
 
           updateQueries(query) match {
             case 1 => Status.CREATED
             case _ => Status.BAD_REQUEST
           }
         } else Status.BAD_GATEWAY
-      case _ => Status.BAD_REQUEST
+      case None => Status.BAD_REQUEST
     }
   }
 

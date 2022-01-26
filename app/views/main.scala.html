@@ -1,4 +1,4 @@
-@(title: String)(body: Html)
+@(title: String, page: String)(body: Html)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,36 +23,35 @@
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("css/bootstrap.min.css")">
 
     </head>
-    <body id="mainDiv">
+    <body id="mainDiv" class="container-fluid">
             <!-- End header area -->
-        <div class="container-fluid">
-            <div class="header-area">
-                <div class="logo">
-                    <h1 style="margin-bottom: 20px;"><a href="@routes.HomeController.index()">
-                        <img class="img-thumbnail" height="150" width="200" src="@routes.Assets.versioned("/img/eshoplogo.png")"></a>
+        <div class="header-area">
+            <div class="logo">
+                <h1 style="margin-bottom: 20px;"><a href="@routes.HomeController.index()">
+                    <img class="img-thumbnail" height="150" width="200" src="@routes.Assets.versioned("/img/eshoplogo.png")"></a>
 
-                        <div class="user-menu">
-                            <ul>
-                                <li><a href="#"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/account.png")">
-                                    Users</a></li>
-                                <li ><a href="@routes.UserController.getAllActiveUsers()"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/account.png")">
-                                    Active</a></li>
-                                <li><a href="#"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/account.png")">
-                                    Account</a></li>
-                                <li><a href="@routes.HomeController.cart()"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/cart.png")">
-                                    Cart</a></li>
-                                <li><a href="@routes.HomeController.checkOut()"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/check.png")">
-                                    Checkout</a></li>
-                                <li><a href="@routes.HomeController.index()"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/login.png")">
-                                    Login</a></li>
-                                <li><a href="@routes.HomeController.signUp()"><img class="rounded" height="20" width="20" src="@routes.Assets.versioned("/img/signup.png")">
-                                    SignUp</a></li>
-                            </ul>
-                        </div>
-                    </h1>
-                </div>
+                    <div class="user-menu">
+                        <ul>
+                            <li><a><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/account.png")">
+                                Users</a></li>
+                            <li ><a href="@routes.UserController.getAllActiveUsers()"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/account.png")">
+                                Active</a></li>
+                            <li><a href="#"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/account.png")">
+                                Account</a></li>
+                            <li><a href="@routes.HomeController.cart()"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/cart.png")">
+                                Cart</a></li>
+                            <li><a href="@routes.HomeController.checkOut()"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/check.png")">
+                                Checkout</a></li>
+                            <li><button class="open-button" onclick="openForm()"><a href="#logInForm" data-reveal-id="exampleModal"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/login.png")">
+                                Login</a></button></li>
+                            <li><a href="@routes.HomeController.signUp()"><img class="rounded" height="20" width="20" src="@routes.Assets.versioned("/img/signup.png")">
+                                SignUp</a></li>
+                        </ul>
+                    </div>
+                </h1>
             </div>
         </div>
+
         @* <div class="col-sm-8">*@
         @* <div class="shopping-item">*@
         @* <a href="cart.html">Cart - <span class="cart-amunt">*@
@@ -85,7 +84,7 @@
             <!-- End site branding area -->
         <div class="mainmenu-area">
             <div class="container">
-                <nav class="navbar navbar-expand-sm">
+                <nav class="navbar navbar-expand-md">
 
                     <ul class="navbar-nav">
                         <li class="nav-item">
@@ -103,10 +102,60 @@
                         <li class="nav-item">
                             <<a href="@routes.HomeController.contact()">Contact</a>
                         </li>
+                     <li>
+                        <div class="form-popup" id="logInForm">
+                            <div id="exampleModal" class="reveal-modal">
+                                <form action="#" class="form-container">
+                                    <h1>Login</h1>
+
+                                    <label for="email"><b>Email</b></label>
+                                    <input type="text" placeholder="Enter Email" name="email" required>
+
+                                    <label for="psw"><b>Password</b></label>
+                                    <input type="password" placeholder="Enter Password" name="psw" required>
+
+                                    <button type="submit" class="btn">Login</button>
+                                    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
                     </ul>
                 </nav>
             </div>
         </div>
+
+
+
+
+
+        @* <div class="form-popup" id="logInForm">*@
+        @* <form action="#" class="form-container">*@
+        @* <h1>Login</h1>*@
+
+        @* <label for="email"><b>Email</b></label>*@
+        @* <input type="text" placeholder="Enter Email" name="email" required>*@
+
+        @* <label for="psw"><b>Password</b></label>*@
+        @* <input type="password" placeholder="Enter Password" name="psw" required>*@
+
+        @* <button type="submit" class="btn">Login</button>*@
+        @* <button type="button" class="btn cancel" onclick="closeForm()">Close</button>*@
+        @* </form>*@
+        @* </div>*@
+        @* </div>*@
+
+        @* <div class="product-big-title-area">*@
+        @* <div class="container">*@
+        @* <div class="row">*@
+        @* <div class="col-md-11">*@
+        @* <div class="product-bit-title text-center" >*@
+        @* <h2 class="title-page"><b>@title</b></h2>*@
+        @* </div>*@
+        @* </div>*@
+        @* </div>*@
+        @* </div>*@
+        @* </div>*@
 
         @body
 
@@ -132,9 +181,9 @@
         <script src="@routes.Assets.versioned("js/jquery.sticky.js")"></script>
         <script>
                 function readMore() {
-                    var dots = document.getElementById("dots");
-                    var moreText = document.getElementById("more");
-                    var btnText = document.getElementById("myBtn");
+                    const dots = document.getElementById("dots");
+                    const moreText = document.getElementById("more");
+                    const btnText = document.getElementById("myBtn");
 
                     if (dots.style.display === "none") {
                         dots.style.display = "inline";
@@ -145,6 +194,14 @@
                         btnText.innerHTML = "Read less";
                         moreText.style.display = "inline";
                     }
+                }
+
+                function openForm() {
+                    document.getElementById("logInForm").style.display = "block";
+                }
+
+                function closeForm() {
+                    document.getElementById("logInForm").style.display = "none";
                 }
         </script>
     </body>

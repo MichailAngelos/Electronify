@@ -49,7 +49,10 @@ body {
 }
 
 #mainDiv {
-    background: #f7f7f7;
+    background: rgb(34, 195, 169);
+    background: radial-gradient(circle, rgba(34, 195, 169, 1) 0%, white 100%);
+    margin-top: -40px;
+    box-shadow: 5px 10px 8px gray;
 }
 
 .header-area {
@@ -62,20 +65,29 @@ body {
 
 .user-menu ul {
     list-style: outside none none;
-    margin-left:30% ;
+    margin-left: 30%;
     margin-top: -60px;
+    margin-right: 40px;
     padding-left: 0;
 }
 
 .user-menu li {
     display: inline-block;
     margin-left: 2px;
+    width: 100px !important;
+    padding-bottom: 15px;
+}
+
+#user-button {
+    width: 120px !important;
+    padding: 0;
+    margin-left: 50px;
 }
 
 .user-menu li a {
     display: block;
     font-size: 13px;
-    padding: 10px;
+    padding: 0;
 }
 
 .user-menu li a i.fa {
@@ -112,6 +124,7 @@ body {
     width: 100%;
     z-index: 999;
     position: page;
+    margin-top: -40px;
 }
 
 
@@ -123,6 +136,13 @@ body {
 
 .logo h1 a {
     color: #999;
+    margin-top: 10px;
+    margin-left: 2%;
+    padding-top: 5px;
+}
+
+.logo h1 a .menu-top {
+    width: 60px !important;
 }
 
 .logo h1 a:hover {
@@ -196,11 +216,15 @@ body {
     color: #fff;
     font-size: 16px;
     font-weight: 500;
-    padding: 20px;
+    padding: 18px;
 }
 
-.mainmenu-area ul.navbar-nav li:hover a, .mainmenu-area ul.navbar-nav li.active a {
-    background: #222
+ul.navbar-nav li:hover a, ul.navbar-nav li.active a {
+    background: lightgreen;
+}
+
+.mainmenu-area {
+    background: lightgreen !important;
 }
 
 .mainmenu-area .nav > li > a:focus {
@@ -216,9 +240,6 @@ body {
     overflow: hidden
 }
 
-.zigzag-bottom {
-}
-
 .slide-text-wrapper {
     height: 700px;
 }
@@ -231,17 +252,6 @@ body {
 .slide-text {
     display: table-cell;
     vertical-align: middle
-}
-
-.zigzag-bottom {
-    background: #1abc9c;
-    bottom: -80px;
-    height: 165px;
-    left: -5%;
-    position: absolute;
-    transform: rotate(3deg);
-    width: 108%;
-    z-index: 9;
 }
 
 .slide-bg {
@@ -291,7 +301,8 @@ body {
 .slide-content {
     position: relative;
     z-index: 9;
-    padding: 30px
+    padding: 30px;
+    box-shadow: 5px 10px 8px black;
 }
 
 .slide-content:before {
@@ -307,25 +318,39 @@ body {
 }
 
 
-.readmore {
-    background: none repeat scroll 0 0 #1abc9c;
-    color: #fff;
-    border: 1px solid #1abc9c;
+.click-options {
+    font-size: 16px;
+    padding: 8px 20px;
+    background-color: #c2fbd7;
+    border-radius: 100px;
+    box-shadow: rgba(44, 187, 99, .2) 0 -25px 18px -14px inset, rgba(44, 187, 99, .15) 0 1px 2px, rgba(44, 187, 99, .15) 0 2px 4px, rgba(44, 187, 99, .15) 0 4px 8px, rgba(44, 187, 99, .15) 0 8px 16px, rgba(44, 187, 99, .15) 0 16px 32px;
+    color: green;
+    cursor: pointer;
     display: inline-block;
-    font-size: 20px;
-    margin-top: 15px;
-    padding: 10px 20px;
-    text-transform: uppercase;
-}
-
-
-.readmore:hover {
-    background: #222;
+    font-family: CerebriSans-Regular, -apple-system, system-ui, Roboto, sans-serif;
+    text-align: center;
     text-decoration: none;
-    color: #fff;
-    border: 1px solid #fff
+    transition: all 250ms;
+    border: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
 }
 
+.click-options:hover {
+    box-shadow: rgba(44, 187, 99, .35) 0 -25px 18px -14px inset, rgba(44, 187, 99, .25) 0 1px 2px, rgba(44, 187, 99, .25) 0 2px 4px, rgba(44, 187, 99, .25) 0 4px 8px, rgba(44, 187, 99, .25) 0 8px 16px, rgba(44, 187, 99, .25) 0 16px 32px;
+    transform: scale(1.05) rotate(-1deg);
+}
+
+.menu-item {
+    background: none repeat scroll 0 0 #1abc9c !important;
+    box-shadow: unset !important;
+}
+
+.menu-item:hover {
+    box-shadow: rgba(44, 187, 99, .35) 0 -25px 18px -14px inset, rgba(44, 187, 99, .25) 0 1px 2px, rgba(44, 187, 99, .25) 0 2px 4px, rgba(44, 187, 99, .25) 0 4px 8px, rgba(44, 187, 99, .25) 0 8px 16px, rgba(44, 187, 99, .25) 0 16px 32px;
+    background: lightgreen !important;
+}
 
 .promo-area {
     background: none repeat scroll 0 0 #1abc9c;
@@ -337,10 +362,6 @@ body {
     background: none repeat scroll 0 0 #1abc9c;
     color: #beffdf;
     padding: 0px 0 200px;
-}
-
-.promo-area .zigzag-bottom, .brands-area .zigzag-bottom {
-    background: #fff
 }
 
 .single-promo {
@@ -357,7 +378,7 @@ body {
 
 .single-promo:hover {
     color: #fff;
-    background: #222;
+    background: lightgreen;
     border-color: #222
 }
 
@@ -415,13 +436,13 @@ body {
 }
 
 .product-hover a:hover {
-    background: #000;
+    background: lightgreen;
     text-decoration: none;
     border-color: #444;
 }
 
 .product-carousel-price ins {
-    color: #1abc9c;
+    color: black;
     font-weight: 700;
     margin-right: 5px;
     text-decoration: none;
@@ -458,9 +479,6 @@ body {
 
 .single-product {
     overflow: hidden;
-}
-
-.single-product:hover {
 }
 
 .single-product:hover .product-hover a.add-to-cart-link {
@@ -552,7 +570,7 @@ body {
 }
 
 .product-wid-price ins {
-    color: #1abc9c;
+    color: black;
     font-weight: 700;
     margin-right: 10px;
     text-decoration: none;
@@ -587,14 +605,14 @@ body {
 
 .product-widget-area {
     padding-bottom: 150px;
-    padding-top: 30px;
+    padding-top: 5px;
 }
 
-.product-widget-area .zigzag-bottom {
-    background: #e3e3e3
-}
+/*.product-widget-area {*/
+/*    background: #e3e3e3*/
+/*}*/
 
-.footer-top-area .zigzag-bottom {
+.footer-top-area {
     background: #000
 }
 
@@ -606,7 +624,6 @@ body {
 
 
 .footer-bottom-area {
-    background: #4ac9cd;
     color: #fff
 }
 
@@ -774,7 +791,7 @@ ol.slide-indicators li.active {
     background: url(../img/crossword.png) repeat scroll 0 0 #1ABC9C
 }
 
-.title-page{
+.title-page {
     font-size: 40px !important;
 }
 
@@ -785,10 +802,6 @@ ol.slide-indicators li.active {
     margin: 0;
     padding: 20px 0;
     color: #ffffff;
-}
-
-.single-product-area .zigzag-bottom {
-    background-color: #333333
 }
 
 .single-product-area {
@@ -1372,7 +1385,7 @@ button {
 }
 
 button:hover {
-    opacity: 0.8;
+    opacity: 0.7;
 }
 
 /* Extra styles for the cancel button */
@@ -1478,33 +1491,28 @@ span.psw {
     }
 }
 
-#checkout{
-    background: url(../img/crossword.png) repeat scroll 0 0 #1ABC9C
-}
-
 .open-button {
     background-color: transparent;
     width: auto;
 }
 
-/* The popup form - hidden by default */
 .form-popup {
     display: none;
     position: fixed;
-    top: auto;
-    right: 15px;
-    border: 0;
+    top: 18%;
     z-index: 9;
+    opacity: 0.9;
+    border: 1px solid;
+    padding: 0;
+    box-shadow: 5px 10px 8px black;
 }
 
-/* Add styles to the form container */
 .form-container {
     max-width: 300px;
     padding: 10px;
     background-color: white;
 }
 
-/* Full-width input fields */
 .form-container input[type=text], .form-container input[type=password] {
     width: 100%;
     padding: 15px;
@@ -1513,13 +1521,11 @@ span.psw {
     background: #f1f1f1;
 }
 
-/* When the inputs get focus, do something */
 .form-container input[type=text]:focus, .form-container input[type=password]:focus {
     background-color: #ddd;
     outline: none;
 }
 
-/* Set a style for the submit/login button */
 .form-container .btn {
     background-color: #04AA6D;
     color: white;
@@ -1527,16 +1533,95 @@ span.psw {
     border: none;
     cursor: pointer;
     width: 100%;
-    margin-bottom:10px;
+    margin-bottom: 10px;
     opacity: 0.8;
 }
 
 /* Add a red background color to the cancel button */
 .form-container .cancel {
-    background-color: red;
+    background-color: #f44336;
 }
 
+.form-container .cancel:hover {
+    background-color: lightcoral;
+}
+
+
 /* Add some hover effects to buttons */
-.form-container .btn:hover {
-    opacity: 1;
+.form-container .login:hover {
+    opacity: 0.8;
+}
+
+.login:hover {
+    background-color: lightgreen !important;
+}
+
+.logo {
+    background: rgb(34, 195, 169) !important;
+    background: linear-gradient(90deg, rgb(34, 195, 169) 0%, white 37%) !important;
+}
+
+.main-body {
+    background: rgb(34, 195, 169);
+    background: radial-gradient(circle, rgba(34, 195, 169, 1) 0%, white 100%);
+}
+
+.open-button .login-button {
+    padding: 5px;
+}
+
+.hover_bkgr_fricc {
+    background: rgba(0, 0, 0, .4);
+    cursor: pointer;
+    height: 100%;
+    position: fixed;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    right: 0;
+    padding: 50px;
+}
+
+.hover_bkgr_fricc .helper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.trigger_popup_fricc {
+    cursor: pointer;
+    font-size: 20px;
+    margin: 20px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.pop-up-message {
+    padding: 0 !important;
+    background: lightgray !important;
+    box-shadow: 10px 10px 60px #555 !important;
+
+}
+
+.message {
+    margin: 0;
+    padding: 0 !important;
+    position: fixed;
+    top: 40%;
+    left: 37%;
+}
+
+.click-options .message-pop {
+    background: lightgray;
+}
+
+.message-pop{
+    color: black !important;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.message-pop:hover {
+    color: white !important;
+    background: lightgreen;
 }

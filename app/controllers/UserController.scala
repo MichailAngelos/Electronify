@@ -52,22 +52,20 @@ class UserController @Inject() (
   def logIn: Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
       val credentials = logInForm.bindFromRequest().get
+      val failedPage = BadRequest(views.html.failed())
+      val successPage = Ok(views.html.success(credentials.username, LOGGED_IN))
       val encryptedPass = Utils.encryptPassword(credentials.password)
-      Ok(
-        userService
-          .logInUser(
-            credentials
-              .copy(password = encryptedPass)
-          )
-          .toString
-      )
+
+      val mayLogIn: Int =
+        userService.logInUser(credentials.copy(password = encryptedPass))
+
+      if (mayLogIn.equals(200)) successPage
+      else failedPage
     }
 
-//  def logout = Action {
-//    Redirect(routes.Auth.login).withNewSession.flashing(
-//      "success" -> "You are now logged out."
-//    )
-//  }
+  def logout: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    Ok(views.html.success("", LOGGED_OUT))
+  }
 
   def disableUser: Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>

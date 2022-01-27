@@ -1,0 +1,11 @@
+@()
+
+@main("Failed Message") {
+    <div class="hover_bkgr_fricc">
+        <span class="helper"></span>
+        <div class="message">
+            <a href="@routes.HomeController.index()" class="click-options">
+                Wrong Username/Password&nbsp;&nbsp;<img class="rounded-circle" height="50" width="50" src="@routes.Assets.versioned("/img/failed.png")"></a>
+        </div>
+    </div>
+}

@@ -12,4 +12,7 @@ object Responses {
 
   val NO_ACTIVE_USER = "No Active User"
   val NO_USER_FOUND = "No User found"
+
+  val LOGGED_IN = "logged in"
+  val LOGGED_OUT= "logged out"
 }

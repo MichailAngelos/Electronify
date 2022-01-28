@@ -1,6 +1,8 @@
 package controllers.utils
 
 import controllers.constants.Responses._
+import models.db.User
+import models.raw.LogIn
 import models.{Id, Logger}
 import play.api.http.Status
 import play.api.libs.json.{JsError, JsSuccess, JsValue}
@@ -65,5 +67,9 @@ object Utils extends Logger {
         logger.info("No ID was given")
         ""
     }
+  }
+
+  def isUserValid(credentials: LogIn, user: User): Boolean = {
+    user.active && user.username == credentials.username && credentials.password == user.password
   }
 }

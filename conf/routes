@@ -21,9 +21,10 @@ PUT           /products/edit/:id          controllers.ElectronicsController.edit
 DELETE        /products/delete/:id        controllers.ElectronicsController.delete(id :Int)
 
 #Users
-GET           /user                       controllers.UserController.getUserById
+GET           /user                       controllers.UserController.getUserById(id:String)
 GET           /user/active                controllers.UserController.getAllActiveUsers
 POST          /user/signin                controllers.UserController.logIn
+GET           /user/logout                controllers.UserController.logout
 POST          /user/signup                controllers.UserController.signUpUser
 PUT           /user/disable               controllers.UserController.disableUser
 

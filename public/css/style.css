@@ -73,9 +73,10 @@ body {
 
 .user-menu li {
     display: inline-block;
-    margin-left: 2px;
+    margin-left: 2%;
     width: 100px !important;
     padding-bottom: 15px;
+    padding-left: 0;
 }
 
 #user-button {
@@ -335,6 +336,7 @@ ul.navbar-nav li:hover a, ul.navbar-nav li.active a {
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
+    margin-left: 40px;
 }
 
 .click-options:hover {
@@ -1493,18 +1495,20 @@ span.psw {
 
 .open-button {
     background-color: transparent;
-    width: auto;
+    padding-left: 0;
+    margin-left: -70px
 }
 
 .form-popup {
     display: none;
     position: fixed;
-    top: 18%;
+    top: 14%;
     z-index: 9;
     opacity: 0.9;
     border: 1px solid;
     padding: 0;
     box-shadow: 5px 10px 8px black;
+    right: 32%;
 }
 
 .form-container {
@@ -1570,19 +1574,7 @@ span.psw {
     padding: 5px;
 }
 
-.hover_bkgr_fricc {
-    background: rgba(0, 0, 0, .4);
-    cursor: pointer;
-    height: 100%;
-    position: fixed;
-    text-align: center;
-    top: 0;
-    width: 100%;
-    right: 0;
-    padding: 50px;
-}
-
-.hover_bkgr_fricc .helper {
+.helper {
     display: inline-block;
     height: 100%;
     vertical-align: middle;
@@ -1609,6 +1601,8 @@ span.psw {
     position: fixed;
     top: 40%;
     left: 37%;
+    width: 300px !important;
+    height: 100px !important;
 }
 
 .click-options .message-pop {
@@ -1621,7 +1615,20 @@ span.psw {
     font-size: 20px;
 }
 
-.message-pop:hover {
-    color: white !important;
-    background: lightgreen;
+.user-button-lo{
+ margin-left: 50px !important;
+}
+
+#overlay {
+    position: fixed;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 2;
+    cursor: pointer;
 }

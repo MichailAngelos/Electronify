@@ -1,10 +1,16 @@
 package controllers
 
+import controllers.constants.Global
 import controllers.constants.Responses._
 import controllers.forms.Forms._
 import controllers.services.UserService
 import controllers.utils.Utils
-import controllers.utils.Utils.{extractUUID, updateValidationResponse}
+import controllers.utils.Utils.{
+  encryptPassword,
+  extractUUID,
+  isUserValid,
+  updateValidationResponse
+}
 import models.db.User
 import models.db.User._
 import models.raw.RawUser
@@ -20,9 +26,8 @@ class UserController @Inject() (
 )(implicit ec: ExecutionContext)
     extends AbstractController(cc) {
 
-  def getUserById: Action[AnyContent] =
+  def getUserById(id: String): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      val id = extractUUID(request.body.asJson)
       Ok(Json.toJson(userService.getUserById(id)))
     }
 
@@ -52,20 +57,30 @@ class UserController @Inject() (
   def logIn: Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
       val credentials = logInForm.bindFromRequest().get
-      val failedPage = BadRequest(views.html.failed())
-      val successPage = Ok(views.html.success(credentials.username, LOGGED_IN))
-      val encryptedPass = Utils.encryptPassword(credentials.password)
+      val encryptedPassCredential =
+        credentials.copy(password = encryptPassword(credentials.password))
 
-      val mayLogIn: Int =
-        userService.logInUser(credentials.copy(password = encryptedPass))
+      val mayUser: User =
+        userService.logInUser(encryptedPassCredential)
 
-      if (mayLogIn.equals(200)) successPage
-      else failedPage
+      if (isUserValid(encryptedPassCredential, mayUser)) {
+        Redirect(routes.HomeController.index()).withSession(
+          Global.SESSION_USERNAME_KEY -> credentials.username,
+          Global.SESSION_ID -> mayUser.id.get.toString,
+          Global.SESSION_LOGGED_IN_KEY -> LOGGED_IN,
+          Global.SESSION_ERR_LOGGED -> EMPTY_STRING
+        )
+      } else {
+        Redirect(routes.HomeController.index()) withSession (
+          Global.SESSION_ERR_LOGGED -> FAILED
+        )
+      }
     }
 
-  def logout: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.success("", LOGGED_OUT))
-  }
+  def logout: Action[AnyContent] =
+    Action { implicit request: Request[AnyContent] =>
+      Redirect(routes.HomeController.index()).withNewSession
+    }
 
   def disableUser: Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>

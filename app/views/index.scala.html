@@ -1,4 +1,6 @@
-@()
+@import controllers.constants.Global._
+@import controllers.constants.Responses._
+@()(implicit session: Session)
 
 @main("eShop") {
     <div class="slider-area">
@@ -13,6 +15,30 @@
                                     <div class="row">
                                         <div class="col-md-6 col-md-offset-6">
                                             <div align="center" class="slide-content">
+
+                                                @if(session.get(SESSION_ERR_LOGGED).nonEmpty) {
+                                                    <div id="overlay" onclick="off()">
+                                                        <span class="helper"></span>
+                                                        <div class="message">
+                                                            <a href="@routes.HomeController.index()" class="click-options">@FAILED_LOG_IN &nbsp;&nbsp;
+                                                                <img class="rounded-circle" height="50" width="50" src="@routes.Assets.versioned("/img/failed.png")">
+
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                }
+
+                                                @if(session.get(SESSION_LOGGED_IN_KEY).nonEmpty) {
+                                                    <div id="overlay" onclick="off()">
+                                                        <span class="helper"></span>
+                                                        <div class="message">
+                                                            <a href="@routes.HomeController.index()" class="click-options"><b>@LOGGED_IN_Response @session.get(SESSION_USERNAME_KEY)</b> &nbsp;&nbsp;
+                                                                <img class="rounded-circle" height="50" width="50" src="@routes.Assets.versioned("/img/success.png")">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                }
+
                                                 <h2>We are awesome</h2>
                                                 <p>Welcome to the cheapest eShop for your electronics!</p>
                                                 <p> <span id="dots">...</span>
@@ -23,7 +49,8 @@
                                                         <br>  <br>
                                                         <img class="rounded-circle" height="120" width="120" src="@routes.Assets.versioned("/img/shipping.png")">
                                                     </span></p>
-                                                <button class="click-options" onclick="readMore()" id="myBtn">Read More</button>
+                                                <button class="click-options" onclick="readMore()" id="myBtn">
+                                                    Read More</button>
                                             </div>
                                         </div>
                                     </div>
@@ -36,6 +63,7 @@
         </div>
     </div>
         <!-- End slider area -->
+
 
     <div class="brands-area">
         <div class="container" style="align-content: center">
@@ -149,5 +177,10 @@
             </div>
         </div>
     </div>
-        <!-- End product widget area -->
+    <script>
+            function off() {
+                document.getElementById("overlay").style.display = "none";
+            }
+    </script>
 }
+

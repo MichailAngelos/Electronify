@@ -98,16 +98,16 @@ class UserService @Inject() (
     } else Status.GONE
   }
 
-  def logInUser(credentials: LogIn): Int = {
+  def logInUser(credentials: LogIn): User = {
     val query =
       sql"select * from electronify.users where username = ${credentials.username} and password = ${credentials.password} and active = true;"
         .as[User]
     val userO = Utils.getFutureValue(db.run(query)).headOption
     userO match {
-      case Some(_) => Status.OK
+      case Some(value) => value
       case None =>
         logger.info(NO_USER_FOUND)
-        Status.BAD_REQUEST
+        User.defaultUser
     }
   }
 

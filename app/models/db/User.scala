@@ -17,7 +17,7 @@ import java.util.UUID
 import scala.language.postfixOps
 
 case class User(
-    id: Option[UUID] = Some(UUID.fromString("")),
+    id: Option[UUID],
     username: String,
     password: String,
     email: String,
@@ -87,6 +87,7 @@ object User extends Logger {
 
   def defaultUser: User = {
     User(
+      id = Some(UUID.fromString("00000000-0000-0000-0000-000000000000")),
       username = "",
       password = "",
       email = "",

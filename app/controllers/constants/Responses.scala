@@ -13,6 +13,10 @@ object Responses {
   val NO_ACTIVE_USER = "No Active User"
   val NO_USER_FOUND = "No User found"
 
-  val LOGGED_IN = "logged in"
+  val LOGGED_IN = "Logged In"
   val LOGGED_OUT= "logged out"
+  val LOGGED_IN_Response = "Success, Welcome back  "
+  val FAILED_LOG_IN =      "Wrong Username/Password"
+  val FAILED = "failed"
+  val EMPTY_STRING = ""
 }

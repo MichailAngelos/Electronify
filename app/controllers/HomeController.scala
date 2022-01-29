@@ -1,9 +1,12 @@
 package controllers
 
-/**Version 1 will be released in March 2021 */
-import controllers.constants.Global
-import controllers.constants.Responses.EMPTY_STRING
+/** Version 1 will be released in March 2021 */
 
+import controllers.constants.Global
+import controllers.constants.Global.{
+  SESSION_INVALID_FORM,
+  SESSION_SIGN_UP_INVALID_PASS
+}
 import javax.inject._
 import play.api.mvc._
 
@@ -36,7 +39,7 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
 
   def checkOut(): Action[AnyContent] =
     Action { implicit request =>
-      Ok(views.html.checkout())
+      Ok(views.html.checkout()).removingFromSession(SESSION_INVALID_FORM)
     }
 
   def contact(): Action[AnyContent] =
@@ -46,6 +49,9 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
 
   def signUp(): Action[AnyContent] =
     Action { implicit request =>
-      Ok(views.html.signup())
+      Ok(views.html.signup()).removingFromSession(
+        SESSION_INVALID_FORM,
+        SESSION_SIGN_UP_INVALID_PASS
+      )
     }
 }

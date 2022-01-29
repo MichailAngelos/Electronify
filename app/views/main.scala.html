@@ -108,9 +108,15 @@
                         <li class="nav-item">
                             <a href="@routes.HomeController.cart()" class="click-options menu-item">Cart</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="@routes.HomeController.checkOut()" class="click-options menu-item">Checkout</a>
-                        </li>
+                        @if(session.get(SESSION_ID).isEmpty) {
+                            <li class="nav-item">
+                                <a href="@routes.HomeController.signUp()" class="click-options menu-item">SignUp</a>
+                            </li>
+                        } else {
+                            <li class="nav-item">
+                                <a href="@routes.HomeController.checkOut()" class="click-options menu-item">Checkout</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a href="@routes.HomeController.contact()" class="click-options menu-item">Contact</a>
                         </li>

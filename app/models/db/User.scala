@@ -106,15 +106,6 @@ object User extends Logger {
       active = true
     )
   }
-
-  def extractFormData(form: Option[RawUser]): User = {
-    form match {
-      case Some(userForm) => User.getUserFromRaw(userForm)
-      case None =>
-        logger.info("Failed Invalid Form")
-        User.defaultUser
-    }
-  }
 }
 
 case class UserList(users: Seq[User])

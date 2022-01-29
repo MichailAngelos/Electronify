@@ -2,9 +2,10 @@ package controllers.services
 
 import controllers.constants.Responses._
 import controllers.utils.Utils
+import controllers.utils.Utils.isCreated
 import models.Logger
 import models.db.User._
-import models.db.{User, UserList}
+import models.db.{User, UserAddress, UserList}
 import models.raw.LogIn
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.http.Status
@@ -70,11 +71,9 @@ class UserService @Inject() (
         if (filter.isEmpty) {
           val query: SqlAction[Int, NoStream, Effect] =
             sqlu"insert into electronify.users values ($id, ${user.username}, ${user.password}, ${user.email}, ${user.telephone}, ${user.created_at}, ${user.active})"
+          val response = updateQueries(query)
 
-          updateQueries(query) match {
-            case 1 => Status.CREATED
-            case _ => Status.BAD_REQUEST
-          }
+          isCreated(response)
         } else Status.BAD_GATEWAY
       case None => Status.BAD_REQUEST
     }
@@ -108,6 +107,27 @@ class UserService @Inject() (
       case None =>
         logger.info(NO_USER_FOUND)
         User.defaultUser
+    }
+  }
+
+  def createUserAddress(address: UserAddress): Int = {
+    val getAddress =
+      sql"select * from electronify.users_address where id = ${address.id};"
+        .as[UserAddress]
+    val mayAddress: Option[UserAddress] =
+      Utils.getFutureValue(db.run(getAddress)).headOption
+
+    mayAddress match {
+      case Some(_) =>
+        logger.info(ERR_ALREADY_EXIST)
+        Status.BAD_REQUEST
+      case None =>
+        val query: SqlAction[Int, NoStream, Effect] =
+          sqlu" insert into electronify.users_address (id, address_1, address_2, city, postal_code, country, telephone, name) values (${address.id},  ${address.address}, ${address.addressO}, ${address.city},${address.postCode},${address.country},${address.telephone}, ${address.name});"
+
+        val response = updateQueries(query)
+
+        isCreated(response)
     }
   }
 

@@ -18,11 +18,9 @@
 
                                                 @if(session.get(SESSION_ERR_LOGGED).nonEmpty) {
                                                     <div id="overlay" onclick="off()">
-                                                        <span class="helper"></span>
                                                         <div class="message">
                                                             <a href="@routes.HomeController.index()" class="click-options">@FAILED_LOG_IN &nbsp;&nbsp;
                                                                 <img class="rounded-circle" height="50" width="50" src="@routes.Assets.versioned("/img/failed.png")">
-
                                                             </a>
                                                         </div>
                                                     </div>
@@ -30,7 +28,6 @@
 
                                                 @if(session.get(SESSION_LOGGED_IN_KEY).nonEmpty) {
                                                     <div id="overlay" onclick="off()">
-                                                        <span class="helper"></span>
                                                         <div class="message">
                                                             <a href="@routes.HomeController.index()" class="click-options"><b>@LOGGED_IN_Response @session.get(SESSION_USERNAME_KEY)</b> &nbsp;&nbsp;
                                                                 <img class="rounded-circle" height="50" width="50" src="@routes.Assets.versioned("/img/success.png")">

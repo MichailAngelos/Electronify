@@ -44,11 +44,11 @@ object Utils extends Logger {
 
   def updateValidationResponse(response: Int): String = {
     response match {
-      case Status.CREATED     => USER_CREATED
-      case Status.ACCEPTED    => USER_UPDATED
+      case Status.CREATED     => CREATED_ENTITY
+      case Status.ACCEPTED    => UPDATED
       case Status.OK          => DONE
       case Status.GONE        => ERR_USER_DISABLE
-      case Status.BAD_GATEWAY => ERR_USER_EXIST
+      case Status.BAD_GATEWAY => ERR_ALREADY_EXIST
       case _                  => ERR_INVALID_REQUEST
     }
   }
@@ -72,4 +72,12 @@ object Utils extends Logger {
   def isUserValid(credentials: LogIn, user: User): Boolean = {
     user.active && user.username == credentials.username && credentials.password == user.password
   }
+
+  def isCreated(status: Int): Int = {
+    status match {
+      case 1 => Status.CREATED
+      case _ => Status.BAD_REQUEST
+    }
+  }
+
 }

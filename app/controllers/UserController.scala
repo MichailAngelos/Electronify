@@ -36,15 +36,15 @@ class UserController @Inject() (
       Ok(Json.toJson(userService.getUserById(id)))
     }
 
+  //todo: html template missing (only for admins)
   def getAllActiveUsers: Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      //todo: html template missing (only for admins)
       Ok(Json.toJson(userService.getAllActiveUsers))
     }
 
+  //todo: better input validation email,letters etc.
   def signUpUser: Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      //todo: better input validation email,letters etc.
       val userRaw: Option[RawUser] = userForm.bindFromRequest().value
       userRaw match {
         case Some(raw) =>
@@ -59,7 +59,7 @@ class UserController @Inject() (
             }
           } else {
             logger.error(ERR_INVALID_PASS)
-            Redirect(routes.HomeController.signUp(), 400)
+            Redirect(routes.HomeController.signUp())
               .withSession(SESSION_SIGN_UP_INVALID_PASS -> ERR_INVALID_PASS)
           }
         case None =>
@@ -69,9 +69,9 @@ class UserController @Inject() (
       }
     }
 
+  //todo: missing authorization
   def logIn: Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      //todo: missing authorization
       val credentials = logInForm.bindFromRequest().get
       val encryptedPassCredential =
         credentials.copy(password = encryptPassword(credentials.password))
@@ -98,9 +98,9 @@ class UserController @Inject() (
       Redirect(routes.HomeController.index()).withNewSession
     }
 
+  //todo: admin action
   def disableUser: Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      //todo: admin action
       val id = extractUUID(request.body.asJson)
       val response = updateValidationResponse(userService.disableUser(id))
 
@@ -110,12 +110,12 @@ class UserController @Inject() (
       }
     }
 
+  //todo: If we have user address then ask if we want to change
   def checkout(id: String): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
       val checkOutRaw: Option[CheckOutRaw] =
         checkoutForm.bindFromRequest().value
 
-      //todo: If we have user address then ask if we want to change
       checkOutRaw match {
         case Some(raw) =>
           val user = userService.getUserById(id)

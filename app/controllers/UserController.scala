@@ -53,19 +53,27 @@ class UserController @Inject() (
             val response =
               updateValidationResponse(userService.createUser(user))
             response match {
-              case CREATED_ENTITY    => Redirect(routes.HomeController.index())
+              case CREATED_ENTITY =>
+                Created(CREATED_ENTITY).withSession(
+                  Global.SESSION_USERNAME_KEY -> user.username,
+                  Global.SESSION_ID -> user.id.get.toString,
+                  Global.SESSION_LOGGED_IN_KEY -> LOGGED_IN,
+                  Global.SESSION_ERR_LOGGED -> EMPTY_STRING
+                )
               case ERR_ALREADY_EXIST => BadGateway(response)
               case _                 => BadRequest(response)
             }
           } else {
             logger.error(ERR_INVALID_PASS)
-            Redirect(routes.HomeController.signUp())
-              .withSession(SESSION_SIGN_UP_INVALID_PASS -> ERR_INVALID_PASS)
+            BadGateway(ERR_INVALID_PASS).withSession(
+              SESSION_SIGN_UP_INVALID_PASS -> ERR_INVALID_PASS
+            )
           }
         case None =>
           logger.error(ERR_INVALID_FORM)
-          Redirect(routes.HomeController.signUp(), 400)
-            .withSession(SESSION_INVALID_FORM -> ERR_INVALID_FORM)
+          BadRequest(ERR_INVALID_FORM).withSession(
+            SESSION_INVALID_FORM -> ERR_INVALID_FORM
+          )
       }
     }
 
@@ -80,14 +88,14 @@ class UserController @Inject() (
         userService.logInUser(encryptedPassCredential)
 
       if (isUserValid(encryptedPassCredential, mayUser)) {
-        Redirect(routes.HomeController.index()).withSession(
+        Ok(SUCCESS).withSession(
           Global.SESSION_USERNAME_KEY -> credentials.username,
           Global.SESSION_ID -> mayUser.id.get.toString,
           Global.SESSION_LOGGED_IN_KEY -> LOGGED_IN,
           Global.SESSION_ERR_LOGGED -> EMPTY_STRING
         )
       } else {
-        Redirect(routes.HomeController.index()) withSession (
+        BadRequest(FAILED) withSession (
           Global.SESSION_ERR_LOGGED -> FAILED
         )
       }
@@ -95,7 +103,7 @@ class UserController @Inject() (
 
   def logout: Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      Redirect(routes.HomeController.index()).withNewSession
+      Ok("").withNewSession
     }
 
   //todo: admin action
@@ -126,9 +134,9 @@ class UserController @Inject() (
           response match {
             case CREATED_ENTITY =>
               //todo: Redirect to payment page
-              Redirect(routes.HomeController.checkOut())
+              Created(CREATED_ENTITY)
             case _ =>
-              Redirect(routes.HomeController.checkOut())
+              BadRequest(ERR_INVALID_FORM)
                 .withSession(
                   SESSION_INVALID_FORM -> ERR_INVALID_FORM,
                   Global.SESSION_USERNAME_KEY -> user.username,
@@ -137,7 +145,7 @@ class UserController @Inject() (
           }
         case None =>
           logger.info(checkoutForm.bindFromRequest().errors.toString())
-          Redirect(routes.HomeController.checkOut())
+          BadRequest(ERR_INVALID_FORM)
             .withSession(SESSION_INVALID_FORM -> ERR_INVALID_FORM)
       }
     }

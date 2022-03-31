@@ -7,6 +7,10 @@ host: localhhost:9000
 basePath: /index.html
 tags:
   - name: User
+  - name: Product
+  - name: Pages
+
+#User
 paths:
   /user/{id}:
     get:
@@ -136,7 +140,147 @@ paths:
           description: Bad Request
           schema:
             example: Error Message
+  #End User apis
+  #Product
+  /products:
+    get:
+      summary: Get all products
+      tags: [Product]
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ProductList'
+  /product:
+    post:
+      summary: Enter product in inventory
+      tags: [Product]
+      parameters:
+        - in: body
+          name: id
+          required: true
+          type: string
+          example: 04ab814f-68e0-477a-a525-b281670d29ec
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ProductList'
+  /products/{id}:
+    get:
+      summary: Get product by id
+      tags: [Product]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+          example: 04ab814f-68e0-477a-a525-b281670d29ec
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ProductList'
+  /product/cart:
+    post:
+      summary: Add product in the cart
+      tags: [Product]
+      parameters:
+        - in: body
+          name: id
+          required: true
+          type: string
+          example: 04ab814f-68e0-477a-a525-b281670d29ec
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ProductList'
+  /product/edit:
+    put:
+      summary: Modify product
+      tags: [Product]
+      parameters:
+        - in: body
+          name: id
+          required: true
+          type: string
+          example: 04ab814f-68e0-477a-a525-b281670d29ec
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ProductList'
+  /product/remove:
+    delete:
+      summary: Delete product
+      tags: [Product]
+      parameters:
+        - in: body
+          name: id
+          required: true
+          type: string
+          example: 04ab814f-68e0-477a-a525-b281670d29ec
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/ProductList'
 
+  #End of product apis
+  #Pages
+  /index.html:
+    get:
+      summary: Get Homepage
+      tags: [Pages]
+      responses:
+        200:
+          description: OK
+  /cart.html:
+    get:
+      summary: Get cart page
+      tags: [Pages]
+      responses:
+        200:
+          description: OK
+  /singleProduct.html:
+    get:
+      summary: Get product page
+      tags: [Pages]
+      responses:
+        200:
+          description: OK
+  /checkout.html:
+    get:
+      summary: Get checkout page
+      tags: [Pages]
+      responses:
+        200:
+          description: OK
+  /shop.html:
+    get:
+      summary: Get product page
+      tags: [Pages]
+      responses:
+        200:
+          description: OK
+  /contact.html:
+    get:
+      summary: Get contact page
+      tags: [Pages]
+      responses:
+        200:
+          description: OK
+
+  /signUp.html:
+    get:
+      summary: Get sign up from
+      tags: [Pages]
+      responses:
+        200:
+          description: OK
+#End pages apis
+#Definitions
 definitions:
   User:
     properties:
@@ -199,3 +343,24 @@ definitions:
         email: achaitidis@electronify.com,
         telephone: 9993965
       }
+  ProductList:
+    example:
+      [{
+        id: 04ab814f-68e0-477a-a525-b281670d29ec,
+        name: PS5,
+        brand: Sony,
+        price: 500,
+        on_sale: false,
+        in_stock: true,
+        created_at: Mon Jan 24 11:04:18 EET 2022
+      },
+        {
+          id: 04ab814f-68e0-477a-a525-b281670d29ec,
+          name: Laptop,
+          brand: HP,
+          price: 800,
+          on_sale: true,
+          in_stock: true,
+          created_at: Mon Jan 4 10:10:18 EET 2020
+        }
+      ]

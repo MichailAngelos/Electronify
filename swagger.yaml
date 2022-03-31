@@ -1,0 +1,201 @@
+swagger: "2.0"
+info:
+  title: Electronify API Documentation
+  description: electronics e-commerce
+  version: 1.0.0
+host: localhhost:9000
+basePath: /index.html
+tags:
+  - name: User
+paths:
+  /user/{id}:
+    get:
+      summary: Get user by ID
+      tags: [User]
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+          example: 04ab814f-68e0-477a-a525-b281670d29ec
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+  /user/active:
+    get:
+      summary: Returns a list of all active users.
+      tags: [User]
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/UserList'
+  /user/logout:
+    get:
+      summary: Sign out the user
+      tags: [User]
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+
+  /user/checkout/{id}:
+    post:
+      summary: Create address for the user
+      tags: [User]
+      description: if the user already has an address ask if they want to change it otherwise proceed to checkout
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+          example: 04ab814f-68e0-477a-a525-b281670d29ec
+      responses:
+        201:
+          description: Created
+          schema:
+            example: Created
+        400:
+          description: Bad Request
+          schema:
+            example: Invalid Form
+  /user/signin:
+    post:
+      summary: Logs in existing user
+      tags: [User]
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: Credentials
+          schema:
+            $ref: '#/definitions/LogIn'
+      responses:
+        200:
+          description: OK
+          schema:
+            example:
+              Success
+        400:
+          description: Bad Request
+          schema:
+            example: Failed
+  /user/signup:
+    post:
+      summary: Sigh up a user
+      tags: [User]
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: Credentials
+          schema:
+            $ref: '#/definitions/SignUp'
+      responses:
+        201:
+          description: Created
+          schema:
+            example:
+              Created
+        400:
+          description: Bad Request
+          schema:
+            example: Invalid Form
+        502:
+          description: Bad Gateway
+          schema:
+            example: Already Exist
+  /user/disable:
+    put:
+      summary: Disable an active user
+      tags: [User]
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: id
+          required: true
+          type: string
+          example: 04ab814f-68e0-477a-a525-b281670d29ec
+      responses:
+        200:
+          description: OK
+          schema:
+            example:
+              Updated
+        400:
+          description: Bad Request
+          schema:
+            example: Error Message
+
+definitions:
+  User:
+    properties:
+      id:
+        type: string
+        example: 04ab814f-68e0-477a-a525-b281670d29ec
+      username:
+        type: string
+        example: mgeorgiou
+      passwrord:
+        type: string
+        example: 6e83207fbc89d99ee010ec2cf03d8ea91d2d70187b98557a81d821c673c81176
+      email:
+        type: string
+        example: mgeorgiou@electronify.com
+      telephone:
+        type: integer
+        example: 99942975
+      created_at:
+        type: string
+        example: Mon Jan 24 11:04:18 EET 2022
+      active:
+        type: boolean
+  UserList:
+    properties:
+      users:
+        type: array
+        example: [
+          {
+            id: 04ab814f-68e0-477a-a525-b281670d29ec,
+            username: mgeorgiou,
+            password: 6e83207fbc89d99ee010ec2cf03d8ea91d2d70187b98557a81d821c673c81176,
+            email: mgeorgiou@electronify.com,
+            telephone: 99942975,
+            created_at: Mon Jan 24 11:04:18 EET 2022,
+            active: true
+          },
+          {
+            id: cde4b002-8539-417b-91d8-0df4fc5495e5,
+            username: tchristou,
+            password: 6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918,
+            email: tchristou@electronify.com,
+            telephone: 97639337,
+            created_at: Mon Jan 20 15:04:18 EET 2021,
+            active: true
+          }
+        ]
+  LogIn:
+    example:
+      {
+        username: "mgeorgiou",
+        password: 1234
+      }
+  SignUp:
+    example:
+      {
+        username: achaitidis,
+        password: 1234,
+        passwordR: 1234,
+        email: achaitidis@electronify.com,
+        telephone: 9993965
+      }

@@ -123,7 +123,7 @@
                         <li>
                             <div class="form-popup" id="logInForm">
                                 <div id="exampleModal" class="reveal-modal">
-                                    <form action="@routes.UserController.logIn()" method="post" class="form-container">
+                                    <form action="@routes.UserController.userPostAction(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"),0)" method="post" class="form-container">
                                         <h2>Login</h2>
 
                                         <label for="email"><b>Email</b></label>

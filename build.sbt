@@ -10,10 +10,9 @@ libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
 libraryDependencies += jdbc
 libraryDependencies ++= Seq(
-  "org.postgresql" % "postgresql" % "42.3.1",
+  "org.postgresql" % "postgresql" % "42.3.3",
   "com.typesafe.play" %% "play-slick" % "5.0.0",
-  //"org.slf4j" % "slf4j-nop" % "1.7.33",
-  "com.typesafe.slick" %% "slick-hikaricp" % "3.3.3",
+  "com.github.tototoshi" %% "slick-joda-mapper" % "2.5.0"
 )
 libraryDependencies += ws
 libraryDependencies ++= Seq(

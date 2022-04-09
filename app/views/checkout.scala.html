@@ -21,7 +21,7 @@
     <div class="container-fluid" id="checkout">
         <div class="row">
             <div class="col-md-9" id="checkout-form">
-                <form action="@routes.UserController.checkout(session.get(SESSION_ID).getOrElse("04ab814f-68e0-477a-a525-b281670d29ec"))" method="post">
+                <form action="@routes.UserController.userPostAction(session.get(SESSION_ID).getOrElse("04ab814f-68e0-477a-a525-b281670d29ec"),3)" method="post">
                     <label for="name" class="required">Delivery Name</label>
                     <input type="text" name="name" required placeholder="Name" >
 

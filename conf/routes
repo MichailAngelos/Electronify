@@ -26,11 +26,7 @@ GET           /user                       controllers.UserController.getUserById
 GET           /user/active                controllers.UserController.getAllActiveUsers
 GET           /user/logout                controllers.UserController.logout
 
-POST          /user/checkout              controllers.UserController.checkout(id:String)
-POST          /user/signin                controllers.UserController.logIn
-POST          /user/signup                controllers.UserController.signUpUser
-
-PUT           /user/disable               controllers.UserController.disableUser
+POST          /user                       controllers.UserController.userPostAction(id: String ,action: Int)
 
 #Assets
 GET           /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

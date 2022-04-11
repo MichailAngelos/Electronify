@@ -23,7 +23,8 @@ case class User(
     email: String,
     telephone: Int,
     created_at: String = "",
-    active: Boolean = false
+    active: Boolean = false,
+    auth: Int = 0
 )
 
 object User extends Logger {
@@ -34,7 +35,8 @@ object User extends Logger {
       (JsPath \ "email").read[String] and
       (JsPath \ "telephone").read[Int] and
       (JsPath \ "created_at").read[String] and
-      (JsPath \ "active").read[Boolean]
+      (JsPath \ "active").read[Boolean] and
+      (JsPath \ "auth").read[Int]
   )(User.apply _)
 
   implicit val writes: Writes[User] = (
@@ -44,7 +46,8 @@ object User extends Logger {
       (JsPath \ "email").write[String] and
       (JsPath \ "telephone").write[Int] and
       (JsPath \ "created_at").write[String] and
-      (JsPath \ "active").write[Boolean]
+      (JsPath \ "active").write[Boolean] and
+      (JsPath \ "auth").write[Int]
   )(unlift(User.unapply))
 
   implicit val getUserResult: AnyRef with GetResult[User] =
@@ -56,7 +59,8 @@ object User extends Logger {
         r.nextString(),
         r.nextInt(),
         r.nextString(),
-        r.nextBoolean()
+        r.nextBoolean(),
+        r.nextInt()
       )
     )
 
@@ -71,7 +75,8 @@ object User extends Logger {
       user.email,
       user.telephone,
       user.created_at,
-      user.active
+      user.active,
+      user.auth
     )
   }
 
@@ -103,7 +108,8 @@ object User extends Logger {
       email = form.email,
       telephone = form.telephone,
       created_at = DateUtils.timestampNow,
-      active = true
+      active = true,
+      auth = 2
     )
   }
 }

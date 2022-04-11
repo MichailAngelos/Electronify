@@ -1,6 +1,8 @@
 package controllers.utils
 
+import com.google.inject.spi.StaticInjectionRequest
 import controllers.constants.Responses._
+import controllers.constants.Values.EMAIL_REGEX
 import models.db.User
 import models.raw.LogIn
 import models.{Id, Logger}
@@ -80,4 +82,7 @@ object Utils extends Logger {
     }
   }
 
+  def isEmailValid(email: String): Boolean = {
+    EMAIL_REGEX.matches(email.toLowerCase)
+  }
 }

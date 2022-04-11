@@ -8,4 +8,7 @@ object Global {
   val SESSION_ERR_LOGGED = "failed"
   val SESSION_INVALID_FORM = "invalidForm"
   val SESSION_SIGN_UP_INVALID_PASS = "invalidSingUp"
+  val SESSION_AUTH = "auth"
+  val SESSION_INVALID_EMAIL = "invalidForm"
+
 }

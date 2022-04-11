@@ -1,4 +1,4 @@
-package controllers.forms
+package models.forms
 
 import models.raw.{CheckOutRaw, LogIn, RawUser}
 import play.api.data.Form

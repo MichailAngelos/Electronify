@@ -40,12 +40,12 @@
                                     Cart</a>
                                 </li>
                                 @if(session.get("username").nonEmpty) {
-                                    <li><a href="@routes.UserController.getUserById(session.get(SESSION_ID).get)"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/account.png")">
+                                    <li><a href="@routes.UserController.getUserActions(session.get(SESSION_ID).get,0)"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/account.png")">
                                     @session.get("username")
                                     </a>
                                     </li>
                                     <li>
-                                        <a href ="@routes.UserController.logout()">
+                                        <a href ="@routes.UserController.getUserActions(session.get(SESSION_ID).get,2)">
                                             <img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/logout.jpg")">
                                             Logout</a>
                                     </li>

@@ -20,12 +20,8 @@ POST          /products/cart/:id          controllers.ElectronicsController.addC
 PUT           /products/edit/:id          controllers.ElectronicsController.editProduct(id :Int)
 DELETE        /products/delete/:id        controllers.ElectronicsController.delete(id :Int)
 
-#Users
-
-GET           /user                       controllers.UserController.getUserById(id:String)
-GET           /user/active                controllers.UserController.getAllActiveUsers
-GET           /user/logout                controllers.UserController.logout
-
+#User
+GET           /user                       controllers.UserController.getUserActions(id: String, action: Int)
 POST          /user                       controllers.UserController.userPostAction(id: String ,action: Int)
 
 #Assets

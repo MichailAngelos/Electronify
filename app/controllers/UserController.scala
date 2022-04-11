@@ -29,7 +29,7 @@ import scala.concurrent.ExecutionContext
 
 class UserController @Inject() (
     cc: ControllerComponents,
-    userService: UserService
+    service: UserService
 )(implicit ec: ExecutionContext)
     extends AbstractController(cc) {
 
@@ -83,7 +83,7 @@ class UserController @Inject() (
         val encryptedPassCredential =
           credentials.copy(password = encryptPassword(credentials.password))
         val mayUser: User =
-          userService.logInUser(encryptedPassCredential)
+          service.logInUser(encryptedPassCredential)
 
         if (isUserValid(encryptedPassCredential, mayUser)) {
           val authLevel = UserAuth.getUserAuthLevel(mayUser.auth)
@@ -98,17 +98,14 @@ class UserController @Inject() (
                 )
               level match {
                 case Guest =>
-                  print(Guest.toString)
                   logIn.addingToSession(
                     Global.SESSION_AUTH -> Guest.toString
                   )(request)
                 case Admin =>
-                  print(Admin.toString)
                   logIn.addingToSession(
                     Global.SESSION_AUTH -> Admin.toString
                   )(request)
                 case Customer =>
-                  print(Customer.toString)
                   logIn.addingToSession(
                     Global.SESSION_AUTH -> Customer.toString
                   )(request)
@@ -137,7 +134,7 @@ class UserController @Inject() (
         if (raw.password.equals(raw.passwordR)) {
           val user: User = getUserFromRaw(raw)
           val response =
-            updateValidationResponse(userService.createUser(user))
+            updateValidationResponse(service.createUser(user))
           response match {
             case CREATED_ENTITY =>
               Created(CREATED_ENTITY).withSession(
@@ -170,7 +167,7 @@ class UserController @Inject() (
 
   //todo: admin action
   def disableUser(id: String): Result = {
-    val response = updateValidationResponse(userService.disableUser(id))
+    val response = updateValidationResponse(service.disableUser(id))
     response match {
       case UPDATED => Ok(response)
       case _       => BadRequest(response)
@@ -181,10 +178,10 @@ class UserController @Inject() (
   def checkout(id: String, checkOutRaw: Option[CheckOutRaw]): Result = {
     checkOutRaw match {
       case Some(raw) =>
-        val user = userService.getUserById(id)
+        val user = service.getUserById(id)
         val address: UserAddress = userAddressFromRaw(user, raw)
         val response =
-          updateValidationResponse(userService.createUserAddress(address))
+          updateValidationResponse(service.createUserAddress(address))
 
         response match {
           case CREATED_ENTITY =>
@@ -206,12 +203,12 @@ class UserController @Inject() (
 
   //todo: html template missing
   def getUserById(id: String): Result = {
-    Ok(Json.toJson(userService.getUserById(id)))
+    Ok(Json.toJson(service.getUserById(id)))
   }
 
   //todo: html template missing (only for admins)
   def getAllActiveUsers: Result = {
-    Ok(Json.toJson(userService.getAllActiveUsers))
+    Ok(Json.toJson(service.getAllActiveUsers))
   }
 
   def logout: Result = {

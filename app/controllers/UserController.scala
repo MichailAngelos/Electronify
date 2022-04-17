@@ -45,11 +45,12 @@ class UserController @Inject() (
             case SignUp   => signUp(userForm.bindFromRequest().value)
             case Disable  => disableUser(extractUUID(request.body.asJson))
             case Checkout => checkout(id, checkoutForm.bindFromRequest().value)
-            //todo
-            case Update => Redirect(routes.HomeController.index())
+            case Update =>
+              Ok(views.html.index())
+                .withSession(Global.SESSION_USERNAME_KEY -> "")
           }
         case None =>
-          Redirect(routes.HomeController.index()) withSession (
+          Ok(views.html.index()) withSession (
             Global.SESSION_ERR_LOGGED -> FAILED
           )
       }

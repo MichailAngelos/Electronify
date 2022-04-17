@@ -17,6 +17,7 @@ POST        /user                      controllers.UserController.userPostAction
 
 #Product
 GET         /product                   controllers.ProductController.getProduct(id:String,action:Int)
+POST        /product                   controllers.ProductController.postProduct(id:String,action:Int)
 
 #Assets
 GET         /assets/*file              controllers.Assets.versioned(path="/public", file: Asset)

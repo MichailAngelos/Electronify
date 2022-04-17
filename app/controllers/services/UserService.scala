@@ -26,7 +26,7 @@ class UserService @Inject() (
 
   def getUserById(id: String): User = {
     val query = sql"select * from electronify.users where id = $id;".as[User]
-    val user = Utils.getFutureValue(db.run(query)).headOption
+    val user: Option[User] = Utils.getFutureValue(db.run(query)).headOption
 
     user match {
       case Some(user) =>

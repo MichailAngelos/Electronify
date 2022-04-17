@@ -1,12 +1,29 @@
 package models.enums
 
-object Product {
-  object GetProduct extends Enumeration {
-    type GetProduct = Value
-    val Details, All, OnSale, InStock, Category = Value
+import controllers.constants.Values
 
-    def getProduct(action: Int): Option[Value] = {
-      values.find(_.id == action)
-    }
+trait Product
+
+sealed abstract class ProductAction(name: Map[Int, String]) {
+  def getAction(action: Int): Option[String] = {
+    name.get(action)
   }
+}
+
+object Product {
+  case object GetProduct extends ProductAction(Values.getProduct)
+  case object PostProduct extends ProductAction(Values.postProduct)
+}
+
+object ActionProduct extends Enumeration {
+  type ActionProduct = Value
+  val Details = "Details"
+  val All = "All"
+  val OnSale = "OnSale"
+  val InStock = "InStock"
+  val Category = "Category"
+  val Create = "Create"
+  val Update = "Update"
+  val Remove = "Remove"
+  val SetSale = "SetSale"
 }

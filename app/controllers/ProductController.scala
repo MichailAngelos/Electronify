@@ -1,18 +1,10 @@
 package controllers
 
 import controllers.services.ProductService
-import models.db.Products
-import models.enums.Product
+import models.enums.ActionProduct._
 import models.enums.Product.GetProduct
-import models.enums.Product.GetProduct._
-import play.api.mvc.{
-  AbstractController,
-  Action,
-  AnyContent,
-  ControllerComponents,
-  Request,
-  Result
-}
+import play.api.libs.json.Json
+import play.api.mvc._
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -25,10 +17,8 @@ class ProductController @Inject() (
 
   def getProduct(id: String = "", action: Int): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      val mayAction: Option[Product.GetProduct.Value] =
-        GetProduct.getProduct(action)
-
-      mayAction match {
+      val productAction: Option[String] = GetProduct.getAction(action)
+      productAction match {
         case Some(action) =>
           action match {
             case Details  => getDetails(id)
@@ -36,13 +26,20 @@ class ProductController @Inject() (
             case OnSale   => ???
             case InStock  => ???
             case Category => ???
+            case _        => BadRequest(views.html.index())
           }
-        case None => ???
-      }
+        case None => BadRequest(views.html.index())
 
+      }
     }
+
   def getDetails(id: String): Result = {
-    ???
+    Ok(Json.toJson(service.getProduct(id)))
   }
+
+  def postProduct(id: String, action: Int): Action[AnyContent] =
+    Action { implicit request: Request[AnyContent] =>
+      ???
+    }
 
 }

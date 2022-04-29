@@ -4,73 +4,15 @@
     <div class="single-product-area">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
-                    <div class="single-sidebar">
-                        <h2 class="sidebar-title">Search Products</h2>
-                        <form action="">
-                            <input type="text" placeholder="Search products...">
-                            <input type="submit" value="Search">
-                        </form>
-                    </div>
-
-                    <div class="single-sidebar">
-                        <h2 class="sidebar-title">Products</h2>
-                        <div class="thubmnail-recent">
-                            <img src="@routes.Assets.versioned("img/alienware.jpg")" class="recent-thumb" alt="">
-                            <h2><a href="">Sony Smart TV</a></h2>
-                            <div class="product-sidebar-price">
-                                <ins>$700.00</ins> <del>$800.00</del>
-                            </div>
-                        </div>
-                        <div class="thubmnail-recent">
-                            <img src="@routes.Assets.versioned("img/alienware.jpg")" class="recent-thumb" alt="">
-                            <h2><a href="">Sony Smart TV </a></h2>
-                            <div class="product-sidebar-price">
-                                <ins>$700.00</ins> <del>$800.00</del>
-                            </div>
-                        </div>
-                        <div class="thubmnail-recent">
-                            <img src="@routes.Assets.versioned("img/alienware.jpg")" class="recent-thumb" alt="">
-                            <h2><a href="">Sony Smart TV </a></h2>
-                            <div class="product-sidebar-price">
-                                <ins>$700.00</ins> <del>$800.00</del>
-                            </div>
-                        </div>
-                        <div class="thubmnail-recent">
-                            <img src="@routes.Assets.versioned("img/alienware.jpg")" class="recent-thumb" alt="">
-                            <h2><a href="">Sony Smart TV </a></h2>
-                            <div class="product-sidebar-price">
-                                <ins>$700.00</ins> <del>$800.00</del>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-8">
                     <div class="product-content-right">
-                        <div class="product-breadcroumb">
-                            <a href="@routes.HomeController.index()">Home</a>
-                            <a href="#">Sony Smart TV </a>
-                            <br><br>
-                        </div>
-
                         <div class="row">
-                            <div class="col-sm-6">
-                                <div class="product-images">
-                                    <div class="product-main-img">
-                                        <img src="@routes.Assets.versioned("img/product-thumb-4.jpg")" alt="">
-                                    </div>
-                                    <br>
-                                    <div class="product-gallery">
-                                        <img src="@routes.Assets.versioned("img/alienware.jpg")" alt="">
-                                        <img src="@routes.Assets.versioned("img/product-thumb-2.jpg")" alt="">
-                                        <img src="@routes.Assets.versioned("img/product-thumb-3.jpg")" alt="">
-                                        <img src="@routes.Assets.versioned("img/product-thumb-4.jpg")" alt="">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6">
+                            <div class="card-body">
+                                <div class="card">
+                                    <img src="@routes.Assets.versioned("img/product-4.jpg")" alt="Denim Jeans">
+                                    <h1>Tailored Jeans</h1>
+                                    <p class="price">$19.99</p>
+                                    <p>lorem ipsum lorem jeansum. Lorem jeamsun denim lorem jeansum.</p>
+                                </div><br>
                                 <div class="product-inner">
                                     <h2 class="product-name">Sony Smart TV</h2>
                                     <div class="product-inner-price">
@@ -83,49 +25,10 @@
                                         </div>
                                         <button class="add_to_cart_button" type="submit">Add to cart</button>
                                     </form>
-
-                                    <div role="tabpanel">
-                                        <ul class="product-tab" role="tablist">
-                                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">
-                                                Description</a></li>
-                                            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
-                                                Reviews</a></li>
-                                        </ul>
-                                        <div class="tab-content">
-                                            <div role="tabpanel" class="tab-pane fade in active" id="home">
-                                                <h2>Product Description</h2>
-                                                <p>Explaining Here in more details about a single Product that the User click on</p>
-                                            </div>
-                                            <div role="tabpanel" class="tab-pane fade" id="profile">
-                                                <h2>Reviews</h2>
-                                                <div class="submit-review">
-                                                    <p><label for="name">Name</label> <input name="name" type="text"></p>
-                                                    <p><label for="email">
-                                                        Email</label> <input name="email" type="email"></p>
-                                                    <div class="rating-chooser">
-                                                        <p>Your rating</p>
-
-                                                        <div class="rating-wrap-post">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                        </div>
-                                                    </div>
-                                                    <p><label for="review">
-                                                        Your review</label> <textarea name="review" id="" cols="30" rows="10"></textarea></p>
-                                                    <p><input type="submit" value="Submit"></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>

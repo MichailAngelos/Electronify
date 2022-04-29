@@ -1,4 +1,5 @@
 @import controllers.constants.Global.SESSION_ID
+@import models.enums.ActionsUser
 @(title: String)(content: Html)(implicit session: Session)
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +17,7 @@
         <link href="@routes.Assets.versioned("css/google3.css")" rel='stylesheet' type='text/css'>
 
             <!-- Custom Css -->
-        <link rel="stylesheet" href=@routes.Assets.versioned("css/owl.carousel.css")>
+        <link rel="stylesheet" href=@routes.Assets.versioned("css/product.css")>
         <link rel="stylesheet" href=@routes.Assets.versioned("css/responsive.css")>
         <link rel="stylesheet" href=@routes.Assets.versioned("css/signup.css")>
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("css/style.css")">
@@ -40,12 +41,12 @@
                                     Cart</a>
                                 </li>
                                 @if(session.get("username").nonEmpty) {
-                                    <li><a href="@routes.UserController.getUserActions(session.get(SESSION_ID).get,0)"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/account.png")">
+                                    <li><a href="@routes.UserController.getUserActions(session.get(SESSION_ID).get,ActionsUser.UserById)"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/account.png")">
                                     @session.get("username")
                                     </a>
                                     </li>
                                     <li>
-                                        <a href ="@routes.UserController.getUserActions(session.get(SESSION_ID).get,2)">
+                                        <a href ="@routes.UserController.getUserActions(session.get(SESSION_ID).get,ActionsUser.LogOut)">
                                             <img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/logout.jpg")">
                                             Logout</a>
                                     </li>
@@ -123,7 +124,7 @@
                         <li>
                             <div class="form-popup" id="logInForm">
                                 <div id="exampleModal" class="reveal-modal">
-                                    <form action="@routes.UserController.userPostAction(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"),0)" method="post" class="form-container">
+                                    <form action="@routes.UserController.userPostAction(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"),ActionsUser.SignIn)" method="post" class="form-container">
                                         <h2>Login</h2>
 
                                         <label for="email"><b>Email</b></label>

@@ -1,6 +1,6 @@
 package controllers.utils
 
-import com.google.inject.spi.StaticInjectionRequest
+import controllers.constants.Global
 import controllers.constants.Responses._
 import controllers.constants.Values.EMAIL_REGEX
 import models.db.User
@@ -84,5 +84,14 @@ object Utils extends Logger {
 
   def isEmailValid(email: String): Boolean = {
     EMAIL_REGEX.matches(email.toLowerCase)
+  }
+
+  def getUserSession(user: User): Map[String, String] = {
+    Map(
+      Global.SESSION_USERNAME_KEY -> user.username,
+      Global.SESSION_ID -> user.id.get.toString,
+      Global.SESSION_LOGGED_IN_KEY -> LOGGED_IN,
+      Global.SESSION_ERR_LOGGED -> EMPTY_STRING
+    )
   }
 }

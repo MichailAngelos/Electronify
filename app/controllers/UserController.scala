@@ -5,20 +5,13 @@ import controllers.constants.Global._
 import controllers.constants.Responses._
 import controllers.services.UserService
 import controllers.utils.Utils
-import controllers.utils.Utils.{
-  encryptPassword,
-  extractUUID,
-  isUserValid,
-  updateValidationResponse
-}
-import models.db.{User, UserAddress}
+import controllers.utils.Utils.{logger, _}
 import models.db.User._
 import models.db.UserAddress.userAddressFromRaw
-import models.enums.UserActions.UserGetActions._
-import models.enums.UserActions.{UserGetActions, UserPostActions}
-import models.enums.UserActions.UserPostActions._
-import models.enums.UserAuth._
+import models.db.{User, UserAddress}
+import models.enums.ActionsUser._
 import models.enums.UserAuth
+import models.enums.UserAuth._
 import models.forms.Forms._
 import models.raw.{CheckOutRaw, LogIn, RawUser}
 import play.api.libs.json.Json
@@ -33,45 +26,29 @@ class UserController @Inject() (
 )(implicit ec: ExecutionContext)
     extends AbstractController(cc) {
 
-  def userPostAction(id: String = "", action: Int): Action[AnyContent] =
+  def userPostAction(id: String = "", action: String): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      val userAction: Option[UserPostActions.Value] =
-        UserPostActions.getUserAction(action)
-
-      userAction match {
-        case Some(action) =>
-          action match {
-            case SignIn   => signIn(logInForm.bindFromRequest().value, request)
-            case SignUp   => signUp(userForm.bindFromRequest().value)
-            case Disable  => disableUser(extractUUID(request.body.asJson))
-            case Checkout => checkout(id, checkoutForm.bindFromRequest().value)
-            case Update =>
-              Ok(views.html.index())
-                .withSession(Global.SESSION_USERNAME_KEY -> "")
-          }
-        case None =>
-          Ok(views.html.index()) withSession (
-            Global.SESSION_ERR_LOGGED -> FAILED
-          )
+      action match {
+        case SignIn   => signIn(logInForm.bindFromRequest().value, request)
+        case SignUp   => signUp(userForm.bindFromRequest().value, request)
+        case Disable  => disableUser(extractUUID(request.body.asJson))
+        case Checkout => checkout(id, checkoutForm.bindFromRequest().value)
+        case Update =>
+          Ok(views.html.index())
+            .withSession(Global.SESSION_USERNAME_KEY -> "")
+        case _ =>
+          BadRequest(views.html.index())
+            .withSession(Global.SESSION_USERNAME_KEY -> "")
       }
     }
 
-  def getUserActions(id: String = "", action: Int): Action[AnyContent] =
+  def getUserActions(id: String = "", action: String): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      val getAction: Option[UserGetActions.Value] =
-        UserGetActions.getUserAction(action)
+      action match {
+        case UserById    => getUserById(id)
+        case ActiveUsers => getAllActiveUsers
+        case LogOut      => logout
 
-      getAction match {
-        case Some(action) =>
-          action match {
-            case GetUser     => getUserById(id)
-            case ActiveUsers => getAllActiveUsers
-            case LogOut      => logout
-          }
-        case None =>
-          Redirect(routes.HomeController.index()) withSession (
-            Global.SESSION_ERR_LOGGED -> FAILED
-          )
       }
     }
 
@@ -91,12 +68,18 @@ class UserController @Inject() (
           authLevel match {
             case Some(level) =>
               val logIn: Result =
-                Redirect(routes.HomeController.index()).withSession(
+                Ok(
+                  views.html.index()(
+                    request.session.copy(
+                      getUserSession(mayUser)
+                    )
+                  )
+                ).addingToSession(
                   Global.SESSION_USERNAME_KEY -> credentials.username,
                   Global.SESSION_ID -> mayUser.id.get.toString,
                   Global.SESSION_LOGGED_IN_KEY -> LOGGED_IN,
                   Global.SESSION_ERR_LOGGED -> EMPTY_STRING
-                )
+                )(request)
               level match {
                 case Guest =>
                   logIn.addingToSession(
@@ -129,7 +112,7 @@ class UserController @Inject() (
     }
   }
 
-  def signUp(userRaw: Option[RawUser]): Result = {
+  def signUp(userRaw: Option[RawUser], request: Request[AnyContent]): Result = {
     userRaw match {
       case Some(raw) =>
         if (raw.password.equals(raw.passwordR)) {
@@ -138,12 +121,18 @@ class UserController @Inject() (
             updateValidationResponse(service.createUser(user))
           response match {
             case CREATED_ENTITY =>
-              Created(CREATED_ENTITY).withSession(
+              Created(
+                views.html.index()(
+                  request.session.copy(
+                    getUserSession(user)
+                  )
+                )
+              ).addingToSession(
                 Global.SESSION_USERNAME_KEY -> user.username,
                 Global.SESSION_ID -> user.id.get.toString,
                 Global.SESSION_LOGGED_IN_KEY -> LOGGED_IN,
                 Global.SESSION_ERR_LOGGED -> EMPTY_STRING
-              )
+              )(request)
             case ERR_ALREADY_EXIST => BadGateway(response)
             case _                 => BadRequest(response)
           }

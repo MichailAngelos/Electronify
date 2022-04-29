@@ -1,8 +1,7 @@
 package models.db
 
 import models.Logger
-import play.api.libs.functional.syntax.{toFunctionalBuilderOps, unlift}
-import play.api.libs.json.{Format, JsPath, Json, Reads, Writes}
+import play.api.libs.json.{Format, Json}
 import slick.jdbc.GetResult
 
 import java.util.UUID
@@ -14,7 +13,11 @@ case class Product(
     price: Double,
     onSale: Boolean,
     inStock: Boolean,
-    createdAt: String
+    createdAt: String,
+    category: String,
+    sale: Int,
+    stock: Int,
+    image: String
 )
 
 object Product extends Logger {
@@ -50,6 +53,10 @@ object Product extends Logger {
         r.nextDouble(),
         r.nextBoolean(),
         r.nextBoolean(),
+        r.nextString(),
+        r.nextString(),
+        r.nextInt(),
+        r.nextInt(),
         r.nextString()
       )
     )
@@ -62,7 +69,11 @@ object Product extends Logger {
       price = 0.0,
       onSale = false,
       inStock = false,
-      createdAt = ""
+      createdAt = "",
+      category = "",
+      sale = 0,
+      stock = 0,
+      image = ""
     )
   }
 }

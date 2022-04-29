@@ -12,12 +12,12 @@ GET         /contact.html              controllers.HomeController.contact()
 GET         /signUp.html               controllers.HomeController.signUp()
 
 #User
-GET         /user                      controllers.UserController.getUserActions(id: String, action: Int)
-POST        /user                      controllers.UserController.userPostAction(id: String ,action: Int)
+GET         /user                      controllers.UserController.getUserActions(id: String, action: String)
+POST        /user                      controllers.UserController.userPostAction(id: String ,action: String)
 
 #Product
-GET         /product                   controllers.ProductController.getProduct(id:String,action:Int)
-POST        /product                   controllers.ProductController.postProduct(id:String,action:Int)
+GET         /product                   controllers.ProductController.getProduct(id:String,action:String)
+POST        /product                   controllers.ProductController.postProduct(id:String,action:String)
 
 #Assets
 GET         /assets/*file              controllers.Assets.versioned(path="/public", file: Asset)

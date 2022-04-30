@@ -47,7 +47,7 @@ class UserController @Inject() (
       action match {
         case UserById    => getUserById(id)
         case ActiveUsers => getAllActiveUsers
-        case LogOut      => logout
+        case LogOut      => logout(id)
 
       }
     }
@@ -201,7 +201,8 @@ class UserController @Inject() (
     Ok(Json.toJson(service.getAllActiveUsers))
   }
 
-  def logout: Result = {
+  def logout(id:String): Result = {
+    service.logOutSession(id)
     Redirect(routes.HomeController.index()).withNewSession
   }
 }

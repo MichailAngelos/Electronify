@@ -1,11 +1,17 @@
 package controllers.services
 
 import controllers.constants.Responses._
-import controllers.utils.Utils
-import controllers.utils.Utils.isCreated
+import controllers.utils.DateUtils.timestampNow
+import controllers.utils.Utils.{
+  getFutureValue,
+  getUUID,
+  isCreated,
+  isUpdated,
+  validUpdateStatus
+}
 import models.Logger
 import models.db.User._
-import models.db.{User, UserAddress, UserList}
+import models.db.{ShoppingSession, User, UserAddress, UserList}
 import models.raw.LogIn
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.http.Status
@@ -26,7 +32,7 @@ class UserService @Inject() (
 
   def getUserById(id: String): User = {
     val query = sql"select * from electronify.users where id = $id;".as[User]
-    val user: Option[User] = Utils.getFutureValue(db.run(query)).headOption
+    val user: Option[User] = getFutureValue(db.run(query)).headOption
 
     user match {
       case Some(user) =>
@@ -51,13 +57,17 @@ class UserService @Inject() (
   def getAllActiveUsers: UserList = {
     val query =
       sql"select * from electronify.users where active = true;".as[Seq[User]]
-    UserList.getUserList(Utils.getFutureValue(db.run(query)))
+    UserList.getUserList(getFutureValue(db.run(query)))
   }
 
   def getAllDisableUsers: UserList = {
     val query =
       sql"select * from electronify.users where active = false;".as[Seq[User]]
-    UserList.getUserList(Utils.getFutureValue(db.run(query)))
+    UserList.getUserList(getFutureValue(db.run(query)))
+  }
+
+  def updateQueries(query: SqlAction[Int, NoStream, Effect]): Int = {
+    getFutureValue[Int](db.run(query))
   }
 
   def createUser(user: User): Int = {
@@ -72,8 +82,9 @@ class UserService @Inject() (
           val query: SqlAction[Int, NoStream, Effect] =
             sqlu"insert into electronify.users values ($id, ${user.username}, ${user.password}, ${user.email}, ${user.telephone}, ${user.created_at}, ${user.active})"
           val response = updateQueries(query)
-
-          isCreated(response)
+          val result = isCreated(response)
+          if (result == Status.CREATED) createSession(id)
+          result
         } else Status.BAD_GATEWAY
       case None => Status.BAD_REQUEST
     }
@@ -90,10 +101,7 @@ class UserService @Inject() (
       val query: SqlAction[Int, NoStream, Effect] =
         sqlu"update electronify.users set active = false where id = $id;"
 
-      updateQueries(query) match {
-        case 1 => Status.ACCEPTED
-        case _ => Status.BAD_REQUEST
-      }
+      isUpdated(updateQueries(query))
     } else Status.GONE
   }
 
@@ -101,9 +109,11 @@ class UserService @Inject() (
     val query =
       sql"select * from electronify.users where username = ${credentials.username} and password = ${credentials.password} and active = true;"
         .as[User]
-    val userO = Utils.getFutureValue(db.run(query)).headOption
+    val userO = getFutureValue(db.run(query)).headOption
     userO match {
-      case Some(value) => value
+      case Some(value) =>
+        createSession(value.id.get.toString)
+        value
       case None =>
         logger.info(NO_USER_FOUND)
         User.defaultUser
@@ -115,7 +125,7 @@ class UserService @Inject() (
       sql"select * from electronify.users_address where id = ${address.id};"
         .as[UserAddress]
     val mayAddress: Option[UserAddress] =
-      Utils.getFutureValue(db.run(getAddress)).headOption
+      getFutureValue(db.run(getAddress)).headOption
 
     mayAddress match {
       case Some(_) =>
@@ -131,7 +141,29 @@ class UserService @Inject() (
     }
   }
 
-  def updateQueries(query: SqlAction[Int, NoStream, Effect]): Int = {
-    Utils.getFutureValue[Int](db.run(query))
+  def createSession(id: String): Int = {
+    val currentDate = timestampNow
+    val uuid = getUUID
+    val query =
+      sqlu"insert into electronify.shopping_session (id, user_id, login) values ($uuid,$id,$currentDate)"
+    validUpdateStatus(isUpdated(updateQueries(query)), "shopping_session")
+  }
+
+  def logOutSession(userId: String): Int = {
+    val getSession =
+      sql"select * from electronify.shopping_session where user_id = $userId and logout = '';"
+        .as[ShoppingSession]
+    val session = getFutureValue(db.run(getSession)).headOption
+
+    session match {
+      case Some(sess) =>
+        val currentDate = timestampNow
+        val query =
+          sqlu"update electronify.shopping_session set logout = $currentDate where id = ${sess.id}"
+        validUpdateStatus(isUpdated(updateQueries(query)), "shopping_session")
+      case None =>
+        logger.info("No session Found for user")
+        Status.BAD_REQUEST
+    }
   }
 }

@@ -82,6 +82,13 @@ object Utils extends Logger {
     }
   }
 
+  def isUpdated(status: Int): Int = {
+    status match {
+      case 1 => Status.ACCEPTED
+      case _ => Status.BAD_REQUEST
+    }
+  }
+
   def isEmailValid(email: String): Boolean = {
     EMAIL_REGEX.matches(email.toLowerCase)
   }
@@ -93,5 +100,16 @@ object Utils extends Logger {
       Global.SESSION_LOGGED_IN_KEY -> LOGGED_IN,
       Global.SESSION_ERR_LOGGED -> EMPTY_STRING
     )
+  }
+
+  def getUUID: UUID = {
+    UUID.randomUUID()
+  }
+
+  def validUpdateStatus(status: Int, update: String): Int = {
+    if (status != Status.ACCEPTED) {
+      logger.info(s"Failed to update $update table")
+      status
+    } else status
   }
 }

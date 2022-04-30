@@ -5,18 +5,20 @@
     @main("Products") {
         <div class="single-product-area">
             <div class="container">
-                <div class="row" id="products-list">
-                    <div class="col-md-3 col-sm-6">
-                        <div class="single-shop-product">
+                    <div class="single-shop-product">
+                    @for(product <- products.products) {
+                      <div class="list-products">
+                        <div class="card list-product">
                             <div class="product-upper">
-                                <img src="@routes.Assets.versioned("img/product-4.jpg")" alt="">
+                                <img src="@routes.Assets.versioned(product.image)" class="rounded virtual-flow" style="width: 220px;
+                                    height: 220px;" alt="@product.brand">
                             </div>
-                            <h2><a href="@routes.HomeController.product()">Sony Playstation</a></h2>
-                            <div class="product-carousel-price">
-                                <ins>$899.00</ins> <del>$999.00</del>
-                            </div>
-
-                            <form action="@routes.CartController.postCart(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), "332a2604-c07e-11ec-9d64-0242ac120002", ActionsCart.AddCart)" method="post" class="form-container">
+                            <h2><a href="@routes.HomeController.product()">@product.name</a></h2>
+                            <form action="@routes.CartController.postCart(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), product.id, ActionsCart.AddCart)" method="post" class="form-container">
+                                <div class="product-carousel-price">
+                                    <ins class="price-tag">&euro;
+                                        @product.price</ins>
+                                </div>
                                 <div class="quantity buttons_added">
                                     <input type="number" size="4" class="input-text qty text" title="Qty" value="1" min="0" step="1" name="quantity">
                                 </div>
@@ -25,8 +27,9 @@
                                 </div>
                             </form>
                         </div>
+                      </div>
+                    }
                     </div>
                 </div>
-            </div>
         </div>
     }

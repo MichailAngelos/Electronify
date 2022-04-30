@@ -35,3 +35,30 @@
     margin: 0 400px !important;
     padding: 0;
 }
+
+.price-tag {
+    margin-left: 17%;
+    padding-bottom: 0;
+    position: absolute;
+}
+
+.product-upper {
+    margin: 5px;
+}
+
+.product-card-shop {
+    background: #9fcdff;
+}
+
+.list-products {
+    margin: 5px 10px;
+    align-items: flex-start;
+    float:left;
+    display:inline;
+    justify-content: center;
+}
+
+.container {
+    align-items: flex-start;
+    justify-content: center;
+}

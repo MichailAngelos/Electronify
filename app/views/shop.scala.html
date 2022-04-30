@@ -1,33 +1,32 @@
-@import controllers.constants.Global.SESSION_ID
 @import models.db.Products
+@import controllers.constants.Global.SESSION_ID
+@import models.enums.ActionsCart
 @(products: Products)(implicit session: Session)
-@main("Products") {
-    <div class="single-product-area">
-        <div class="container">
-            <div class="row" id="products-list">
-                <div class="col-md-3 col-sm-6">
-                    <div class="single-shop-product">
-                        <div class="product-upper">
-                            <img src="@routes.Assets.versioned("img/product-4.jpg")" alt="">
-                        </div>
-                        <h2><a href="@routes.HomeController.product()">Sony Playstation</a></h2>
-                        <div class="product-carousel-price">
-                            <ins>$899.00</ins> <del>$999.00</del>
-                        </div>
+    @main("Products") {
+        <div class="single-product-area">
+            <div class="container">
+                <div class="row" id="products-list">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="single-shop-product">
+                            <div class="product-upper">
+                                <img src="@routes.Assets.versioned("img/product-4.jpg")" alt="">
+                            </div>
+                            <h2><a href="@routes.HomeController.product()">Sony Playstation</a></h2>
+                            <div class="product-carousel-price">
+                                <ins>$899.00</ins> <del>$999.00</del>
+                            </div>
 
-                        <div class="product-option-shop">
-                            <button class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="/canvas/shop/?add-to-cart=70">
-                                Add to cart</button>
+                            <form action="@routes.CartController.postCart(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), "332a2604-c07e-11ec-9d64-0242ac120002", ActionsCart.AddCart)" method="post" class="form-container">
+                                <div class="quantity buttons_added">
+                                    <input type="number" size="4" class="input-text qty text" title="Qty" value="1" min="0" step="1" name="quantity">
+                                </div>
+                                <div class="product-option-shop">
+                                    <button type="submit" class="add_to_cart_button">Add to cart</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script>
-            window.onload = function () {
-                document.getElementsByClassName('.add_to_cart_button').disable = @session.get(SESSION_ID).getOrElse("").isEmpty;
-            };
-    </script>
-        <!-- End footer bottom area -->
-}
+    }

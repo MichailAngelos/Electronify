@@ -102,10 +102,6 @@ object Utils extends Logger {
     )
   }
 
-  def getUUID: UUID = {
-    UUID.randomUUID()
-  }
-
   def validUpdateStatus(status: Int, update: String): Int = {
     if (status != Status.ACCEPTED) {
       logger.info(s"Failed to update $update table")

@@ -1,8 +1,8 @@
 package models.forms
 
-import models.raw.{CheckOutRaw, LogIn, RawUser}
+import models.raw._
 import play.api.data.Form
-import play.api.data.Forms.{mapping, number, text, tuple}
+import play.api.data.Forms.{mapping, number, text}
 
 object Forms {
 
@@ -33,5 +33,11 @@ object Forms {
       "country" -> text,
       "comments" -> text
     )(CheckOutRaw.apply)(CheckOutRaw.unapply)
+  }
+
+  val addToCartF: Form[AddCartRaw] = Form {
+    mapping(
+      "quantity" -> number
+    )(AddCartRaw.apply)(AddCartRaw.unapply)
   }
 }

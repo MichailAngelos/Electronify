@@ -31,9 +31,23 @@ class ProductService @Inject() (
     }
   }
 
-  def getAll: Products  = {
+  def getAll: Products = {
     val query =
-      sql"select * from electronify.product".as[Seq[Product]]
+      sql"select * from electronify.product;".as[Seq[Product]]
+    getProducts(getFutureValue(db.run(query)))
+  }
+
+  def getSale: Products = {
+    val query =
+      sql"select * from electronify.product where on_sale = true;"
+        .as[Seq[Product]]
+    getProducts(getFutureValue(db.run(query)))
+  }
+
+  def getInStock: Products = {
+    val query =
+      sql"select * from electronify.product where in_stock = true;"
+        .as[Seq[Product]]
     getProducts(getFutureValue(db.run(query)))
   }
 

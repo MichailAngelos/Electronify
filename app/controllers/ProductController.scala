@@ -17,12 +17,11 @@ class ProductController @Inject() (
   def getProduct(id: String = "", action: String): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
       action match {
-        case Details  => getDetails(id)
-        case All      => getAllProducts(request)
-        case OnSale   => ???
-        case InStock  => ???
-        case Category => ???
-        case _        => BadRequest(views.html.index())
+        case Details => getDetails(id)
+        case All     => getAllProducts(request)
+        case OnSale  => getSaleProducts(request)
+        case InStock => getInStockProducts(request)
+        case _       => BadRequest(views.html.index())
       }
     }
 
@@ -34,9 +33,23 @@ class ProductController @Inject() (
     Ok(views.html.shop(service.getAll)(request.session))
   }
 
+  def getSaleProducts(request: Request[AnyContent]): Result = {
+    Ok(views.html.shop(service.getSale)(request.session))
+  }
+
+  def getInStockProducts(request: Request[AnyContent]): Result = {
+    Ok(views.html.shop(service.getInStock)(request.session))
+  }
+
   def postProduct(id: String, action: String): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
-      ???
+      action match {
+        case Create  => Ok(views.html.index())
+        case Update  => Ok(views.html.index())
+        case Remove  => Ok(views.html.index())
+        case SetSale => Ok(views.html.index())
+        case _       => BadRequest(views.html.index())
+      }
     }
 
 }

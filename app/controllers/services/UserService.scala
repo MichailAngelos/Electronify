@@ -4,7 +4,6 @@ import controllers.constants.Responses._
 import controllers.utils.DateUtils.timestampNow
 import controllers.utils.Utils.{
   getFutureValue,
-  getUUID,
   isCreated,
   isUpdated,
   validUpdateStatus
@@ -143,7 +142,7 @@ class UserService @Inject() (
 
   def createSession(id: String): Int = {
     val currentDate = timestampNow
-    val uuid = getUUID
+    val uuid = UUID.randomUUID()
     val query =
       sqlu"insert into electronify.shopping_session (id, user_id, login) values ($uuid,$id,$currentDate)"
     validUpdateStatus(isUpdated(updateQueries(query)), "shopping_session")

@@ -95,18 +95,18 @@ class UserController @Inject() (
                   )(request)
               }
             case None =>
-              Redirect(routes.HomeController.index()) withSession (
+              BadRequest(views.html.index()(request.session)).withSession(
                 Global.SESSION_ERR_LOGGED -> FAILED
               )
           }
 
         } else {
-          Redirect(routes.HomeController.index()) withSession (
+          BadRequest(views.html.index()(request.session)) withSession (
             Global.SESSION_ERR_LOGGED -> FAILED
           )
         }
       case None =>
-        Redirect(routes.HomeController.index()) withSession (
+        BadRequest(views.html.index()(request.session)) withSession (
           Global.SESSION_ERR_LOGGED -> FAILED
         )
     }
@@ -201,7 +201,7 @@ class UserController @Inject() (
     Ok(Json.toJson(service.getAllActiveUsers))
   }
 
-  def logout(id:String): Result = {
+  def logout(id: String): Result = {
     service.logOutSession(id)
     Redirect(routes.HomeController.index()).withNewSession
   }

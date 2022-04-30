@@ -2,21 +2,25 @@
 
 #Home Controller Get HTML pages
 
-GET         /                          controllers.HomeController.index()
-GET         /index.html                controllers.HomeController.index()
-GET         /cart.html                 controllers.HomeController.cart()
-GET         /singleProduct.html        controllers.HomeController.product()
-GET         /checkout.html             controllers.HomeController.checkOut()
-GET         /contact.html              controllers.HomeController.contact()
-GET         /signUp.html               controllers.HomeController.signUp()
+GET         /                                        controllers.HomeController.index()
+GET         /index.html                              controllers.HomeController.index()
+GET         /cart.html                               controllers.HomeController.cart()
+GET         /singleProduct.html                      controllers.HomeController.product()
+GET         /checkout.html                           controllers.HomeController.checkOut()
+GET         /contact.html                            controllers.HomeController.contact()
+GET         /signUp.html                             controllers.HomeController.signUp()
 
 #User
-GET         /user                      controllers.UserController.getUserActions(id: String, action: String)
-POST        /user                      controllers.UserController.userPostAction(id: String ,action: String)
+GET         /user                                    controllers.UserController.getUserActions(id: String, action: String)
+POST        /user                                    controllers.UserController.userPostAction(id: String ,action: String)
 
 #Product
-GET         /product                   controllers.ProductController.getProduct(id:String,action:String)
-POST        /product                   controllers.ProductController.postProduct(id:String,action:String)
+GET         /product                                 controllers.ProductController.getProduct(id:String,action:String)
+POST        /product                                 controllers.ProductController.postProduct(id:String,action:String)
+
+#Cart
+GET         /user/:id/cart                           controllers.CartController.getCart(id:String,action:String)
+POST        /user/:id/product/:productId/cart        controllers.CartController.postCart(id:String,productId:String,action:String)
 
 #Assets
-GET         /assets/*file              controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                            controllers.Assets.versioned(path="/public", file: Asset)

@@ -6,7 +6,6 @@ object ActionProduct extends Enumeration {
   val All = "All"
   val OnSale = "OnSale"
   val InStock = "InStock"
-  val Category = "Category"
   val Create = "Create"
   val Update = "Update"
   val Remove = "Remove"

@@ -23,27 +23,6 @@ case class Product(
 object Product extends Logger {
   implicit val format: Format[Product] = Json.format
 
-//Remove if are not needed
-//  implicit val reads: Reads[Product] = (
-//    (JsPath \ "id").read[String] and
-//      (JsPath \ "name").read[String] and
-//      (JsPath \ "brand").read[String] and
-//      (JsPath \ "price").read[Double] and
-//      (JsPath \ "onSale").read[Boolean] and
-//      (JsPath \ "inStock").read[Boolean] and
-//      (JsPath \ "createdAt").read[String]
-//  )(Product.apply _)
-//
-//  implicit val writes: Writes[Product] = (
-//    (JsPath \ "id").write[String] and
-//      (JsPath \ "name").write[String] and
-//      (JsPath \ "brand").write[String] and
-//      (JsPath \ "price").write[Double] and
-//      (JsPath \ "onSale").write[Boolean] and
-//      (JsPath \ "inStock").write[Boolean] and
-//      (JsPath \ "createdAt").write[String]
-//  )(unlift(Product.unapply))
-
   implicit val getProduct: AnyRef with GetResult[Product] =
     GetResult(r =>
       Product(
@@ -76,10 +55,18 @@ object Product extends Logger {
       image = ""
     )
   }
+
+  implicit val getProductsResult: AnyRef with GetResult[Seq[Product]] =
+    GetResult(r => Seq(getProduct.apply(r)))
+
 }
 
 case class Products(products: Seq[Product])
 
 object Products extends Logger {
   implicit val format: Format[Products] = Json.format
+
+  def getProducts(products: Vector[Seq[Product]]): Products = {
+    Products(products.flatten)
+  }
 }

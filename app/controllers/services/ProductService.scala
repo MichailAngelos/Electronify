@@ -1,8 +1,10 @@
 package controllers.services
 
 import controllers.utils.Utils
+import controllers.utils.Utils.getFutureValue
 import models.Logger
-import models.db.Product
+import models.db.Products.getProducts
+import models.db.{Product, Products}
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import slick.jdbc.JdbcProfile
 
@@ -27,6 +29,12 @@ class ProductService @Inject() (
       case Some(value) => value
       case None        => Product.defaultProduct
     }
+  }
+
+  def getAll: Products  = {
+    val query =
+      sql"select * from electronify.product".as[Seq[Product]]
+    getProducts(getFutureValue(db.run(query)))
   }
 
 }

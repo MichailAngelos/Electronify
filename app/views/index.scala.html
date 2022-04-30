@@ -13,7 +13,7 @@
                             <div class="slide-text">
                                 <div class="container">
                                     <div class="row">
-                                        <div class="col-md-6 col-md-offset-6">
+                                        <div class="col-md-6 col-md-offset-6 details-card">
                                             <div align="center" class="slide-content">
 
                                                 @if(session.get(SESSION_ERR_LOGGED).nonEmpty) {
@@ -81,99 +81,6 @@
         </div>
     </div>
         <!-- End brands area -->
-
-    <div class="product-widget-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="single-product-widget">
-                        <h2 class="product-wid-title">Top Sellers</h2>
-                        <a href="@routes.HomeController.shop()" class="wid-view-more">View All</a>
-                        <div class="single-wid-product">
-                            <a href="@routes.HomeController.product()"><img src="@routes.Assets.versioned("img/sonySmart.jpg")" alt="" class="product-thumb"></a>
-                            <h2><a href="@routes.HomeController.product()">Sony Smart TV </a></h2>
-                            <div class="product-wid-price">
-                                <ins>$400.00</ins> <del>$425.00</del>
-                            </div>
-                        </div>
-                        <div class="single-wid-product">
-                            <a href="@routes.HomeController.product()"><img src="@routes.Assets.versioned("img/Macbook_Air.jpg")" alt="" class="product-thumb"></a>
-                            <h2><a href="@routes.HomeController.product()">Apple New MacBook</a></h2>
-                            <div class="product-wid-price">
-                                <ins>$400.00</ins> <del>$525.00</del>
-                            </div>
-                        </div>
-                        <div class="single-wid-product">
-                            <a href="@routes.HomeController.product()"><img src="@routes.Assets.versioned("img/macBook.jpg")" alt="" class="product-thumb"></a>
-                            <h2><a href="@routes.HomeController.product()">Apple MacBook Air</a></h2>
-                            <div class="product-wid-price">
-                                <ins>$400.00</ins> <del>$425.00</del>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="single-product-widget">
-                        <h2 class="product-wid-title">Recently Viewed</h2>
-                        <a href="@routes.HomeController.shop()" class="wid-view-more">View All</a>
-                        <div class="single-wid-product">
-                            <a href="@routes.HomeController.product()"><img src="@routes.Assets.versioned("img/product_thumb__1.jpg")" alt="" class="product-thumb"></a>
-                            <h2><a href="@routes.HomeController.product()">Sony Playstation</a></h2>
-
-                            <div class="product-wid-price">
-                                <ins>$400.00</ins> <del>$425.00</del>
-                            </div>
-                        </div>
-                        <div class="single-wid-product">
-                            <a href="@routes.HomeController.product()"><img src="@routes.Assets.versioned("img/xboxOne.jpg")" alt="" class="product-thumb"></a>
-                            <h2><a href="@routes.HomeController.product()">X-box One</a></h2>
-
-                            <div class="product-wid-price">
-                                <ins>$400.00</ins> <del>$425.00</del>
-                            </div>
-                        </div>
-                        <div class="single-wid-product">
-                            <a href="@routes.HomeController.product()"><img src="@routes.Assets.versioned("img/product-thumb-2.jpg")" alt="" class="product-thumb"></a>
-                            <h2><a href="@routes.HomeController.product()">Samsung Galaxy note 4</a></h2>
-                            <div class="product-wid-price">
-                                <ins>$400.00</ins> <del>$425.00</del>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="single-product-widget">
-                        <h2 class="product-wid-title">Top New</h2>
-                        <a href="#" class="wid-view-more">View All</a>
-                        <div class="single-wid-product">
-                            <a href="@routes.HomeController.product()"><img src="@routes.Assets.versioned("img/alienware.jpg")" alt="" class="product-thumb"></a>
-                            <h2><a href="@routes.HomeController.product()">Alienware M17</a></h2>
-
-                            <div class="product-wid-price">
-                                <ins>$400.00</ins> <del>$425.00</del>
-                            </div>
-                        </div>
-                        <div class="single-wid-product">
-                            <a href="@routes.HomeController.product()"><img src="@routes.Assets.versioned("img/product-thumb-4.jpg")" alt="" class="product-thumb"></a>
-                            <h2><a href="@routes.HomeController.product()">Samsung Smart Tv</a></h2>
-
-                            <div class="product-wid-price">
-                                <ins>$400.00</ins> <del>$425.00</del>
-                            </div>
-                        </div>
-                        <div class="single-wid-product">
-                            <a href="@routes.HomeController.product()"><img src="@routes.Assets.versioned("img/product_thumb__1.jpg")" alt="" class="product-thumb"></a>
-                            <h2><a href="@routes.HomeController.product()">Sony Playstation</a></h2>
-
-                            <div class="product-wid-price">
-                                <ins>$250.00</ins> <del>$350.00</del>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <script>
             function off() {
                 document.getElementById("overlay").style.display = "none";

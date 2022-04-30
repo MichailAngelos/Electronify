@@ -336,7 +336,6 @@ ul.navbar-nav li:hover a, ul.navbar-nav li.active a {
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
-    margin-left: 40px;
 }
 
 .click-options:hover {

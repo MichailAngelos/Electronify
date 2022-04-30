@@ -32,11 +32,6 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
       Ok(views.html.singleProduct())
     }
 
-  def shop(): Action[AnyContent] =
-    Action { implicit request =>
-      Ok(views.html.shop())
-    }
-
   def checkOut(): Action[AnyContent] =
     Action { implicit request =>
       Ok(views.html.checkout()).removingFromSession(SESSION_INVALID_FORM)

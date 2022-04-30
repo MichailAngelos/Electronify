@@ -7,7 +7,6 @@ GET         /index.html                controllers.HomeController.index()
 GET         /cart.html                 controllers.HomeController.cart()
 GET         /singleProduct.html        controllers.HomeController.product()
 GET         /checkout.html             controllers.HomeController.checkOut()
-GET         /shop.html                 controllers.HomeController.shop()
 GET         /contact.html              controllers.HomeController.contact()
 GET         /signUp.html               controllers.HomeController.signUp()
 

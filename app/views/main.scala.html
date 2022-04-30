@@ -12,13 +12,12 @@
         <title>@title</title>
 
             <!--fonts from Google -->
-        <link href="@routes.Assets.versioned("css/google1.css")" rel='stylesheet' type='text/css'>
-        <link href="@routes.Assets.versioned("css/google2.css")" rel='stylesheet' type='text/css'>
         <link href="@routes.Assets.versioned("css/google3.css")" rel='stylesheet' type='text/css'>
 
             <!-- Custom Css -->
         <link rel="stylesheet" href=@routes.Assets.versioned("css/product.css")>
         <link rel="stylesheet" href=@routes.Assets.versioned("css/contact.css")>
+        <link rel="stylesheet" href=@routes.Assets.versioned("css/cart.css")>
         <link rel="stylesheet" href=@routes.Assets.versioned("css/responsive.css")>
         <link rel="stylesheet" href=@routes.Assets.versioned("css/signup.css")>
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("css/style.css")">
@@ -67,36 +66,6 @@
                     </h1>
                 </div>
             </div>
-            @* <div class="col-sm-8">*@
-            @* <div class="shopping-item">*@
-            @* <a href="cart.html">Cart - <span class="cart-amunt">*@
-            @* $0</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">0</span></a>*@
-            @* </div>*@
-            @* <div class="col-md-4">*@
-            @* <div class="header-right">*@
-            @* <ul class="list-unstyled list-inline">*@
-            @* <li class="dropdown dropdown-small">*@
-            @* <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">*@
-            @* currency :</span><span class="value">USD </span><b class="caret"></b></a>*@
-            @* <ul class="dropdown-menu">*@
-            @* <li><a href="#">USD</a></li>*@
-            @* <li><a href="#">EUR</a></li>*@
-            @* <li><a href="#">GBP</a></li>*@
-            @* </ul>*@
-            @* </li>*@
-
-            @* <li class="dropdown dropdown-small">*@
-            @* <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">*@
-            @* language :</span><span class="value">English </span><b class="caret"></b></a>*@
-            @* <ul class="dropdown-menu">*@
-            @* <li><a href="index.html">English</a></li>*@
-            @* <li><a href="#">Greek</a></li>*@
-            @* </ul>*@
-            @* </li>*@
-            @* </ul>*@
-            @* </div>*@
-            @* </div>*@
-                <!-- End site branding area -->
             <div class="mainmenu-area">
                 <nav class="navbar navbar-expand-md">
 
@@ -148,16 +117,9 @@
 
 
             @content
-            @* <div class="footer-bottom-area container">*@
-            @* <div class="row">*@
-            @* <div class="col-md-8">*@
-            @* <div class="copyright" style="padding-left: 40px">*@
-            @* <p>European standards <img height="20" width="20" src="@routes.Assets.versioned("/img/eu.png")"></p><br>*@
-            @* <p>&copy; 2020 eShop. All Rights Reserved.</p>*@
-            @* </div>*@
-            @* </div>*@
-            @* </div>*@
-            @* </div>*@
+            <div class="copyright" style="padding-left: 40px">
+                <p>&copy; 2020 eShop. All Rights Reserved.</p>
+            </div>
         </div>
     </body>
         <!-- End footer bottom area -->

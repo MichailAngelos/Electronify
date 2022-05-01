@@ -1,6 +1,6 @@
-package models
+package models.db
 
-import play.api.libs.json.{OFormat, Json}
+import play.api.libs.json.{Json, OFormat}
 
 import java.util.UUID
 

@@ -3,9 +3,9 @@ package controllers.utils
 import controllers.constants.Global
 import controllers.constants.Responses._
 import controllers.constants.Values.EMAIL_REGEX
-import models.db.User
+import models.db.{Id, User}
 import models.raw.LogIn
-import models.{Id, Logger}
+import models.Logger
 import play.api.http.Status
 import play.api.libs.json.{JsError, JsSuccess, JsValue}
 

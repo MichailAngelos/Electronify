@@ -27,6 +27,8 @@ case class User(
     auth: Int = 0
 )
 
+case class UserList(users: Seq[User])
+
 object User extends Logger {
   implicit val reads: Reads[User] = (
     (JsPath \ "id").readNullable[UUID] and
@@ -113,8 +115,6 @@ object User extends Logger {
     )
   }
 }
-
-case class UserList(users: Seq[User])
 
 object UserList {
   implicit val format: Format[UserList] = Json.format[UserList]

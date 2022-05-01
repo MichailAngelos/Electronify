@@ -20,6 +20,8 @@ case class Product(
     image: String
 )
 
+case class Products(products: Seq[Product])
+
 object Product extends Logger {
   implicit val format: Format[Product] = Json.format
 
@@ -61,12 +63,14 @@ object Product extends Logger {
 
 }
 
-case class Products(products: Seq[Product])
-
 object Products extends Logger {
   implicit val format: Format[Products] = Json.format
 
   def getProducts(products: Vector[Seq[Product]]): Products = {
     Products(products.flatten)
+  }
+
+  def getCartProducts(products: Vector[Product]): Products = {
+    Products(products)
   }
 }

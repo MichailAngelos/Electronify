@@ -7,6 +7,7 @@ import models.db.Cart.{createCart, logger}
 import models.enums.ActionsCart._
 import models.forms.Forms.addToCartF
 import models.raw.AddCartRaw
+import play.api.libs.json.Json
 import play.api.mvc.{
   AbstractController,
   Action,
@@ -53,7 +54,10 @@ class CartController @Inject() (
           service.addToCart(createCart(userId, productId, quantity.quantity))
         )
         response match {
-          case CREATED_ENTITY => Created(views.html.cart()(request.session))
+          case CREATED_ENTITY =>
+            Created(
+              views.html.cart(service.getUserCart(userId))(request.session)
+            )
           case _ =>
             logger.info("Failed to add")
             BadRequest(views.html.index()(request.session))
@@ -65,5 +69,14 @@ class CartController @Inject() (
   }
 
   def getCart(id: String, action: String): Action[AnyContent] =
-    Action { implicit request: Request[AnyContent] => ??? }
+    Action { implicit request: Request[AnyContent] =>
+      action match {
+        case GetCart => getUserCart(id, request)
+        case _       => BadRequest(views.html.index())
+      }
+    }
+
+  def getUserCart(userId: String, request: Request[AnyContent]): Result = {
+    Ok(views.html.cart(service.getUserCart(userId))(request.session))
+  }
 }

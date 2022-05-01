@@ -22,10 +22,10 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
       )
     }
 
-  def cart(): Action[AnyContent] =
-    Action { implicit request =>
-      Ok(views.html.cart())
-    }
+//  def cart(): Action[AnyContent] =
+//    Action { implicit request =>
+//      Ok(views.html.cart())
+//    }
 
   def product(): Action[AnyContent] =
     Action { implicit request =>

@@ -46,6 +46,11 @@
     margin: 5px;
 }
 
+.product-upper img{
+    width: 220px;
+    height: 220px;
+}
+
 .product-card-shop {
     background: #9fcdff;
 }
@@ -61,4 +66,12 @@
 .container {
     align-items: flex-start;
     justify-content: center;
+}
+
+.out-of-stock{
+    background-color: #5a6268 !important;
+}
+
+.out-of-stock {
+    background-color: #5a6268;
 }

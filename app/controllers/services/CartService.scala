@@ -2,7 +2,7 @@ package controllers.services
 
 import controllers.utils.Utils.{getFutureValue, isCreated, validUpdateStatus}
 import models.Logger
-import models.db.Cart
+import models.db._
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.http.Status
 import slick.jdbc.JdbcProfile
@@ -32,5 +32,25 @@ class CartService @Inject() (
     else {
       validUpdateStatus(result, "cart")
     }
+  }
+
+  def getUserCart(userId: String): UserCart = {
+    val queryProducts =
+      sql"select product_id,quantity from electronify.cart where user_id = $userId;"
+        .as[Seq[CartProduct]]
+    val productCart: Seq[CartProduct] = getFutureValue(
+      db.run(queryProducts)
+    ).flatten
+
+    val userProducts: Seq[Product] = productCart.flatMap(cart => {
+      val product =
+        sql"select * from electronify.product where id = ${cart.id};"
+          .as[Product]
+      getFutureValue(db.run(product)).map(_.copy(stock = cart.quantity))
+    })
+    // Shipping cost depends on user's country address temp total
+    val total: Double = userProducts.foldLeft[Double](0.0)(_ + _.price)
+
+    UserCart(userId, Products(userProducts), total)
   }
 }

@@ -1,5 +1,6 @@
 @import controllers.constants.Global.SESSION_ID
 @import models.enums.{ActionProduct, ActionsUser}
+@import models.enums.ActionsCart
 @(title: String)(content: Html)(implicit session: Session)
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +38,7 @@
                                 <li><a href="@routes.HomeController.checkOut()"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/check.png")">
                                     Checkout</a>
                                 </li>
-                                <li><a href="@routes.HomeController.cart()"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/cart.png")">
+                                <li><a href="@routes.CartController.getCart(session.get(SESSION_ID).get, ActionsCart.GetCart)"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/cart.png")">
                                     Cart</a>
                                 </li>
                                 @if(session.get("username").nonEmpty) {
@@ -78,7 +79,7 @@
                                 Store</a>
                         </li>
                         <li class="nav-item">
-                            <a href="@routes.HomeController.cart()" class="click-options menu-item">Cart</a>
+                            <a href="@routes.CartController.getCart(session.get(SESSION_ID).get, ActionsCart.GetCart)" class="click-options menu-item">Cart</a>
                         </li>
                         @if(session.get(SESSION_ID).isEmpty) {
                             <li class="nav-item">

@@ -165,4 +165,10 @@ class UserService @Inject() (
         Status.BAD_REQUEST
     }
   }
+
+  def clearCart(id: String): Int = {
+    val query = sqlu"delete from electronify.cart where user_id = $id;"
+    updateQueries(query)
+  }
+
 }

@@ -10,4 +10,5 @@ object ActionsUser extends Enumeration {
   val Disable = "Disable"
   val Checkout = "CheckOut"
   val Update = "Update"
+  val ClearCart = "ClearCart"
 }

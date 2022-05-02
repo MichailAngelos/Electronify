@@ -38,16 +38,16 @@
                                 <li><a href="@routes.HomeController.checkOut()"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/check.png")">
                                     Checkout</a>
                                 </li>
-                                <li><a href="@routes.CartController.getCart(session.get(SESSION_ID).get, ActionsCart.GetCart)"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/cart.png")">
+                                <li><a href="@routes.CartController.getCart(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsCart.GetCart)"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/cart.png")">
                                     Cart</a>
                                 </li>
                                 @if(session.get("username").nonEmpty) {
-                                    <li><a href="@routes.UserController.getUserActions(session.get(SESSION_ID).get, ActionsUser.UserById)"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/account.png")">
+                                    <li><a href="@routes.UserController.getUserActions(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsUser.UserById)"><img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/account.png")">
                                     @session.get("username")
                                     </a>
                                     </li>
                                     <li>
-                                        <a href ="@routes.UserController.getUserActions(session.get(SESSION_ID).get, ActionsUser.LogOut)">
+                                        <a href ="@routes.UserController.getUserActions(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsUser.LogOut)">
                                             <img class="rounded-circle" height="20" width="20" src="@routes.Assets.versioned("/img/logout.jpg")">
                                             Logout</a>
                                     </li>
@@ -79,7 +79,7 @@
                                 Store</a>
                         </li>
                         <li class="nav-item">
-                            <a href="@routes.CartController.getCart(session.get(SESSION_ID).get, ActionsCart.GetCart)" class="click-options menu-item">Cart</a>
+                            <a href="@routes.CartController.getCart(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsCart.GetCart)" class="click-options menu-item">Cart</a>
                         </li>
                         @if(session.get(SESSION_ID).isEmpty) {
                             <li class="nav-item">

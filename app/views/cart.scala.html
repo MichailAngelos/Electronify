@@ -1,104 +1,122 @@
 @import models.db.UserCart
+@import controllers.constants.Global.SESSION_ID
+@import models.enums.ActionsUser
 @(userCart: UserCart)(implicit session: Session)
 
-    @main("Shopping Cart") {
-        <div class="single-product-area">
-            <div class="container">
-                <div class="row">
-                    <div>
-                        <div class="product-content-right">
-                            <div class="woocommerce">
-                                <form method="post" action="#">
-                                    <table cellspacing="0" class="shop_table cart">
-                                        <thead>
-                                            <tr>
-                                                <th class="product-remove">&nbsp;</th>
-                                                <th class="product-thumbnail">&nbsp;</th>
-                                                <th class="product-name">Product</th>
-                                                <th class="product-name">Brand</th>
-                                                <th class="product-price">Price</th>
-                                                <th class="product-quantity">Quantity</th>
-                                                <th class="product-subtotal">Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @for(product <- userCart.products.products) {
-                                                <tr class="cart_item">
-                                                    <td class="product-remove">
-                                                        <a title="Remove this item" class="remove" href="#">×</a>
-                                                    </td>
-
-                                                    <td class="product-thumbnail">
-                                                        <a href="@routes.HomeController.product()"><img width="145" height="145" alt="poster_1_up" class="shop_thumbnail" src="@routes.Assets.versioned(product.image)"></a>
-                                                    </td>
-
-                                                    <td class="product-name">
-                                                        <a href="@routes.HomeController.product()">@product.name</a>
-                                                    </td>
-
-                                                    <td class="product-name">
-                                                        <a href="@routes.HomeController.product()">@product.brand</a>
-                                                    </td>
-
-                                                    <td class="product-price">
-                                                        <span class="amount">@product.price</span>
-                                                    </td>
-                                                    <td class="product-quantity">
-                                                    @if(product.inStock) {
-                                                        <div class="quantity buttons_added">
-                                                            <input type="number" size="4" class="input-text qty text" title="Qty" value="@product.stock" min="0" max="@product.stock" step="1">
-                                                        </div>
-                                                    } else {
-                                                        <div class="quantity buttons_added">
-                                                            <del> OUT OF STOCK</del>
-                                                        </div>
-                                                    }
-                                                    </td>
-                                                    <td class="product-subtotal">
-                                                        <span class="amount">@product.price</span>
-                                                    </td>
-                                                </tr>
-                                            }
-                                            <tr>
-                                                <td class="actions" colspan="6">
-                                                    <div class="coupon">
-                                                        <label for="coupon_code">Coupon:</label>
-                                                        <input type="text" placeholder="Coupon code" value="" id="coupon_code" class="input-text" name="coupon_code">
-                                                        <input type="submit" value="Apply Coupon" name="apply_coupon" class="button">
-                                                        <input type="submit" value="Proceed to Checkout" name="proceed" class="checkout-button button alt wc-forward">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cart-collaterals">
-                        <div class="cart_totals">
-                            <table cellspacing="0">
+@main("Shopping Cart") {
+    <div class="single-product-area">
+        <div class="container">
+            <div class="row">
+                <div>
+                    <div class="product-content-right">
+                        <div class="woocommerce">
+                            @* <form method="post" action="#">*@
+                            <table cellspacing="0" class="shop_table cart">
+                                <thead>
+                                    <tr>
+                                        <th class="product-remove">&nbsp;</th>
+                                        <th class="product-thumbnail">&nbsp;</th>
+                                        <th class="product-name">Product</th>
+                                        <th class="product-name">Brand</th>
+                                        <th class="product-price">Price</th>
+                                        <th class="product-price">VAT</th>
+                                        <th class="product-quantity">Quantity</th>
+                                        <th class="product-subtotal">Total</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
-                                    <tr class="cart-subtotal">
-                                        <th>Cart Subtotal</th>
-                                        <td><span class="amount">&euro; @userCart.total</span></td>
-                                    </tr>
+                                    @for(product <- userCart.products.products) {
+                                        <tr class="cart_item">
+                                            <td class="product-remove">
+                                                <a title="Remove this item" class="remove" href="#">×</a>
+                                            </td>
 
-                                    <tr class="shipping">
-                                        <th>Shipping and Handling</th>
-                                        <td>&euro; 00.00</td>
-                                    </tr>
+                                            <td class="product-thumbnail">
+                                                <a href="@routes.HomeController.product()"><img width="145" height="145" alt="poster_1_up" class="shop_thumbnail" src="@routes.Assets.versioned(product.image)"></a>
+                                            </td>
 
-                                    <tr class="order-total">
-                                        <th>Order Total</th>
-                                        <td><strong><span class="amount">&euro; @userCart.total</span></strong> </td>
+                                            <td class="product-name">
+                                                <a href="@routes.HomeController.product()">@product.name</a>
+                                            </td>
+
+                                            <td class="product-name">
+                                                <a href="@routes.HomeController.product()">@product.brand</a>
+                                            </td>
+
+                                            <td class="product-price">
+                                                <span class="amount">@product.price</span>
+                                            </td>
+
+                                            <td class="product-price">
+                                                <span class="vat">@{
+                                                    product.price * 0.19
+                                                }</span>
+                                            </td>
+
+                                            <td class="product-quantity">
+                                            @if(product.inStock) {
+                                                <div class="quantity buttons_added">
+                                                    <input type="number" size="4" class="input-text qty text" title="Qty" value="@product.stock" min="0" max="@product.stock" step="1">
+                                                </div>
+                                            } else {
+                                                <div class="quantity buttons_added">
+                                                    <del> OUT OF STOCK</del>
+                                                </div>
+                                            }
+                                            </td>
+                                            <td class="product-subtotal">
+                                                <span class="amount">@{
+                                                    product.price + (product.price * 0.19)
+                                                }</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td class="actions" colspan="6">
+                                            <div class="coupon">
+                                                <label for="coupon_code">Coupon:</label>
+                                                <input type="text" placeholder="Coupon code" value="" id="coupon_code" class="input-text" name="coupon_code">
+                                                <a class="button-71" type="button" href="@routes.HomeController.checkOut()">
+                                                    Apply Coupon</a>
+                                                <a class="button-71" type="button" href="@routes.HomeController.checkOut()">
+                                                    Proceed to Checkout</a>
+                                                <a class="button-71 clear" type="button" href="@routes.UserController.getUserActions(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsUser.ClearCart)">
+                                                    Remove all items</a>
+                                            </div>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
+                            @* </form>*@
                         </div>
                     </div>
-
                 </div>
+                <div class="cart-collaterals">
+                    <div class="cart_totals">
+                        <table cellspacing="0">
+                            <tbody>
+                                <tr class="cart-subtotal">
+                                    <th>Cart Subtotal</th>
+                                    <td><span class="amount">&euro; @userCart.total</span></td>
+                                </tr>
+
+                                <tr class="shipping">
+                                    <th>Shipping and Handling</th>
+                                    <td>&euro; 20.90</td>
+                                </tr>
+
+                                <tr class="order-total">
+                                    <th>Order Total</th>
+                                    <td><strong><span class="amount">&euro; @{
+                                        userCart.total + 20.90
+                                    }</span></strong> </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
         </div>
-    }
+    </div>
+}

@@ -67,7 +67,7 @@ object Products extends Logger {
   implicit val format: Format[Products] = Json.format
 
   def getProducts(products: Vector[Seq[Product]]): Products = {
-    Products(products.flatten)
+    Products(products.flatten.sortWith((a, b) => a.stock >= b.stock))
   }
 
   def getCartProducts(products: Vector[Product]): Products = {

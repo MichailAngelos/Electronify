@@ -48,7 +48,6 @@ class UserController @Inject() (
         case UserById    => getUserById(id)
         case ActiveUsers => getAllActiveUsers
         case LogOut      => logout(id)
-        case ClearCart   => clearUserCart(id, request)
         case _ =>
           BadRequest(views.html.index())
             .withSession(Global.SESSION_USERNAME_KEY -> "")
@@ -207,9 +206,5 @@ class UserController @Inject() (
   def logout(id: String): Result = {
     service.logOutSession(id)
     Redirect(routes.HomeController.index()).withNewSession
-  }
-  def clearUserCart(id: String, request: Request[AnyContent]): Result = {
-    service.clearCart(id)
-    Ok(views.html.index()(request.session))
   }
 }

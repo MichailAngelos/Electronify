@@ -2,43 +2,44 @@
 @import controllers.constants.Global.SESSION_ID
 @import models.enums.ActionsCart
 @(products: Products)(implicit session: Session)
-@main("Products") {
-    <div class="single-product-area">
-        <div class="container">
-            <div class="single-shop-product">
-            @for(product <- products.products) {
-                <div class="list-products">
-                    <div class="card list-product">
-                        <div class="product-upper">
-                            <img src="@routes.Assets.versioned(product.image)" class="rounded virtual-flow" alt="@product.brand">
-                        </div>
-                        <h2><a href="@routes.HomeController.product()">@product.name</a></h2>
-                        <form action="@routes.CartController.postCart(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), product.id, ActionsCart.AddCart)" method="post" class="form-container">
-                            <div class="product-carousel-price">
-                                <ins class="price-tag">&euro;
-                                    @product.price</ins>
+    @main("Products") {
+        <div class="single-product-area">
+            <div class="container">
+                <div class="single-shop-product">
+                @for(product <- products.products) {
+                    <div class="list-products">
+                        <div class="card list-product">
+                            <div class="product-upper">
+                                <img src="@routes.Assets.versioned(product.image)" class="rounded virtual-flow" alt="@product.brand">
                             </div>
-                            @if(product.inStock) {
-                                <div class="quantity buttons_added">
-                                    <input type="number" size="3" class="input-text qty text" title="Qty" value="1" min="0" max="@product.stock" step="1" name="quantity">
+                            <h2><a href="@routes.HomeController.product()">@product.name</a></h2>
+                            <form action="@routes.CartController.postCart(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), product.id, ActionsCart.AddCart)" method="post" class="form-container">
+                                <div class="product-carousel-price">
+                                    <ins class="price-tag">&euro;
+                                        @product.price</ins>
                                 </div>
-                                <div class="product-option-shop">
-                                    <button class="add_to_cart_button" type="submit" >Add to cart</button>
-                                </div>
-                            } else {
-                                <div class="quantity buttons_added">
-                                    <input type="number" size="3" class="input-text qty text" title="Qty" value="0" min="0" max="@product.stock" step="1" name="quantity">
-                                </div>
-                                <div class="product-option-shop">
-                                    <button class="add_to_cart_button out-of-stock" disabled type="submit" >
-                                        Out of Stock</button>
-                                </div>
-                            }
-                        </form>
+                                @if(product.inStock) {
+                                    <div class="quantity buttons_added">
+                                        <input type="number" size="3" class="input-text qty text" title="Qty" value="1" min="0" max="@product.stock" step="1" name="quantity">
+                                        <span class="input-text qty text">Max: @product.stock</span>
+                                    </div>
+                                    <div class="product-option-shop">
+                                        <button class="add_to_cart_button" type="submit" >Add to cart</button>
+                                    </div>
+                                } else {
+                                    <div class="quantity buttons_added">
+                                        <input type="number" size="3" class="input-text qty text" title="Qty" value="0" min="0" max="@product.stock" step="1" name="quantity">
+                                    </div>
+                                    <div class="product-option-shop">
+                                        <button class="add_to_cart_button out-of-stock" disabled type="submit" >
+                                            Out of Stock</button>
+                                    </div>
+                                }
+                            </form>
+                        </div>
                     </div>
+                }
                 </div>
-            }
             </div>
         </div>
-    </div>
-}
+    }

@@ -7,7 +7,6 @@ import models.db.Cart.{createCart, logger}
 import models.enums.ActionsCart._
 import models.forms.Forms.addToCartF
 import models.raw.AddCartRaw
-import play.api.libs.json.Json
 import play.api.mvc.{
   AbstractController,
   Action,
@@ -36,7 +35,8 @@ class CartController @Inject() (
         case AddCart =>
           addToCart(id, productId, addToCartF.bindFromRequest().value, request)
         case UpdateCart => Ok(views.html.index())
-        case RemoveCart => Ok(views.html.index())
+        case ClearCart => clearUserCart(id, productId, request)
+        case RemoveItem => removeItem(id,productId, request)
         case _          => BadRequest(views.html.index())
 
       }
@@ -55,9 +55,7 @@ class CartController @Inject() (
         )
         response match {
           case CREATED_ENTITY =>
-            Created(
-              views.html.cart(service.getUserCart(userId))(request.session)
-            )
+            Created(views.html.shop(service.getAllProducts)(request.session))
           case _ =>
             logger.info("Failed to add")
             BadRequest(views.html.index()(request.session))
@@ -71,12 +69,22 @@ class CartController @Inject() (
   def getCart(id: String, action: String): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
       action match {
-        case GetCart => getUserCart(id, request)
-        case _       => BadRequest(views.html.index())
+        case GetCart   => getUserCart(id, request)
+        case _         => BadRequest(views.html.index())
       }
     }
 
   def getUserCart(userId: String, request: Request[AnyContent]): Result = {
     Ok(views.html.cart(service.getUserCart(userId))(request.session))
+  }
+
+  def clearUserCart(id: String,productId:String, request: Request[AnyContent]): Result = {
+    service.clearCart(id,productId)
+    Ok(views.html.cart(service.getUserCart(id))(request.session))
+  }
+
+  def removeItem(id: String,productId:String, request: Request[AnyContent]): Result = {
+    service.removeItem(id,productId)
+    Ok(views.html.cart(service.getUserCart(id))(request.session))
   }
 }

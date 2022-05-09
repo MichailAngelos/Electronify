@@ -1,8 +1,11 @@
 package controllers.services
 
-import controllers.utils.Utils.{getFutureValue, isCreated, validUpdateStatus}
+import controllers.utils.Utils
+import controllers.utils.Utils.{getFutureValue, isCreated, isUpdated, validUpdateStatus}
 import models.Logger
+import models.db.Products.getProducts
 import models.db._
+import models.enums.UpdateProduct._
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.http.Status
 import slick.jdbc.JdbcProfile
@@ -25,12 +28,13 @@ class CartService @Inject() (
   def addToCart(cart: Cart): Int = {
     val addToCart =
       sqlu"insert into electronify.cart (id, quantity, created_at, deleted_at,user_id, product_id) values (${cart.id}, ${cart.quantity}, ${cart.createdAt}, ${cart.deletedAt}, ${cart.userId}, ${cart.productId});"
-    val response = updateQueries(addToCart)
-    val result = isCreated(response)
+    val cartResponse = isCreated(updateQueries(addToCart))
+    val productResponse = isUpdated(updateProduct(cart, Reduce))
 
-    if (result == Status.CREATED) result
-    else {
-      validUpdateStatus(result, "cart")
+    if (cartResponse == Status.CREATED && productResponse == Status.ACCEPTED) {
+      cartResponse
+    } else {
+      validUpdateStatus(cartResponse, "cart")
     }
   }
 
@@ -53,4 +57,72 @@ class CartService @Inject() (
 
     UserCart(userId, Products(userProducts), total)
   }
+
+  def clearCart(userId: String, productId: String): Int = {
+    //todo : to be continued
+    //val resetProductStock = updateProduct(productId)
+
+    val query = sqlu"delete from electronify.cart where user_id = $userId;"
+    updateQueries(query)
+  }
+
+  def getAllProducts: Products = {
+    val query =
+      sql"select * from electronify.product;".as[Seq[Product]]
+    getProducts(getFutureValue(db.run(query)))
+  }
+
+  def updateProduct(cart: Cart, action: String): Int = {
+    action match {
+      case Reduce => reduceProductStock(cart.productId, cart.quantity)
+      case Reset  => resetStock(cart.productId, cart.quantity)
+      case Update => ???
+      case _      => -1
+    }
+  }
+
+  def reduceProductStock(productId: String, quantity: Int): Int = {
+    val productO = getProductById(productId)
+    productO match {
+      case Some(product) =>
+        val newStock = product.stock - quantity
+        if (newStock < 0) -1
+        else {
+          val inStock = Utils.inStock(product.stock)
+          val updateProduct: SqlAction[Int, NoStream, Effect] =
+            sqlu"update electronify.product set stock = $newStock , in_stock = $inStock where id = ${product.id};"
+          updateQueries(updateProduct)
+        }
+      case None =>
+        logger.info("Failed to get product")
+        -1
+    }
+  }
+
+  def resetStock(productId: String, quantity: Int): Int = {
+    val productO = getProductById(productId)
+    productO match {
+      case Some(product) =>
+        val newStock = product.stock + quantity
+        val inStock = Utils.inStock(product.stock)
+        val updateProduct =
+          sqlu"update electronify.product set stock = $newStock , in_stock = $inStock where id = ${product.id};"
+        updateQueries(updateProduct)
+      case None =>
+        logger.info("Failed to get product")
+        -1
+    }
+  }
+
+  def getProductById(id: String): Option[Product] = {
+    val getProduct =
+      sql"select * from electronify.product where id = ${id};"
+        .as[Product]
+    getFutureValue(db.run(getProduct)).headOption
+  }
+
+  def removeItem(userId: String, productId: String): Int = {
+    ???
+  }
+
 }

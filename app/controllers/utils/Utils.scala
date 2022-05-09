@@ -108,4 +108,8 @@ object Utils extends Logger {
       status
     } else status
   }
+
+  def inStock(stock: Int): Boolean = {
+    stock != 0
+  }
 }

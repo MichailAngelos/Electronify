@@ -1,6 +1,6 @@
 @import models.db.UserCart
 @import controllers.constants.Global.SESSION_ID
-@import models.enums.ActionsUser
+@import models.enums.ActionsCart
 @(userCart: UserCart)(implicit session: Session)
 
 @main("Shopping Cart") {
@@ -28,7 +28,9 @@
                                     @for(product <- userCart.products.products) {
                                         <tr class="cart_item">
                                             <td class="product-remove">
-                                                <a title="Remove this item" class="remove" href="#">×</a>
+                                                <form method="post" action="@routes.CartController.postCart(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), product.id, ActionsCart.RemoveItem)">
+                                                    <button title="Remove this item" type="submit" class="btn btn-primary btn-xs" >×</button>
+                                                </form>
                                             </td>
 
                                             <td class="product-thumbnail">
@@ -79,9 +81,9 @@
                                                 <a class="button-71" type="button" href="@routes.HomeController.checkOut()">
                                                     Apply Coupon</a>
                                                 <a class="button-71" type="button" href="@routes.HomeController.checkOut()">
-                                                    Proceed to Checkout</a>
-                                                <a class="button-71 clear" type="button" href="@routes.UserController.getUserActions(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsUser.ClearCart)">
-                                                    Remove all items</a>
+                                                    Proceed Checkout</a>
+                                                <a class="button-71 clear" type="button" href="@routes.CartController.getCart(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsCart.ClearCart)">
+                                                    Remove All</a>
                                             </div>
                                         </td>
                                     </tr>

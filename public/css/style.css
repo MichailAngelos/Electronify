@@ -964,6 +964,10 @@ input[type="submit"]:hover, button[type=submit]:hover {
     text-decoration: none
 }
 
+.add_to_cart_button:disabled{
+    background-color: #6c757d;
+}
+
 form.cart {
     margin-bottom: 25px;
 }

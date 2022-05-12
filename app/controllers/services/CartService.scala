@@ -1,7 +1,12 @@
 package controllers.services
 
 import controllers.utils.Utils
-import controllers.utils.Utils.{getFutureValue, isCreated, isUpdated, validUpdateStatus}
+import controllers.utils.Utils.{
+  getFutureValue,
+  isCreated,
+  isUpdated,
+  validUpdateStatus
+}
 import models.Logger
 import models.db.Products.getProducts
 import models.db._
@@ -122,7 +127,10 @@ class CartService @Inject() (
   }
 
   def removeItem(userId: String, productId: String): Int = {
-    ???
+    val updateCart =
+      sqlu"delete from electronify.cart where user_id = $userId and product_id = $productId;"
+
+    isUpdated(updateQueries(updateCart))
   }
 
 }

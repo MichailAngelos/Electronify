@@ -24,11 +24,17 @@
                                         <span class="input-text qty text">Max: @product.stock</span>
                                     </div>
                                     <div class="product-option-shop">
-                                        <button class="add_to_cart_button" type="submit" >Add to cart</button>
+                                    @if(session.get(SESSION_ID).isEmpty) {
+                                        <button class="add_to_cart_button" title="Log In" type="submit" disabled >
+                                            <del>Add to cart</del></button>
+                                    } else {
+                                        <button class="add_to_cart_button" title="Add To Cart" type="submit">
+                                            Add to cart</button>
+                                    }
                                     </div>
                                 } else {
                                     <div class="quantity buttons_added">
-                                        <input type="number" size="3" class="input-text qty text" title="Qty" value="0" min="0" max="@product.stock" step="1" name="quantity">
+                                        <input disabled type="number" size="3" class="input-text qty text" title="Qty" value="0" min="0" max="@product.stock" step="1" name="quantity">
                                     </div>
                                     <div class="product-option-shop">
                                         <button class="add_to_cart_button out-of-stock" disabled type="submit" >

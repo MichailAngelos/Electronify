@@ -7,14 +7,7 @@ import models.db.Cart.{createCart, logger}
 import models.enums.ActionsCart._
 import models.forms.Forms.addToCartF
 import models.raw.AddCartRaw
-import play.api.mvc.{
-  AbstractController,
-  Action,
-  AnyContent,
-  ControllerComponents,
-  Request,
-  Result
-}
+import play.api.mvc._
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -35,8 +28,7 @@ class CartController @Inject() (
         case AddCart =>
           addToCart(id, productId, addToCartF.bindFromRequest().value, request)
         case UpdateCart => Ok(views.html.index())
-        case ClearCart => clearUserCart(id, productId, request)
-        case RemoveItem => removeItem(id,productId, request)
+        case RemoveItem => removeItem(id, productId, request)
         case _          => BadRequest(views.html.index())
 
       }
@@ -70,6 +62,7 @@ class CartController @Inject() (
     Action { implicit request: Request[AnyContent] =>
       action match {
         case GetCart   => getUserCart(id, request)
+        case ClearCart => clearUserCart(id, "", request)
         case _         => BadRequest(views.html.index())
       }
     }
@@ -78,13 +71,26 @@ class CartController @Inject() (
     Ok(views.html.cart(service.getUserCart(userId))(request.session))
   }
 
-  def clearUserCart(id: String,productId:String, request: Request[AnyContent]): Result = {
-    service.clearCart(id,productId)
+  def clearUserCart(
+      id: String,
+      productId: String,
+      request: Request[AnyContent]
+  ): Result = {
+    service.clearCart(id, productId)
     Ok(views.html.cart(service.getUserCart(id))(request.session))
   }
 
-  def removeItem(id: String,productId:String, request: Request[AnyContent]): Result = {
-    service.removeItem(id,productId)
-    Ok(views.html.cart(service.getUserCart(id))(request.session))
+  def removeItem(
+      id: String,
+      productId: String,
+      request: Request[AnyContent]
+  ): Result = {
+    val updateCart: Int = service.removeItem(id, productId)
+    updateCart match {
+      case ACCEPTED =>
+        Ok(views.html.cart(service.getUserCart(id))(request.session))
+      case _ => BadRequest(views.html.cart(service.getUserCart(id))(request.session))
+    }
+
   }
 }

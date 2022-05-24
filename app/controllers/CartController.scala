@@ -1,6 +1,6 @@
 package controllers
 
-import controllers.constants.Responses.CREATED_ENTITY
+import controllers.constants.Responses.{CREATED_ENTITY, UPDATED}
 import controllers.services.CartService
 import controllers.utils.Utils.updateValidationResponse
 import models.db.Cart.{createCart, logger}
@@ -46,7 +46,7 @@ class CartController @Inject() (
           service.addToCart(createCart(userId, productId, quantity.quantity))
         )
         response match {
-          case CREATED_ENTITY =>
+          case CREATED_ENTITY | UPDATED =>
             Created(views.html.shop(service.getAllProducts)(request.session))
           case _ =>
             logger.info("Failed to add")

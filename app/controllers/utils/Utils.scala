@@ -103,7 +103,7 @@ object Utils extends Logger {
   }
 
   def validUpdateStatus(status: Int, update: String): Int = {
-    if (status != Status.ACCEPTED) {
+    if (status != Status.ACCEPTED || status != Status.CREATED) {
       logger.info(s"Failed to update $update table")
       status
     } else status

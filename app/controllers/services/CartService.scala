@@ -31,15 +31,31 @@ class CartService @Inject() (
   }
 
   def addToCart(cart: Cart): Int = {
-    val addToCart =
-      sqlu"insert into electronify.cart (id, quantity, created_at, deleted_at,user_id, product_id) values (${cart.id}, ${cart.quantity}, ${cart.createdAt}, ${cart.deletedAt}, ${cart.userId}, ${cart.productId});"
-    val cartResponse = isCreated(updateQueries(addToCart))
     val productResponse = isUpdated(updateProduct(cart, Reduce))
+    val cartO: Option[Cart] = mayCart(cart.userId, cart.productId)
 
-    if (cartResponse == Status.CREATED && productResponse == Status.ACCEPTED) {
-      cartResponse
-    } else {
-      validUpdateStatus(cartResponse, "cart")
+    cartO match {
+      case Some(oldCart) =>
+        val newQuantity = oldCart.quantity + cart.quantity
+        val updateCart =
+          sqlu"update electronify.cart set quantity=$newQuantity where user_id=${cart.userId} and product_id=${cart.productId};"
+        val response = isUpdated(updateQueries(updateCart))
+        if (productResponse == Status.ACCEPTED)
+          validUpdateStatus(response, "cart")
+        else {
+          logger.info("Failed to update product")
+          response
+        }
+      case None =>
+        val addToCart =
+          sqlu"insert into electronify.cart (id, quantity, created_at, deleted_at,user_id, product_id) values (${cart.id}, ${cart.quantity}, ${cart.createdAt}, ${cart.deletedAt}, ${cart.userId}, ${cart.productId});"
+        val cartResponse = isCreated(updateQueries(addToCart))
+        if (productResponse == Status.ACCEPTED)
+          validUpdateStatus(cartResponse, "cart")
+        else {
+          logger.info("Failed to update product")
+          cartResponse
+        }
     }
   }
 
@@ -57,18 +73,30 @@ class CartService @Inject() (
           .as[Product]
       getFutureValue(db.run(product)).map(_.copy(stock = cart.quantity))
     })
-    // Shipping cost depends on user's country address temp total
+    // Todo :Shipping cost depends on user's country address temp total
     val total: Double = userProducts.foldLeft[Double](0.0)(_ + _.price)
 
     UserCart(userId, Products(userProducts), total)
   }
 
   def clearCart(userId: String, productId: String): Int = {
-    //todo : to be continued
-    //val resetProductStock = updateProduct(productId)
+    val cartO = mayCart(userId, productId)
+    cartO match {
+      case Some(cart) =>
+        val resetProductStock = updateProduct(cart, Reset)
+        if (resetProductStock == Status.ACCEPTED) {
+          val query =
+            sqlu"delete from electronify.cart where user_id = $userId;"
+          updateQueries(query)
+        } else {
+          logger.info("Failed to reset product stock")
+          -1
+        }
+      case None =>
+        logger.info("Failed to fetch cart")
+        -1
+    }
 
-    val query = sqlu"delete from electronify.cart where user_id = $userId;"
-    updateQueries(query)
   }
 
   def getAllProducts: Products = {
@@ -121,16 +149,45 @@ class CartService @Inject() (
 
   def getProductById(id: String): Option[Product] = {
     val getProduct =
-      sql"select * from electronify.product where id = ${id};"
+      sql"select * from electronify.product where id = $id;"
         .as[Product]
     getFutureValue(db.run(getProduct)).headOption
   }
 
   def removeItem(userId: String, productId: String): Int = {
-    val updateCart =
-      sqlu"delete from electronify.cart where user_id = $userId and product_id = $productId;"
+    val cartO: Option[Cart] = mayCart(userId, productId)
 
-    isUpdated(updateQueries(updateCart))
+    cartO match {
+      case Some(cart) =>
+        val updateCart =
+          sqlu"delete from electronify.cart where user_id = $userId and product_id = $productId;"
+        val cartResponse = isUpdated(updateQueries(updateCart))
+        val resetProductStock = isUpdated(updateProduct(cart, Reset))
+
+        if (resetProductStock == Status.ACCEPTED)
+          validUpdateStatus(cartResponse, "cart")
+        else {
+          logger.info("Failed to update product")
+          cartResponse
+        }
+      case None =>
+        logger.info("Failed to remove item")
+        -1
+    }
   }
 
+  // Todo : Needs to be fix
+  def mayCart(userId: String, productId: String): Option[Cart] = {
+    if (productId.nonEmpty) {
+      val getCart =
+        sql"select * from electronify.cart where user_id=$userId and product_id=$productId;"
+          .as[Cart]
+      getFutureValue(db.run(getCart)).headOption
+    } else {
+      val getCart =
+        sql"select * from electronify.cart where user_id=$userId;"
+          .as[Cart]
+      getFutureValue(db.run(getCart)).headOption
+    }
+  }
 }

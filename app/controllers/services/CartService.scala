@@ -32,7 +32,7 @@ class CartService @Inject() (
 
   def addToCart(cart: Cart): Int = {
     val productResponse = isUpdated(updateProduct(cart, Reduce))
-    val cartO: Option[Cart] = mayCart(cart.userId, cart.productId)
+    val cartO: Option[Cart] = mayCart(cart.userId, cart.productId).headOption
 
     cartO match {
       case Some(oldCart) =>
@@ -80,23 +80,38 @@ class CartService @Inject() (
   }
 
   def clearCart(userId: String, productId: String): Int = {
-    val cartO = mayCart(userId, productId)
-    cartO match {
-      case Some(cart) =>
-        val resetProductStock = updateProduct(cart, Reset)
-        if (resetProductStock == Status.ACCEPTED) {
+    val cart = mayCart(userId, productId)
+    if (productId.isEmpty) {
+      val updateCart = cart
+        .map(userCart => {
+          updateProduct(userCart, Reset)
           val query =
             sqlu"delete from electronify.cart where user_id = $userId;"
           updateQueries(query)
-        } else {
-          logger.info("Failed to reset product stock")
-          -1
-        }
-      case None =>
-        logger.info("Failed to fetch cart")
+        })
+        .last
+      if (updateCart == 1) updateCart
+      else {
+        logger.info("Failed to clear cart")
         -1
+      }
+    } else {
+      cart.headOption match {
+        case Some(cart) =>
+          val resetProductStock = updateProduct(cart, Reset)
+          if (resetProductStock == Status.ACCEPTED) {
+            val query =
+              sqlu"delete from electronify.cart where user_id = $userId;"
+            updateQueries(query)
+          } else {
+            logger.info("Failed to reset product stock")
+            -1
+          }
+        case None =>
+          logger.info("Failed to fetch cart")
+          -1
+      }
     }
-
   }
 
   def getAllProducts: Products = {
@@ -155,7 +170,7 @@ class CartService @Inject() (
   }
 
   def removeItem(userId: String, productId: String): Int = {
-    val cartO: Option[Cart] = mayCart(userId, productId)
+    val cartO: Option[Cart] = mayCart(userId, productId).headOption
 
     cartO match {
       case Some(cart) =>
@@ -176,18 +191,17 @@ class CartService @Inject() (
     }
   }
 
-  // Todo : Needs to be fix
-  def mayCart(userId: String, productId: String): Option[Cart] = {
+  def mayCart(userId: String, productId: String): Vector[Cart] = {
     if (productId.nonEmpty) {
       val getCart =
         sql"select * from electronify.cart where user_id=$userId and product_id=$productId;"
           .as[Cart]
-      getFutureValue(db.run(getCart)).headOption
+      getFutureValue(db.run(getCart))
     } else {
       val getCart =
         sql"select * from electronify.cart where user_id=$userId;"
           .as[Cart]
-      getFutureValue(db.run(getCart)).headOption
+      getFutureValue(db.run(getCart))
     }
   }
 }

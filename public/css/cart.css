@@ -7,9 +7,7 @@
 
 .cart-collaterals {
     padding: 9% 3% !important;
-    width: 800px;
-    min-width: 400px;
-    max-width: 900px;
+    width: 100%;
 }
 
 .button-71 {
@@ -63,6 +61,6 @@
     }
 }
 
-.btn-xs{
+.btn-xs {
     padding: 0 !important;
 }

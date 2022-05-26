@@ -14,24 +14,12 @@
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-md-6 col-md-offset-6 details-card">
-                                            <div align="center" class="slide-content">
-
-                                                @if(session.get(SESSION_ERR_LOGGED).nonEmpty) {
-                                                    <div id="overlay" onclick="off()">
-                                                        <div class="message">
-                                                            <a href="@routes.HomeController.index()" class="click-options">@FAILED_LOG_IN &nbsp;&nbsp;
-                                                                <img class="rounded-circle" height="50" width="50" src="@routes.Assets.versioned("/img/failed.png")">
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                }
+                                            <div class="slide-content">
 
                                                 @if(session.get(SESSION_LOGGED_IN_KEY).nonEmpty) {
-                                                    <div id="overlay" onclick="off()">
+                                                    <div id="overlay" >
                                                         <div class="message">
-                                                            <a href="@routes.HomeController.index()" class="click-options"><b>@LOGGED_IN_Response @session.get(SESSION_USERNAME_KEY)</b> &nbsp;&nbsp;
-                                                                <img class="rounded-circle" height="50" width="50" src="@routes.Assets.versioned("/img/success.png")">
-                                                            </a>
+                                                            <button class="click-options" onclick="off()"><img class="rounded-circle" height="50" width="50" src="@routes.Assets.versioned("/img/success.png")" alt="success"/> @LOGGED_IN_Response @session.get(SESSION_USERNAME_KEY)</button>
                                                         </div>
                                                     </div>
                                                 }
@@ -44,7 +32,7 @@
                                                         Every week special offers just for you.
                                                         We ship worldwide !
                                                         <br>  <br>
-                                                        <img class="rounded-circle" height="120" width="120" src="@routes.Assets.versioned("/img/shipping.png")">
+                                                        <img class="rounded-circle" height="120" width="120" src="@routes.Assets.versioned("/img/shipping.png")" alt="shipping">
                                                     </span></p>
                                                 <button class="click-options" onclick="readMore()" id="myBtn">
                                                     Read More</button>
@@ -69,11 +57,11 @@
                     <div class="brand-wrapper">
                         <h2 class="section-title">Brands</h2>
                         <div class="brand-list">
-                            <img class="img-thumbnail" height="180" width="200" src="@routes.Assets.versioned("/img/alienware_logo.jpg")">
-                            <img class="img-thumbnail" height="200" width="200" src="@routes.Assets.versioned("/img/microsoft-logo.jpg")">
-                            <img class="img-thumbnail" height="180" width="200" src="@routes.Assets.versioned("/img/sonylogo.gif")">
-                            <img class="img-thumbnail" height="180" width="200" src="@routes.Assets.versioned("/img/Xbox-logo.jpg")">
-                            <img class="img-thumbnail" height="180" width="200" src="@routes.Assets.versioned("/img/appleInc.jpg")">
+                            <img class="img-thumbnail" height="180" width="200" src="@routes.Assets.versioned("/img/alienware_logo.jpg")" alt="alienware">
+                            <img class="img-thumbnail" height="200" width="200" src="@routes.Assets.versioned("/img/microsoft-logo.jpg")" alt="microsoft">
+                            <img class="img-thumbnail" height="180" width="200" src="@routes.Assets.versioned("/img/sonylogo.gif")" alt="sony">
+                            <img class="img-thumbnail" height="180" width="200" src="@routes.Assets.versioned("/img/Xbox-logo.jpg")" alt="x-box">
+                            <img class="img-thumbnail" height="180" width="200" src="@routes.Assets.versioned("/img/appleInc.jpg")" alt="apple">
                         </div>
                     </div>
                 </div>
@@ -83,7 +71,7 @@
         <!-- End brands area -->
     <script>
             function off() {
-                document.getElementById("overlay").style.display = "none";
+                document.getElementById("overlay").remove()
             }
     </script>
 }

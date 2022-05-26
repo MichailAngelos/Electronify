@@ -964,7 +964,7 @@ input[type="submit"]:hover, button[type=submit]:hover {
     text-decoration: none
 }
 
-.add_to_cart_button:disabled{
+.add_to_cart_button:disabled {
     background-color: #6c757d;
 }
 
@@ -1277,7 +1277,7 @@ li, a {
     top: 0;
     color: #1ABC9C;
     text-decoration: none;
-    margin-left: 7%;
+    margin-left: 3%;
 }
 
 table.shop_table td.product-remove a {
@@ -1646,6 +1646,6 @@ span.psw {
     padding-top: 50px;
 }
 
-#checkout-form button{
+#checkout-form button {
     margin-top: 25px;
 }

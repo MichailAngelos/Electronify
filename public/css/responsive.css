@@ -6,7 +6,7 @@
         width: 160px;
     }
 
-    .coupon input[type="text"] {
+    .coupon input[type="tel"] {
         width: 100px;
     }
 
@@ -216,12 +216,13 @@
         font-size: 12px;
     }
 
-    div.coupon input[type="text"] {
-        width: 100px;
+    div.coupon input[type="tel"] {
+        width: 100px !important;
     }
 
     .coupon {
-        margin-bottom: 10px
+        margin-bottom: 10px;
+        width:100%;
     }
 
     .cross-sells {

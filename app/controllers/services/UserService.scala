@@ -132,7 +132,7 @@ class UserService @Inject() (
         Status.BAD_REQUEST
       case None =>
         val query: SqlAction[Int, NoStream, Effect] =
-          sqlu" insert into electronify.users_address (id, address_1, address_2, city, postal_code, country, telephone, name) values (${address.id},  ${address.address}, ${address.addressO}, ${address.city},${address.postCode},${address.country},${address.telephone}, ${address.name});"
+          sqlu" insert into electronify.users_address (id, address_1, address_2, city, postal_code, country, telephone, name, user_id) values (${address.id},  ${address.address}, ${address.addressO}, ${address.city},${address.postCode},${address.country},${address.telephone}, ${address.name}, ${address.userId});"
 
         val response = updateQueries(query)
 

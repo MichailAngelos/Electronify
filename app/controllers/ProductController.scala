@@ -3,6 +3,7 @@ package controllers
 import controllers.services.ProductService
 import models.enums.ActionProduct._
 import play.api.libs.json.Json
+import play.api.mvc.ControllerHelpers.request2session
 import play.api.mvc._
 
 import javax.inject.Inject
@@ -17,7 +18,7 @@ class ProductController @Inject() (
   def getProduct(id: String = "", action: String): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
       action match {
-        case Details => getDetails(id)
+        case Details => getDetails(id, request)
         case All     => getAllProducts(request)
         case OnSale  => getSaleProducts(request)
         case InStock => getInStockProducts(request)
@@ -25,8 +26,8 @@ class ProductController @Inject() (
       }
     }
 
-  def getDetails(id: String): Result = {
-    Ok(Json.toJson(service.getProduct(id)))
+  def getDetails(id: String, request: Request[AnyContent]): Result = {
+    Ok(views.html.singleProduct(service.getProduct(id))(request.session))
   }
 
   def getAllProducts(request: Request[AnyContent]): Result = {

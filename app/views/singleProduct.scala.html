@@ -1,34 +1,37 @@
-@()(implicit session: Session)
+@import db.Product
+@import controllers.utils.Utils.scaleDouble
+@import controllers.constants.Global.SESSION_ID
+@import models.enums.ActionsCart
+@(product: Product)(implicit session: Session)
 
 @main("Product") {
     <div class="single-product-area">
         <div class="container">
             <div class="row">
-                    <div class="product-content-right">
-                        <div class="row">
-                            <div class="card-body">
-                                <div class="card">
-                                    <img src="@routes.Assets.versioned("img/product-4.jpg")" alt="Denim Jeans">
-                                    <h1>Tailored Jeans</h1>
-                                    <p class="price">$19.99</p>
-                                    <p>lorem ipsum lorem jeansum. Lorem jeamsun denim lorem jeansum.</p>
-                                </div><br>
-                                <div class="product-inner">
-                                    <h2 class="product-name">Sony Smart TV</h2>
-                                    <div class="product-inner-price">
-                                        <ins>$700.00</ins> <del>$800.00</del>
-                                    </div>
-
-                                    <form action="" class="cart">
-                                        <div class="quantity">
-                                            <input type="number" size="4" class="input-text qty text" title="Qty" value="1" name="quantity" min="1" step="1">
-                                        </div>
-                                        <button class="add_to_cart_button" type="submit">Add to cart</button>
-                                    </form>
+                <div class="product-content-right">
+                    <div class="row">
+                        <div class="card-body">
+                            <div class="card">
+                                <img src="@routes.Assets.versioned(product.image)" alt="@product.name">
+                                <h1><strong>@product.name</strong></h1>
+                                <p class="price">@scaleDouble(product.price)</p>
+                                <p class="price">@product.description</p>
+                            </div><br>
+                            <form action="@routes.CartController.postCart(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), product.id, ActionsCart.AddCart)" method="post" class="cart">
+                                <div class="quantity">
+                                    <input type="number" size="4" class="input-text qty text" title="Qty" value="1" name="quantity" min="1" step="1">
                                 </div>
-                            </div>
+                                @if(session.get(SESSION_ID).isEmpty) {
+                                    <button class="add_to_cart_button" title="Log In" type="submit" disabled >
+                                        <del>Add to cart</del></button>
+                                } else {
+                                    <button class="add_to_cart_button" title="Add To Cart" type="submit">
+                                        Add to cart</button>
+                                }
+                            </form>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
     </div>

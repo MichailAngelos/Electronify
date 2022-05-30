@@ -13,6 +13,7 @@ import java.security.MessageDigest
 import java.util.UUID
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, Future}
+import scala.math.BigDecimal.double2bigDecimal
 
 object Utils extends Logger {
 
@@ -111,5 +112,9 @@ object Utils extends Logger {
 
   def inStock(stock: Int): Boolean = {
     stock != 0
+  }
+
+  def scaleDouble(number: Double): BigDecimal = {
+    number.setScale(2, BigDecimal.RoundingMode.HALF_EVEN)
   }
 }

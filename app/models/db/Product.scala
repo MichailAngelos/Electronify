@@ -17,7 +17,8 @@ case class Product(
     category: String,
     sale: Int,
     stock: Int,
-    image: String
+    image: String,
+    description: String
 )
 
 case class Products(products: Seq[Product])
@@ -38,6 +39,7 @@ object Product extends Logger {
         r.nextString(),
         r.nextInt(),
         r.nextInt(),
+        r.nextString(),
         r.nextString()
       )
     )
@@ -47,14 +49,15 @@ object Product extends Logger {
       id = UUID.fromString("00000000-0000-0000-0000-000000000000").toString,
       name = "",
       brand = "",
-      price = 0.0,
+      price = 0.00,
       onSale = false,
       inStock = false,
       createdAt = "",
       category = "",
       sale = 0,
       stock = 0,
-      image = ""
+      image = "",
+      description = ""
     )
   }
 

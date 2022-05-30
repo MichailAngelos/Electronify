@@ -34,12 +34,14 @@
 .card-body {
     margin: 0 400px !important;
     padding: 0;
+    width: auto;
 }
 
 .price-tag {
-    margin-left: 17%;
+    margin-left: 15%;
     padding-bottom: 0;
     position: absolute;
+    margin-top: 3%;
 }
 
 .product-upper {

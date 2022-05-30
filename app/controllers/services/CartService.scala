@@ -1,5 +1,6 @@
 package controllers.services
 
+import controllers.constants.Values.EU_COUNTRIES
 import controllers.utils.Utils
 import controllers.utils.Utils.{
   getFutureValue,
@@ -73,10 +74,41 @@ class CartService @Inject() (
           .as[Product]
       getFutureValue(db.run(product)).map(_.copy(stock = cart.quantity))
     })
-    // Todo :Shipping cost depends on user's country address temp total
+    val mayAddress = getUserAddress(userId)
     val total: Double = userProducts.foldLeft[Double](0.0)(_ + _.price)
-
-    UserCart(userId, Products(userProducts), total)
+    if (total >= 200.00) {
+      UserCart(
+        userId,
+        Products(userProducts),
+        total,
+        shipping = 0.00
+      )
+    } else {
+      mayAddress match {
+        case Some(address) =>
+          if (EU_COUNTRIES.contains(address.country)) {
+            UserCart(
+              userId,
+              Products(userProducts),
+              total,
+              shipping = total * 0.03
+            )
+          } else
+            UserCart(
+              userId,
+              Products(userProducts),
+              total,
+              shipping = total * 0.05
+            )
+        case None =>
+          UserCart(
+            userId,
+            Products(userProducts),
+            total,
+            shipping = total * 0.05
+          )
+      }
+    }
   }
 
   def clearCart(userId: String, productId: String): Int = {
@@ -203,5 +235,13 @@ class CartService @Inject() (
           .as[Cart]
       getFutureValue(db.run(getCart))
     }
+  }
+
+  def getUserAddress(userId: String): Option[UserAddress] = {
+    val getAddress =
+      sql"select * from electronify.users_address where id = $userId;"
+        .as[UserAddress]
+
+    getFutureValue(db.run(getAddress)).headOption
   }
 }

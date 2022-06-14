@@ -3,6 +3,11 @@
 }
 
 .details {
-    text-align: center;
+    text-align: left;
     font-weight: bold;
+}
+
+.details b {
+    position: absolute;
+    left: 34%;
 }

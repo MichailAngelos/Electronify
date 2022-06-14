@@ -24,7 +24,8 @@ case class User(
     telephone: Int,
     created_at: String = "",
     active: Boolean = false,
-    auth: Int = 0
+    auth: Int = 0,
+    profileImage: String = "img/user-account.png"
 )
 
 case class UserList(users: Seq[User])
@@ -38,7 +39,8 @@ object User extends Logger {
       (JsPath \ "telephone").read[Int] and
       (JsPath \ "created_at").read[String] and
       (JsPath \ "active").read[Boolean] and
-      (JsPath \ "auth").read[Int]
+      (JsPath \ "auth").read[Int] and
+      (JsPath \ "profileImage").read[String]
   )(User.apply _)
 
   implicit val writes: Writes[User] = (
@@ -49,7 +51,8 @@ object User extends Logger {
       (JsPath \ "telephone").write[Int] and
       (JsPath \ "created_at").write[String] and
       (JsPath \ "active").write[Boolean] and
-      (JsPath \ "auth").write[Int]
+      (JsPath \ "auth").write[Int] and
+      (JsPath \ "profileImage").write[String]
   )(unlift(User.unapply))
 
   implicit val getUserResult: AnyRef with GetResult[User] =
@@ -62,7 +65,8 @@ object User extends Logger {
         r.nextInt(),
         r.nextString(),
         r.nextBoolean(),
-        r.nextInt()
+        r.nextInt(),
+        r.nextString()
       )
     )
 
@@ -78,7 +82,8 @@ object User extends Logger {
       user.telephone,
       user.created_at,
       user.active,
-      user.auth
+      user.auth,
+      user.profileImage
     )
   }
 

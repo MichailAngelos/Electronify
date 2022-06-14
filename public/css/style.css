@@ -784,6 +784,10 @@ ol.slide-indicators li.active {
     text-align: right;
 }
 
+.copyright {
+    padding-left: 40px;
+}
+
 .copyright > p {
     margin: 10px 0 0;
 }
@@ -1507,6 +1511,13 @@ span.psw {
     padding: 0;
     box-shadow: 5px 10px 8px black;
     right: 32%;
+}
+
+.userCard {
+    display: block !important;
+    width: 25%;
+    right: 40%;
+    top: 20%;
 }
 
 .form-container {

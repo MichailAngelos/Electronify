@@ -45,7 +45,7 @@ class UserController @Inject() (
   def getUserActions(id: String = "", action: String): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
       action match {
-        case UserById    => getUserById(id)
+        case UserById    => getUserById(id, request.session)
         case ActiveUsers => getAllActiveUsers
         case LogOut      => logout(id)
         case _ =>
@@ -72,9 +72,7 @@ class UserController @Inject() (
               val logIn: Result =
                 Ok(
                   views.html.index()(
-                    request.session.copy(
-                      getUserSession(mayUser)
-                    )
+                    Session(getUserSession(mayUser))
                   )
                 ).addingToSession(
                   Global.SESSION_USERNAME_KEY -> credentials.username,
@@ -166,7 +164,6 @@ class UserController @Inject() (
     }
   }
 
-  //todo: If we have user address then ask if we want to change
   def checkout(id: String, checkOutRaw: Option[CheckOutRaw]): Result = {
     checkOutRaw match {
       case Some(raw) =>
@@ -177,7 +174,6 @@ class UserController @Inject() (
 
         response match {
           case CREATED_ENTITY =>
-            //todo: Redirect to payment page
             Created(CREATED_ENTITY)
           case _ =>
             BadRequest(ERR_INVALID_FORM)
@@ -193,9 +189,8 @@ class UserController @Inject() (
     }
   }
 
-  //todo: html template missing
-  def getUserById(id: String): Result = {
-    Ok(Json.toJson(service.getUserById(id)))
+  def getUserById(id: String, session: Session): Result = {
+    Ok(views.html.userCard(service.getUserById(id))(session))
   }
 
   //todo: html template missing (only for admins)
@@ -205,6 +200,6 @@ class UserController @Inject() (
 
   def logout(id: String): Result = {
     service.logOutSession(id)
-    Redirect(routes.HomeController.index()).withNewSession
+    Ok(views.html.index()(Session())).withNewSession
   }
 }

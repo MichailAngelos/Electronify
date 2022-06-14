@@ -171,4 +171,10 @@ class UserService @Inject() (
     updateQueries(query)
   }
 
+  def getUserAddress(id: String): Option[UserAddress] = {
+    val query = sql"select * from electronify.users_address where user_id=$id;"
+      .as[UserAddress]
+    getFutureValue(db.run(query)).headOption
+  }
+
 }

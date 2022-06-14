@@ -3,6 +3,7 @@
 @import models.enums.ActionsCart
 @import controllers.utils.Utils.scaleDouble
 @import models.enums.ActionProduct.Details
+@import models.enums.ActionsUser
 @(userCart: UserCart)(implicit session: Session)
 
 @main("Shopping Cart") {
@@ -77,9 +78,9 @@
                     <div class="coupon">
                         <label for="coupon_code">Coupon:</label>
                         <input type="tel" placeholder="Coupon code" value="" id="coupon_code" class="input-text" name="coupon_code">
-                        <a class="button-71" type="button" href="@routes.HomeController.checkOut()">
+                        <a class="button-71" type="button" href="@routes.UserController.getUserActions(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsUser.Checkout)">
                             Apply Coupon</a>
-                        <a class="button-71" type="button" href="@routes.HomeController.checkOut()">
+                        <a class="button-71" type="button" href="@routes.UserController.getUserActions(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsUser.Checkout)">
                             Proceed Checkout</a>
                         <a class="button-71 clear" type="button" href="@routes.CartController.getCart(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsCart.ClearCart)">
                             Remove All</a>

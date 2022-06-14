@@ -29,10 +29,10 @@ class UserController @Inject() (
   def userPostAction(id: String = "", action: String): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
       action match {
-        case SignIn   => signIn(logInForm.bindFromRequest().value, request)
-        case SignUp   => signUp(userForm.bindFromRequest().value, request)
-        case Disable  => disableUser(extractUUID(request.body.asJson))
-        case Checkout => checkout(id, checkoutForm.bindFromRequest().value)
+        case SignIn  => signIn(logInForm.bindFromRequest().value, request)
+        case SignUp  => signUp(userForm.bindFromRequest().value, request)
+        case Disable => disableUser(extractUUID(request.body.asJson))
+        case CreateAddress => checkout(id, checkoutForm.bindFromRequest().value)
         case Update =>
           Ok(views.html.index())
             .withSession(Global.SESSION_USERNAME_KEY -> "")
@@ -47,6 +47,17 @@ class UserController @Inject() (
       action match {
         case UserById    => getUserById(id, request.session)
         case ActiveUsers => getAllActiveUsers
+        case Checkout =>
+          // TODO : redirect to Payment page if address exist
+          val mayAddress = getUserAddress(id)
+          mayAddress match {
+            case Some(address) =>
+              Ok(views.html.checkout())
+                .removingFromSession(SESSION_INVALID_FORM)
+            case None =>
+              Ok(views.html.checkout())
+                .removingFromSession(SESSION_INVALID_FORM)
+          }
         case LogOut      => logout(id)
         case _ =>
           BadRequest(views.html.index())
@@ -201,5 +212,9 @@ class UserController @Inject() (
   def logout(id: String): Result = {
     service.logOutSession(id)
     Ok(views.html.index()(Session())).withNewSession
+  }
+
+  def getUserAddress(id: String): Option[UserAddress] = {
+    service.getUserAddress(id)
   }
 }

@@ -119,9 +119,9 @@ class UserService @Inject() (
     }
   }
 
-  def createUserAddress(address: UserAddress): Int = {
+  def createUserAddress(address: UserAddress): Option[UserAddress] = {
     val getAddress =
-      sql"select * from electronify.users_address where id = ${address.id};"
+      sql"select * from electronify.users_address where user_id = ${address.userId};"
         .as[UserAddress]
     val mayAddress: Option[UserAddress] =
       getFutureValue(db.run(getAddress)).headOption
@@ -129,14 +129,14 @@ class UserService @Inject() (
     mayAddress match {
       case Some(_) =>
         logger.info(ERR_ALREADY_EXIST)
-        Status.BAD_REQUEST
+        None
       case None =>
         val query: SqlAction[Int, NoStream, Effect] =
-          sqlu" insert into electronify.users_address (id, address_1, address_2, city, postal_code, country, telephone, name, user_id) values (${address.id},  ${address.address}, ${address.addressO}, ${address.city},${address.postCode},${address.country},${address.telephone}, ${address.name}, ${address.userId});"
-
+          sqlu" insert into electronify.users_address (id, address_1, address_2, city, postal_code, country, telephone, name, user_id, comments) values (${address.id},  ${address.address}, ${address.addressO}, ${address.city},${address.postCode},${address.country},${address.telephone}, ${address.name}, ${address.userId},${address.comments});"
         val response = updateQueries(query)
 
-        isCreated(response)
+        if (isCreated(response) == Status.CREATED) Some(address)
+        else None
     }
   }
 

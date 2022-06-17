@@ -1,0 +1,17 @@
+@import models.db.UserAddress
+
+@(address: UserAddress)(implicit session: Session)
+
+@main("Payment") {
+    <div class="card payment">
+        <p id="delivery-name">@address.name <img class="hover-square delivery" height="50" width="50" src="@routes.Assets.versioned("/img/del.png")" alt="delivery"></p>
+        <p>@address.address</p>
+        <p>@address.addressO</p>
+        <p>@{
+            address.postCode + ", " + address.city
+        }</p>
+        <p>@address.country</p>
+        <p><b>*@address.comments</b></p>
+    </div>
+
+}

@@ -1513,13 +1513,6 @@ span.psw {
     right: 32%;
 }
 
-.userCard {
-    display: block !important;
-    width: 25%;
-    right: 40%;
-    top: 20%;
-}
-
 .form-container {
     max-width: 300px;
     padding: 10px;

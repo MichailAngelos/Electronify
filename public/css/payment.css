@@ -1,0 +1,18 @@
+.card.payment {
+    margin-top:16px !important;
+    text-align: left;
+    margin-bottom: 20%;
+    margin-left: 2%;
+}
+
+.payment p{
+    margin: 0 5% 0 5%;
+}
+
+#delivery-name{
+    margin-bottom: -6% !important;
+}
+
+.delivery{
+    margin-left: 10%;
+}

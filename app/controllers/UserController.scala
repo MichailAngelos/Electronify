@@ -29,10 +29,11 @@ class UserController @Inject() (
   def userPostAction(id: String = "", action: String): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
       action match {
-        case SignIn        => signIn(logInForm.bindFromRequest().value, request)
-        case SignUp        => signUp(userForm.bindFromRequest().value, request)
-        case Disable       => disableUser(extractUUID(request.body.asJson))
-        case CreateAddress => checkout(id, checkoutForm.bindFromRequest().value)
+        case SignIn  => signIn(logInForm.bindFromRequest().value, request)
+        case SignUp  => signUp(userForm.bindFromRequest().value, request)
+        case Disable => disableUser(extractUUID(request.body.asJson))
+        case CreateAddress =>
+          createAddress(id, checkoutForm.bindFromRequest().value, request)
         case Update =>
           Ok(views.html.index())
             .withSession(Global.SESSION_USERNAME_KEY -> "")
@@ -47,12 +48,10 @@ class UserController @Inject() (
       action match {
         case UserById    => getUserById(id, request.session)
         case ActiveUsers => getAllActiveUsers
-        case Checkout    =>
-          // TODO : redirect to Payment page if address exist
-          val mayAddress = getUserAddress(id)
-          mayAddress match {
+        case Checkout =>
+          getUserAddress(id) match {
             case Some(address) =>
-              Ok(views.html.checkout())
+              Ok(views.html.payment(address))
                 .removingFromSession(SESSION_INVALID_FORM)
             case None =>
               Ok(views.html.checkout())
@@ -189,18 +188,21 @@ class UserController @Inject() (
     }
   }
 
-  def checkout(id: String, checkOutRaw: Option[CheckOutRaw]): Result = {
-    checkOutRaw match {
+  def createAddress(
+      id: String,
+      addressRaw: Option[CheckOutRaw],
+      request: Request[AnyContent]
+  ): Result = {
+    addressRaw match {
       case Some(raw) =>
         val user = service.getUserById(id)
         val address: UserAddress = userAddressFromRaw(user, raw)
-        val response =
-          updateValidationResponse(service.createUserAddress(address))
+        val response = service.createUserAddress(address)
 
         response match {
-          case CREATED_ENTITY =>
-            Created(CREATED_ENTITY)
-          case _ =>
+          case Some(address) =>
+            Created(views.html.payment(address)(request.session))
+          case None =>
             BadRequest(ERR_INVALID_FORM)
               .withSession(
                 SESSION_INVALID_FORM -> ERR_INVALID_FORM,

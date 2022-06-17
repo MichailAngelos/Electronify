@@ -8,14 +8,15 @@ import java.util.UUID
 
 case class UserAddress(
     id: String,
-    name: String,
     address: String,
     addressO: String,
     city: String,
     postCode: String,
     country: String,
     telephone: String,
-    userId: String
+    name: String,
+    userId: String,
+    comments: String
 )
 
 object UserAddress {
@@ -24,20 +25,22 @@ object UserAddress {
   def userAddressFromRaw(user: User, form: CheckOutRaw): UserAddress = {
     UserAddress(
       UUID.randomUUID().toString,
-      form.name,
       form.address,
       form.addressO,
       form.city,
       form.postCode.toString,
       form.country,
       user.telephone.toString,
-      user.id.get.toString
+      form.name,
+      user.id.get.toString,
+      form.comments
     )
   }
 
   implicit val getUserResult: AnyRef with GetResult[UserAddress] =
     GetResult(r =>
       UserAddress(
+        r.nextString(),
         r.nextString(),
         r.nextString(),
         r.nextString(),

@@ -29,9 +29,9 @@ class UserController @Inject() (
   def userPostAction(id: String = "", action: String): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
       action match {
-        case SignIn  => signIn(logInForm.bindFromRequest().value, request)
-        case SignUp  => signUp(userForm.bindFromRequest().value, request)
-        case Disable => disableUser(extractUUID(request.body.asJson))
+        case SignIn        => signIn(logInForm.bindFromRequest().value, request)
+        case SignUp        => signUp(userForm.bindFromRequest().value, request)
+        case Disable       => disableUser(extractUUID(request.body.asJson))
         case CreateAddress => checkout(id, checkoutForm.bindFromRequest().value)
         case Update =>
           Ok(views.html.index())
@@ -47,7 +47,7 @@ class UserController @Inject() (
       action match {
         case UserById    => getUserById(id, request.session)
         case ActiveUsers => getAllActiveUsers
-        case Checkout =>
+        case Checkout    =>
           // TODO : redirect to Payment page if address exist
           val mayAddress = getUserAddress(id)
           mayAddress match {
@@ -58,7 +58,7 @@ class UserController @Inject() (
               Ok(views.html.checkout())
                 .removingFromSession(SESSION_INVALID_FORM)
           }
-        case LogOut      => logout(id)
+        case LogOut => logout(id)
         case _ =>
           BadRequest(views.html.index())
             .withSession(Global.SESSION_USERNAME_KEY -> "")
@@ -80,29 +80,42 @@ class UserController @Inject() (
           val authLevel = UserAuth.getUserAuthLevel(mayUser.auth)
           authLevel match {
             case Some(level) =>
-              val logIn: Result =
-                Ok(
-                  views.html.index()(
-                    Session(getUserSession(mayUser))
-                  )
-                ).addingToSession(
-                  Global.SESSION_USERNAME_KEY -> credentials.username,
-                  Global.SESSION_ID -> mayUser.id.get.toString,
-                  Global.SESSION_LOGGED_IN_KEY -> LOGGED_IN,
-                  Global.SESSION_ERR_LOGGED -> EMPTY_STRING
-                )(request)
               level match {
                 case Guest =>
-                  logIn.addingToSession(
-                    Global.SESSION_AUTH -> Guest.toString
-                  )(request)
+                  Ok(
+                    views.html.index()(
+                      Session(
+                        getUserSession(mayUser, Guest.toString)
+                      )
+                    )
+                  )
                 case Admin =>
-                  logIn.addingToSession(
-                    Global.SESSION_AUTH -> Admin.toString
+                  Ok(
+                    views.html.index()(
+                      Session(
+                        getUserSession(mayUser, Admin.toString)
+                      )
+                    )
+                  ).addingToSession(
+                    Global.SESSION_USERNAME_KEY -> mayUser.username,
+                    Global.SESSION_ID -> mayUser.id.get.toString,
+                    Global.SESSION_LOGGED_IN_KEY -> LOGGED_IN,
+                    Global.SESSION_ERR_LOGGED -> EMPTY_STRING,
+                    Global.SESSION_AUTH -> level.toString
                   )(request)
                 case Customer =>
-                  logIn.addingToSession(
-                    Global.SESSION_AUTH -> Customer.toString
+                  Ok(
+                    views.html.index()(
+                      Session(
+                        getUserSession(mayUser, Customer.toString)
+                      )
+                    )
+                  ).addingToSession(
+                    Global.SESSION_USERNAME_KEY -> mayUser.username,
+                    Global.SESSION_ID -> mayUser.id.get.toString,
+                    Global.SESSION_LOGGED_IN_KEY -> LOGGED_IN,
+                    Global.SESSION_ERR_LOGGED -> EMPTY_STRING,
+                    Global.SESSION_AUTH -> level.toString
                   )(request)
               }
             case None =>
@@ -135,14 +148,15 @@ class UserController @Inject() (
               Created(
                 views.html.index()(
                   request.session.copy(
-                    getUserSession(user)
+                    getUserSession(user, Customer.toString)
                   )
                 )
               ).addingToSession(
                 Global.SESSION_USERNAME_KEY -> user.username,
                 Global.SESSION_ID -> user.id.get.toString,
                 Global.SESSION_LOGGED_IN_KEY -> LOGGED_IN,
-                Global.SESSION_ERR_LOGGED -> EMPTY_STRING
+                Global.SESSION_ERR_LOGGED -> EMPTY_STRING,
+                Global.SESSION_AUTH -> Customer.toString
               )(request)
             case ERR_ALREADY_EXIST => BadGateway(response)
             case _                 => BadRequest(response)

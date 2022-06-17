@@ -6,6 +6,7 @@ import controllers.constants.Values.EMAIL_REGEX
 import models.db.{Id, User}
 import models.raw.LogIn
 import models.Logger
+import models.enums.UserAuth.Guest
 import play.api.http.Status
 import play.api.libs.json.{JsError, JsSuccess, JsValue}
 
@@ -94,12 +95,13 @@ object Utils extends Logger {
     EMAIL_REGEX.matches(email.toLowerCase)
   }
 
-  def getUserSession(user: User): Map[String, String] = {
+  def getUserSession(user: User , userType:String = Guest.toString ): Map[String, String] = {
     Map(
       Global.SESSION_USERNAME_KEY -> user.username,
       Global.SESSION_ID -> user.id.get.toString,
       Global.SESSION_LOGGED_IN_KEY -> LOGGED_IN,
-      Global.SESSION_ERR_LOGGED -> EMPTY_STRING
+      Global.SESSION_ERR_LOGGED -> EMPTY_STRING,
+      Global.SESSION_AUTH -> userType
     )
   }
 

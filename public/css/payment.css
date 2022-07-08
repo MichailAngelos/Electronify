@@ -1,8 +1,9 @@
 .card.payment {
-    margin-top:16px !important;
+    margin-top: 16px !important;
     text-align: left;
-    margin-bottom: 20%;
-    margin-left: 2%;
+    margin-bottom: 5%;
+    margin-left: 10%;
+    max-width: 300px;
 }
 
 .payment p{
@@ -15,4 +16,22 @@
 
 .delivery{
     margin-left: 10%;
+}
+
+.payment.buttons{
+    position: absolute;
+    top: 7%;
+    right: -185%;
+    max-width: 600px;
+    min-width: 100px;
+    width: 500px;
+    padding: 0;
+}
+
+.payment.buttons form{
+margin-bottom: 20px;
+}
+
+#changeAddress{
+    background-color: #17a2b8;
 }

@@ -2,7 +2,7 @@ package models.forms
 
 import models.raw._
 import play.api.data.Form
-import play.api.data.Forms.{mapping, number, text}
+import play.api.data.Forms.{email, mapping, number, text}
 
 object Forms {
 
@@ -11,7 +11,7 @@ object Forms {
       "username" -> text,
       "password" -> text,
       "passwordR" -> text,
-      "email" -> text,
+      "email" -> email,
       "telephone" -> number
     )(RawUser.apply)(RawUser.unapply)
   }
@@ -39,5 +39,11 @@ object Forms {
     mapping(
       "quantity" -> number
     )(AddCartRaw.apply)(AddCartRaw.unapply)
+  }
+
+  val deleteAddress: Form[RawAddress] = Form {
+    mapping(
+      "address" -> text
+    )(RawAddress.apply)(RawAddress.unapply)
   }
 }

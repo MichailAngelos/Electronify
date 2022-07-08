@@ -177,4 +177,10 @@ class UserService @Inject() (
     getFutureValue(db.run(query)).headOption
   }
 
+  def deleteAddress(id: String, addressId: String): Int = {
+    val query =
+      sqlu"delete from electronify.users_address where id=$addressId and user_id=$id;"
+    isUpdated(updateQueries(query))
+  }
+
 }

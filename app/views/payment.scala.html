@@ -1,17 +1,33 @@
 @import models.db.UserAddress
 
+@import controllers.constants.Global.SESSION_ID
+@import models.enums.ActionsUser
+@import play.api.libs.json.Json
 @(address: UserAddress)(implicit session: Session)
 
 @main("Payment") {
-    <div class="card payment">
-        <p id="delivery-name">@address.name <img class="hover-square delivery" height="50" width="50" src="@routes.Assets.versioned("/img/del.png")" alt="delivery"></p>
-        <p>@address.address</p>
-        <p>@address.addressO</p>
-        <p>@{
-            address.postCode + ", " + address.city
-        }</p>
-        <p>@address.country</p>
-        <p><b>*@address.comments</b></p>
+    <div class="container">
+        <div class="card payment">
+            <p id="delivery-name">@address.name <img class="hover-square delivery" height="50" width="50" src="@routes.Assets.versioned("/img/del.png")" alt="delivery"></p>
+            <p>@address.address</p>
+            <p>@address.addressO</p>
+            <p>@{
+                address.postCode + ", " + address.city
+            }</p>
+            <p>@address.country</p>
+            <p><b>*@address.comments</b></p>
+            <div class="payment buttons">
+                <div class="col-md-9">
+                    <form action="@routes.UserController.userPostAction(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsUser.Payment)" method="post">
+                        <input type="text" style="display: none" name="address" required value="@Json.toJson(address.id)">
+                        <button type="submit" class="btn login">Complete Payment</button>
+                    </form>
+                    <form action="@routes.UserController.userPostAction(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsUser.ChangeAddress)" method="post">
+                        <input type="text" style="display: none" name="address" required value="@address.id">
+                        <button type="submit" id="changeAddress" class="btn login">Change Address</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
 }

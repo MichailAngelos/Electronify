@@ -13,18 +13,16 @@ import models.enums.ActionsUser._
 import models.enums.UserAuth
 import models.enums.UserAuth._
 import models.forms.Forms._
-import models.raw.{CheckOutRaw, LogIn, RawUser}
+import models.raw.{CheckOutRaw, LogIn, RawAddress, RawUser}
 import play.api.libs.json.Json
 import play.api.mvc._
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class UserController @Inject() (
-    cc: ControllerComponents,
-    service: UserService
-)(implicit ec: ExecutionContext)
-    extends AbstractController(cc) {
+class UserController @Inject() (cc: ControllerComponents, service: UserService)(
+    implicit ec: ExecutionContext
+) extends AbstractController(cc) {
 
   def userPostAction(id: String = "", action: String): Action[AnyContent] =
     Action { implicit request: Request[AnyContent] =>
@@ -34,7 +32,12 @@ class UserController @Inject() (
         case Disable => disableUser(extractUUID(request.body.asJson))
         case CreateAddress =>
           createAddress(id, checkoutForm.bindFromRequest().value, request)
+        case ChangeAddress =>
+          changeAddress(id, deleteAddress.bindFromRequest().value, request)
+        case Payment =>
+          createPaymentMethod(id)
         case Update =>
+          // change user details
           Ok(views.html.index())
             .withSession(Global.SESSION_USERNAME_KEY -> "")
         case _ =>
@@ -216,6 +219,10 @@ class UserController @Inject() (
     }
   }
 
+  def createPaymentMethod(id: String): Result = {
+    ???
+  }
+
   def getUserById(id: String, session: Session): Result = {
     Ok(views.html.userCard(service.getUserById(id))(session))
   }
@@ -232,5 +239,28 @@ class UserController @Inject() (
 
   def getUserAddress(id: String): Option[UserAddress] = {
     service.getUserAddress(id)
+  }
+
+  def changeAddress(
+      userId: String,
+      address: Option[RawAddress],
+      request: Request[AnyContent]
+  ): Result = {
+    val update = service.deleteAddress(
+      userId,
+      address.getOrElse(RawAddress("00000000-0000-0000-0000-000000000000")).id
+    )
+    updateValidationResponse(update) match {
+      case UPDATED =>
+        Ok(views.html.checkout()(request.session))
+          .removingFromSession(SESSION_INVALID_FORM)(request)
+      case _ =>
+        logger.error(s"Can't find address for this $userId")
+        service.getUserAddress(userId)
+        BadRequest(
+          views.html
+            .payment(service.getUserAddress(userId).get)(request.session)
+        )
+    }
   }
 }

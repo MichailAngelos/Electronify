@@ -95,7 +95,10 @@ object Utils extends Logger {
     EMAIL_REGEX.matches(email.toLowerCase)
   }
 
-  def getUserSession(user: User , userType:String = Guest.toString ): Map[String, String] = {
+  def getUserSession(
+      user: User,
+      userType: String = Guest.toString
+  ): Map[String, String] = {
     Map(
       Global.SESSION_USERNAME_KEY -> user.username,
       Global.SESSION_ID -> user.id.get.toString,

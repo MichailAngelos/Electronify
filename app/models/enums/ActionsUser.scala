@@ -11,4 +11,6 @@ object ActionsUser extends Enumeration {
   val Checkout = "CheckOut"
   val Update = "Update"
   val CreateAddress = "CreateAddress"
+  val Payment = "Payment"
+  val ChangeAddress = "ChangeAddress"
 }

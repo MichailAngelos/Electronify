@@ -19,4 +19,3 @@ libraryDependencies ++= Seq(
   "org.playframework.anorm" %% "anorm-postgres" % "2.6.10"
 )
 libraryDependencies += ehcache
-//libraryDependencies += filters

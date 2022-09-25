@@ -2,7 +2,6 @@ package models.db
 
 import models.Logger
 import play.api.libs.json.{Json, OFormat}
-
 case class UserCart(
     id: String,
     products: Products,

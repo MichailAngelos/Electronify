@@ -14,7 +14,7 @@
                             <div class="card">
                                 <img src="@routes.Assets.versioned(product.image)" alt="@product.name">
                                 <h1><strong>@product.name</strong></h1>
-                                <p class="price">@scaleDouble(product.price)</p>
+                                <p class="price">@scaleDouble(product.price) &euro;</p>
                                 <p class="price">@product.description</p>
                             </div><br>
                             <form action="@routes.CartController.postCart(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), product.id, ActionsCart.AddCart)" method="post" class="cart">

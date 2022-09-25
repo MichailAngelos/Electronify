@@ -19,6 +19,7 @@ object Responses {
   val LOGGED_IN = "Logged In"
   val LOGGED_OUT = "logged out"
   val LOGGED_IN_Response = "Success, Welcome back  "
+  val ORDER_SUBMISSION = "Thank you for ordering with us"
   val FAILED_LOG_IN = "Wrong Username/Password"
   val FAILED = "failed"
   val EMPTY_STRING = ""

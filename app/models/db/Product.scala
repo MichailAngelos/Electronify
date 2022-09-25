@@ -69,6 +69,8 @@ object Product extends Logger {
 object Products extends Logger {
   implicit val format: Format[Products] = Json.format
 
+  //Todo: create apply methods
+
   def getProducts(products: Vector[Seq[Product]]): Products = {
     Products(products.flatten.sortWith((a, b) => a.stock >= b.stock))
   }

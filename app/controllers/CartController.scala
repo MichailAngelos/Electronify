@@ -12,11 +12,9 @@ import play.api.mvc._
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class CartController @Inject() (
-    cc: ControllerComponents,
-    service: CartService
-)(implicit ec: ExecutionContext)
-    extends AbstractController(cc) {
+class CartController @Inject() (cc: ControllerComponents, service: CartService)(
+    implicit ec: ExecutionContext
+) extends AbstractController(cc) {
 
   def postCart(
       id: String,
@@ -89,7 +87,8 @@ class CartController @Inject() (
     updateCart match {
       case ACCEPTED =>
         Ok(views.html.cart(service.getUserCart(id))(request.session))
-      case _ => BadRequest(views.html.cart(service.getUserCart(id))(request.session))
+      case _ =>
+        BadRequest(views.html.cart(service.getUserCart(id))(request.session))
     }
 
   }

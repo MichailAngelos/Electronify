@@ -53,13 +53,13 @@
                                                 users</a>
                                         </li>
                                         <li>
-                                            <a href ="@routes.UserController.getUserActions(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsUser.ActiveUsers)">
+                                            <a href ="@routes.UserController.getUserActions(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsUser.Payment)">
                                                 <img class="rounded-circle" height="30" width="30" src="@routes.Assets.versioned("/img/payment.png")" alt="pay">
                                                 payment</a>
                                         </li>
                                     } else {
                                         <li>
-                                            <a href ="@routes.UserController.getUserActions(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsUser.ActiveUsers)">
+                                            <a href ="@routes.UserController.getUserActions(session.get(SESSION_ID).getOrElse("00000000-0000-0000-0000-000000000000"), ActionsUser.Payment)">
                                                 <img class="rounded-circle" height="30" width="30" src="@routes.Assets.versioned("/img/payment.png")" alt="pay">
                                                 payment</a>
                                         </li>

@@ -51,7 +51,7 @@ class UserController @Inject() (cc: ControllerComponents, service: UserService)(
       action match {
         case UserById    => getUserById(id, request.session)
         case ActiveUsers => getAllActiveUsers
-        case Checkout =>
+        case Checkout | Payment =>
           getUserAddress(id) match {
             case Some(address) =>
               Ok(views.html.payment(address))

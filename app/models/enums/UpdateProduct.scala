@@ -4,5 +4,4 @@ object UpdateProduct extends Enumeration {
   type UpdateProduct = Value
   val Reduce = "Reduce"
   val Reset = "Reset"
-  val Update = "Update"
 }

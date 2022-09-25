@@ -1,6 +1,8 @@
 package controllers.services
 
 import controllers.constants.Responses._
+import controllers.constants.Values.EU_COUNTRIES
+import controllers.utils.DateUtils
 import controllers.utils.DateUtils.timestampNow
 import controllers.utils.Utils.{
   getFutureValue,
@@ -10,11 +12,20 @@ import controllers.utils.Utils.{
 }
 import models.Logger
 import models.db.User._
-import models.db.{ShoppingSession, User, UserAddress, UserList}
+import models.db.{
+  CartProduct,
+  Product,
+  Products,
+  ShoppingSession,
+  User,
+  UserAddress,
+  UserCart,
+  UserList
+}
 import models.raw.LogIn
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import play.api.http.Status
-import slick.jdbc.JdbcProfile
+import slick.jdbc.{JdbcProfile, SetParameter}
 import slick.sql.SqlAction
 
 import java.util.UUID
@@ -183,4 +194,91 @@ class UserService @Inject() (
     isUpdated(updateQueries(query))
   }
 
+  def getUserCart(userId: String): UserCart = {
+    val queryProducts =
+      sql"select product_id,quantity from electronify.cart where user_id = $userId;"
+        .as[Seq[CartProduct]]
+    val productCart: Seq[CartProduct] = getFutureValue(
+      db.run(queryProducts)
+    ).flatten
+
+    val userProducts: Seq[Product] = productCart.flatMap(cart => {
+      val product =
+        sql"select * from electronify.product where id = ${cart.id};"
+          .as[Product]
+      getFutureValue(db.run(product)).map(_.copy(stock = cart.quantity))
+    })
+    val mayAddress = getUserAddress(userId)
+    val total: Double = userProducts.foldLeft[Double](0.0)(_ + _.price)
+    if (total >= 200.00) {
+      UserCart(
+        userId,
+        Products(userProducts),
+        total,
+        shipping = 0.00
+      )
+    } else {
+      mayAddress match {
+        case Some(address) =>
+          if (EU_COUNTRIES.contains(address.country)) {
+            UserCart(
+              userId,
+              Products(userProducts),
+              total,
+              shipping = total * 0.03
+            )
+          } else
+            UserCart(
+              userId,
+              Products(userProducts),
+              total,
+              shipping = total * 0.05
+            )
+        case None =>
+          UserCart(
+            userId,
+            Products(userProducts),
+            total,
+            shipping = total * 0.05
+          )
+      }
+    }
+  }
+
+  def submitOrder(id: String): Int = {
+    val userCart: UserCart = getUserCart(id)
+    val userAddress = getUserAddress(id).get
+    val paymentId = UUID.randomUUID()
+    val orderId = UUID.randomUUID()
+    val dateNow = DateUtils.timestampNow
+    val items = userCart.products.products.map(_.name).mkString
+    val orderIdStr = orderId.toString
+
+    val queryOrder =
+      sqlu"insert into electronify.orders (id, user_id, status,items,total,created_at,address,payment_id) values ($orderIdStr,$id,'InProgress',$items,${userCart.total},$dateNow,${userAddress.id},$paymentId)"
+
+    val order =
+      validUpdateStatus(isCreated(updateQueries(queryOrder)), "payment")
+    if (order == Status.CREATED) {
+      val payment = createPayment(orderId, paymentId, userCart.total, id)
+      if (payment == Status.CREATED) {
+        clearCart(id)
+        1
+      } else -1
+    } else -1
+  }
+
+  def createPayment(
+      orderId: UUID,
+      paymentId: UUID,
+      amount: Double,
+      userId: String
+  ): Int = {
+    val id = paymentId.toString
+    val orderIdStr = orderId.toString
+    val query =
+      sqlu"insert into electronify.payment (id, user_id, status,amount,order_id) values ($id,$userId,'PAID',$amount,$orderIdStr)"
+
+    validUpdateStatus(isCreated(updateQueries(query)), "payment")
+  }
 }

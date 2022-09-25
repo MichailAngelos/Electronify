@@ -16,7 +16,8 @@ class HomeController @Inject() (val controllerComponents: ControllerComponents)
     Action { implicit request: Request[AnyContent] =>
       Ok(views.html.index()).removingFromSession(
         Global.SESSION_LOGGED_IN_KEY,
-        Global.SESSION_ERR_LOGGED
+        Global.SESSION_ERR_LOGGED,
+        Global.SESSION_ORDER
       )
     }
 

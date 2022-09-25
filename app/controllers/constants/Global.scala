@@ -10,4 +10,5 @@ object Global {
   val SESSION_SIGN_UP_INVALID_PASS = "invalidSingUp"
   val SESSION_AUTH = "auth"
   val SESSION_INVALID_EMAIL = "invalidForm"
+  val SESSION_ORDER = "order"
 }

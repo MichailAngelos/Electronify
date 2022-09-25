@@ -35,7 +35,7 @@ class UserController @Inject() (cc: ControllerComponents, service: UserService)(
         case ChangeAddress =>
           changeAddress(id, deleteAddress.bindFromRequest().value, request)
         case Payment =>
-          createPaymentMethod(id)
+          completePayment(id, request)
         case Update =>
           // change user details
           Ok(views.html.index())
@@ -219,8 +219,12 @@ class UserController @Inject() (cc: ControllerComponents, service: UserService)(
     }
   }
 
-  def createPaymentMethod(id: String): Result = {
-    ???
+  def completePayment(id: String, request: Request[AnyContent]): Result = {
+    if (service.submitOrder(id) == 1) {
+      Ok(views.html.index()(request.session))
+        .addingToSession(Global.SESSION_ORDER -> ORDER_SUBMISSION)(request)
+    } else
+      BadRequest(views.html.index()(request.session))
   }
 
   def getUserById(id: String, session: Session): Result = {

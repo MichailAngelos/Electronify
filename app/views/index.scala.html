@@ -24,6 +24,14 @@
                                                     </div>
                                                 }
 
+                                                @if(session.get(SESSION_ORDER).nonEmpty) {
+                                                    <div id="overlay2" >
+                                                        <div class="message">
+                                                            <button class="click-options" onclick="off2()"><img class="rounded-circle" height="50" width="50" src="@routes.Assets.versioned("/img/success.png")" alt="success"/> @ORDER_SUBMISSION @session.get(SESSION_USERNAME_KEY)</button>
+                                                        </div>
+                                                    </div>
+                                                }
+
                                                 <h2>We are awesome</h2>
                                                 <p>Welcome to the cheapest eShop for your electronics!</p>
                                                 <p> <span id="dots">...</span>
@@ -72,6 +80,10 @@
     <script>
             function off() {
                 document.getElementById("overlay").remove()
+            }
+
+            function off2() {
+                document.getElementById("overlay2").remove()
             }
     </script>
 }

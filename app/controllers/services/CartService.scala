@@ -156,7 +156,6 @@ class CartService @Inject() (
     action match {
       case Reduce => reduceProductStock(cart.productId, cart.quantity)
       case Reset  => resetStock(cart.productId, cart.quantity)
-      case Update => ???
       case _      => -1
     }
   }

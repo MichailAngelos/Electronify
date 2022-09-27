@@ -1,0 +1,14 @@
+@import models.db.Order
+@import controllers.constants.Global.SESSION_USERNAME_KEY
+@(order: Order)(implicit session: Session)
+@main("Order") {
+    <div class="container">
+        <div class="card payment">
+            <p id="delivery-name">@session.get(SESSION_USERNAME_KEY) 's Order<img class="hover-square delivery" height="50" width="50" src="@routes.Assets.versioned("/img/del.png")" alt="delivery"></p>
+             <p>Address: @order.address</p>
+             <p> Status: @order.status</p>
+            <p>Products:@order.items</p>
+            <p><b>Total: @order.total</b></p>
+        </div>
+    </div>
+}

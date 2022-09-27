@@ -14,6 +14,7 @@ import models.Logger
 import models.db.User._
 import models.db.{
   CartProduct,
+  Order,
   Product,
   Products,
   ShoppingSession,
@@ -245,7 +246,7 @@ class UserService @Inject() (
     }
   }
 
-  def submitOrder(id: String): Int = {
+  def submitOrder(id: String): Option[Order] = {
     val userCart: UserCart = getUserCart(id)
     val userAddress = getUserAddress(id).get
     val paymentId = UUID.randomUUID()
@@ -263,9 +264,17 @@ class UserService @Inject() (
       val payment = createPayment(orderId, paymentId, userCart.total, id)
       if (payment == Status.CREATED) {
         clearCart(id)
-        1
-      } else -1
-    } else -1
+        Some(
+          Order(
+            orderIdStr,
+            "In Progress",
+            userCart.products.products.map(_.name),
+            userAddress.address,
+            userCart.total
+          )
+        )
+      } else None
+    } else None
   }
 
   def createPayment(

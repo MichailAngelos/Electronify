@@ -220,11 +220,11 @@ class UserController @Inject() (cc: ControllerComponents, service: UserService)(
   }
 
   def completePayment(id: String, request: Request[AnyContent]): Result = {
-    if (service.submitOrder(id) == 1) {
-      Ok(views.html.index()(request.session))
-        .addingToSession(Global.SESSION_ORDER -> ORDER_SUBMISSION)(request)
-    } else
-      BadRequest(views.html.index()(request.session))
+    service.submitOrder(id) match {
+      case Some(order) => Ok(views.html.order(order)(request.session))
+      case None        => BadRequest(views.html.index()(request.session))
+
+    }
   }
 
   def getUserById(id: String, session: Session): Result = {

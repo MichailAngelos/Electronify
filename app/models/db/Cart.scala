@@ -16,7 +16,7 @@ case class Cart(
 )
 
 object Cart extends Logger {
-  implicit val format: Format[ShoppingSession] = Json.format
+  implicit val format: Format[Cart] = Json.format
 
   implicit val getProduct: AnyRef with GetResult[Cart] =
     GetResult(r =>
